@@ -1,112 +1,121 @@
-This repo introduces functional programming concepts using TypeScript and possibly libraries in the fp-ts ecosystem.
+이 저장소는 Typescript 와 fp-ts 라이브러리를 활용해 함수형 프로그래밍을 소개합니다.
 
-This fork is an edited translation of [Giulio Canti](https://gcanti.github.io/about.html)'s ["Introduction to Functional Programming (Italian)"](https://github.com/gcanti/functional-programming). The author uses the original as a reference and supporting material for his lectures and workshops on functional programming.
+모든 내용은 [enricopolanski](https://github.com/enricopolanski/functional-programming) 의 저장소에서 나온 것입니다.
 
-The purpose of the edits is to expand on the material without changing the concepts nor structure, for more information about the edit's goals see the [CONTRIBUTING](/CONTRIBUTING.md) file.
+해당 저장소도 이탈리아어로 작성된 [Giulio Canti](https://gcanti.github.io/about.html) 의 ["Introduction to Functional Programming (Italian)"](https://github.com/gcanti/functional-programming) 을 영어로 번역한 것입니다.
+
+원본 작성자는 해당 글을 함수형 프로그래밍에 관한 강의나 워크샵에 참고자료로 사용하였습니다.
+
+국내에서 함수형 프로그래밍에 대한 이해와 fp-ts 라이브러리 생태계를 소개하기 위한 목적으로 번역하였으며 오역이 있을 수 있으며 번역이 어려운 부분은 원글을 함께 표시하였습니다. 
 
 **Setup**
 
 ```sh
-git clone https://github.com/gcanti/functional-programming.git
+git clone https://github.com/jbl428/functional-programming.git
 cd functional-programming
 npm i
 ```
 
-# What is functional programming
+# 함수형 프로그래밍이란
 
-> Functional Programming is programming with pure functions. Mathematical functions.
+> 함수형 프로그래밍은 순수함수, 수학적인 함수를 사용하는 프로그래밍입니다.
 
-A quick search on the internet may lead you to the following definition:
+인터넷 검색을 통해서 아마 다음과 같은 정의를 볼 수 있습니다:
 
-> A (pure) function is a procedure that given the same input always return the same output without any observable side-effect.
+> (순수) 함수란 같은 입력에 항상 같은 결과를 내는 부작용없는 절차입니다.
 
-The term "side effect" does not yet have any specific meaning (we'll see in the future how to give a formal definition), what matters is to have some sort of intuition, think about opening a file or writing into a database.
+여기서 "부작용" 이란 용어의 정의를 설명하지 않았지만 (이후 공식적인 정의를 보게될것입이다) 직관적으로 파일을 열거나 데이터베이스의 쓰기같은 것을 생각해볼 수 있습니다.
 
-For the time being we can limit ourselves to say that a side effect is _anything_ a function does besides returning a value.
+지금 당장은 부작용이란 함수가 값을 반환하는 작업 이외에 하는 모든것이라고 생각하시면 됩니다.
 
-What is the structure of a program that uses exclusively pure functions?
+순수함수만 사용하는 프로그램은 어떤 구조를 가질까요?
 
-A functional program tends to be written like a **pipeline**:
+보통 함수형 프로그램은 **pipeline** 형태로 이루어져 있습니다.
 
 ```ts
 const program = pipe(
   input,
-  f1, // pure function
-  f2, // pure function
-  f3, // pure function
+  f1, // 순수 함수
+  f2, // 순수 함수
+  f3, // 순수 함수
   ...
 )
 ```
 
-What happens here is that `input` is passed to the first function `f`, which returns a value that is passed to the second function `f2`, which returns a value that is passed as an argument to the third function `f3`, and so on.
+여기서 `input` 은 첫 번째 함수인 `f1` 으로 전달되고 그 결과는 두 번째 함수인 `f2` 로 전달됩니다. 
+
+이어서 `f2` 가 반환하는 값은 세 번째 함수인 `f3` 로 전달되고 이후 같은 방식으로 진행됩니다.
 
 **Demo**
 
 [`00_pipe_and_flow.ts`](src/00_pipe_and_flow.ts)
 
-We'll see how functional programming provides us with tools to structure our code in that style.
+앞으로 함수형 프로그래밍이 위와 같은 구조를 만들어주는 도구를 제공하는지 보게될 것입니다. 
 
-Other than understanding what functional programming _is_, it is also essential to understand what is it's goal.
+함수형 프로그래밍이 무엇인지 이해하는 것 외에 이것의 궁극적인 목적을 이해하는 것 또한 중요합니다.
 
-Functional programming's goal is to **tame a system's complexity** through the use of formal _models_, and to give careful attention to **code's properties** and refactoring ease.
+함수형 프로그래밍의 목적은 수학적인 _모델_ 을 사용해 **시스템의 복잡성을 조정**하고 **코드의 속성** 과 리팩토링의 편의성에 중점을 두는 것입니다.
+> (원문) Functional programming's goal is to **tame a system's complexity** through the use of formal _models_, and to give careful attention to **code's properties** and refactoring ease.
 
-> Functional programming will help teach people the mathematics behind program construction:
+> 함수형 프로그래밍은 프로그램 구조에 감춰진 수학을 사람들에게 가르치는 것에 도와줍니다:
 >
-> - how to write composable code
-> - how to reason about side effects
-> - how to write consistent, general, less ad-hoc APIs
+> - 합성 가능한 코드를 작성하는법
+> - 부작용을 어떻게 다루는지
+> - 일관적이고, 범용적이며 체계적인 API 를 만드는 법
 
-What does it mean to give careful attention to code's properties? Let's see with an example:
+코드의 속성에 중점을 둔다는 것이 무엇일까요? 예제를 살펴보겠습니다:
 
-**Example**
+**예제**
 
-Why can we say that the `Array`'s `map` method is "more functional" than a `for` loop?
+왜 `for` 반복문보다 `Array` 의 `map` 이 더 함수형이라고 할까요?
 
 ```ts
-// input
+// 입력
 const xs: Array<number> = [1, 2, 3]
 
-// transformation
+// 수정
 const double = (n: number): number => n * 2
 
-// result: I want an array where each `xs`' element is doubled
+// 결과: `xs` 의 각 요소들이 2배가 된 배열을 얻고싶다
 const ys: Array<number> = []
 for (let i = 0; i <= xs.length; i++) {
   ys.push(double(xs[i]))
 }
 ```
 
-A `for` loop offers a lot of flexibility, I can modify:
+`for` 반복문은 많은 유연성을 제공합니다. 즉 다음 값들을 수정할 수 있습니다.
 
-- the starting index, `let i = 0`
-- the looping condition, `i < xs.length`
-- the step change, `i++`.
+- 시작 위치, `let i = 0`
+- 반복 조건, `i < xs.length`
+- 반복 제어, `i++`.
 
-This also implies that I may introduce **errors** and that I have no guarantees about the returned value.
+이는 **에러**를 만들어 낼 수 있음을 의미하며 따라서 결과물에 대한 확신이 줄어듭니다.
 
-**Quiz**. Is the `for loop` correct?
+**Quiz**. 위 `for 반복문`은 올바른가요?
 
-Let's rewrite the same exercise using `map`.
+위 예제를 `map`을 활용해 작성해봅시다.
 
 ```ts
-// input
+// 입력
 const xs: Array<number> = [1, 2, 3]
 
-// transformation
+// 수정
 const double = (n: number): number => n * 2
 
-// result: I want an array where each `xs`' element is doubled
+// 결과: `xs` 의 각 요소들이 2배가 된 배열을 얻고싶다
 const ys: Array<number> = xs.map(double)
 ```
 
-We can note how `map` lacks the same flexibility of a `for loop`, but it offers us some guarantees:
+`map`은 `for 반복문`에 비해 유연성이 적지만 다음과 같은 확신을 제공합니다.
 
-- all the elements of the input array will be processed
-- the resulting array will always have the same number of elements as the starting one
+- 입력 배열의 모든 요소에 대해 처리될것이다.
+- 결과 배열의 크기는 입력 배열의 크기와 동일할 것이다.
 
-In functional programming, where there's an emphasis on code properties rather than implementation details, the `map` operation is interesting **due to its limitations**
+함수형 프로그래밍에선 구체적인 구현보다 코드의 속성에 더 집중합니다. 
 
-Think about how easier it is to review a PR that involves `map` rather than a `for` loop.
+즉 `map` 연산의 **제약사항**이 오히려 유용하게 해줍니다.
+
+`for` 반복문 보다 `map` 을 사용한 PR 을 리뷰할 때 얼마나 편한지 생각해보세요.
 
 # The two pillars of functional programming
 
