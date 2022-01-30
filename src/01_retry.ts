@@ -1,8 +1,8 @@
 /*
 
-  Abstraction for a mechanism to perform actions repetitively until successful.
+  성공할 때까지 반복적으로 작업을 수행하는 작업에 대한 추상화입니다.
 
-  This module is split in 3 parts:
+  이 모듈은 다음과 같은 3가지 요소로 이루어집니다:
 
   - the model
   - primitives
@@ -15,10 +15,10 @@
 // -------------------------------------------------------------------------------------
 
 export interface RetryStatus {
-  /** Iteration number, where `0` is the first try */
+  /** 반복자, `0` 은 첫 번째 시도를 의미합니다 */
   readonly iterNumber: number
 
-  /** Latest attempt's delay. Will always be `undefined` on first run. */
+  /** 가장 최근 시도의 지연시간. 첫 번째 시도에서는 항상 `undefined` 입니다 */
   readonly previousDelay: number | undefined
 }
 
@@ -28,10 +28,9 @@ export const startStatus: RetryStatus = {
 }
 
 /**
- * A `RetryPolicy` is a function that takes an `RetryStatus` and
- * possibly returns a delay in milliseconds. Iteration numbers start
- * at zero and increase by one on each retry. A *undefined* return value from
- * the function implies we have reached the retry limit.
+ * `RetryPolicy` 는 `RetryStatus` 를 인자로 받고 지연시간을 밀리초로 반환하는 함수입니다.
+ * 반복자는 0에서 시작하고 각 시도마다 1씩 증가합니다.
+ * 만약 *undefined* 를 반환했다면 재시도 제한에 도달했다는 것을 의미합니다.
  */
 export interface RetryPolicy {
   (status: RetryStatus): number | undefined
@@ -42,19 +41,19 @@ export interface RetryPolicy {
 // -------------------------------------------------------------------------------------
 
 /**
- * Constant delay with unlimited retries.
+ * 무제한 시도하는 상수시간 지연
  */
 export const constantDelay = (delay: number): RetryPolicy => () => delay
 
 /**
- * Retry immediately, but only up to `i` times.
+ * 최대 `i` 번까지 즉시 재시도
  */
 export const limitRetries = (i: number): RetryPolicy => (status) =>
   status.iterNumber >= i ? undefined : 0
 
 /**
- * Grow delay exponentially each iteration.
- * Each delay will increase by a factor of two.
+ * 각 시도마다 지연시간이 기하급수적으로 증가한다.
+ * 지연시간은 2의 거듭제곱으로 증가한다
  */
 export const exponentialBackoff = (delay: number): RetryPolicy => (status) =>
   delay * Math.pow(2, status.iterNumber)
@@ -64,8 +63,7 @@ export const exponentialBackoff = (delay: number): RetryPolicy => (status) =>
 // -------------------------------------------------------------------------------------
 
 /**
- * Set a time-upperbound for any delays that may be directed by the
- * given policy.
+ * 주어진 정책의 최대 지연시간 상한값을 설정합니다.
  */
 export const capDelay = (maxDelay: number) => (
   policy: RetryPolicy
@@ -75,7 +73,7 @@ export const capDelay = (maxDelay: number) => (
 }
 
 /**
- * Merges two policies. **Quiz**: what does it mean to merge two policies?
+ * 두 정책을 병합합니다. **Quiz**: 두 정책을 병합한다는 것은 무엇을 의미할까요?
  */
 export const concat = (second: RetryPolicy) => (
   first: RetryPolicy
@@ -93,7 +91,7 @@ export const concat = (second: RetryPolicy) => (
 // -------------------------------------------------------------------------------------
 
 /**
- * Apply policy on status to see what the decision would be.
+ * 정책을 상태에 적용하고 그 결과를 확인합니다.
  */
 export const applyPolicy = (policy: RetryPolicy) => (
   status: RetryStatus
@@ -103,7 +101,7 @@ export const applyPolicy = (policy: RetryPolicy) => (
 })
 
 /**
- * Apply a policy keeping all intermediate results.
+ * 정책을 적용하고 중간 결과를 모두 반환합니다.
  */
 export const dryRun = (policy: RetryPolicy): ReadonlyArray<RetryStatus> => {
   const apply = applyPolicy(policy)

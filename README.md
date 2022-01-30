@@ -117,20 +117,20 @@ const ys: Array<number> = xs.map(double)
 
 `for` 반복문 보다 `map` 을 사용한 PR 을 리뷰할 때 얼마나 편한지 생각해보세요.
 
-# The two pillars of functional programming
+# 함수형 프로그래밍의 두 가지 요소
 
-Functional programming is based on the following two pillars:
+함수형 프로그래밍은 다음 두 가지 요소를 기반으로 한다:
 
-- Referential transparency
-- Composition (as universal design pattern)
+- 참조 투명성
+- 합성 (범용적 디자인 패턴으로서)
 
-All of the remaining content derives directly or indirectly from those two points.
+이후 내용은 위 두가지 요소와 직간접적으로 연관되어 있습니다.
 
-## Referential transparency
+## 참조 투명성
 
-> **Definition**. An **expression** is said to be _referentially transparent_ if it can be replaced with its corresponding value without changing the program's behavior
+> **정의**. 표현식이 평가되는 결과로 바꿔도 프로그래밍의 동작이 변하지 않는다면 해당 표현식은 참조에 투명하다고 말합니다.
 
-**Example** (referential transparency implies the use of pure functions)
+**예제** (참조 투명성은 순수함수를 사용하는 것을 의미합니다)
 
 ```ts
 const double = (n: number): number => n * 2
@@ -139,18 +139,18 @@ const x = double(2)
 const y = double(2)
 ```
 
-The expression `double(2)` has the referential transparency property because it is replaceable with its value, the number 4.
+`double(2)` 표현식은 그 결과인 4로 변경할 수 있기에 참조 투명성을 가지고 있습니다.
 
-Thus I can proceed with the following refactor
+따라서 코드를 아래와 같이 바꿀 수 있습니다.
 
 ```ts
 const x = 4
 const y = x
 ```
 
-Not every expression is referentially transparent, let's see an example.
+모든 표현식이 항상 참조 투명하지는 않습니다. 다음 예제를 봅시다.
 
-**Example** (referential transparency implies not throwing exceptions)
+**예제** (참조 투명성은 에러를 던지지 않는것을 의미합니다)
 
 ```ts
 const inverse = (n: number): number => {
@@ -161,9 +161,9 @@ const inverse = (n: number): number => {
 const x = inverse(0) + 1
 ```
 
-I can't replace `inverse(0)` with its value, thus it is not referentially transparent.
+`inverse(0)` 는 참조 투명하지 않기 때문에 결과로 대체할 수 없습니다.
 
-**Example** (referential transparency requires the use of immutable data structures)
+**예제** (참조 투명성을 위해 불변 자료구조를 사용해야 합니다)
 
 ```ts
 const xs = [1, 2, 3]
@@ -177,66 +177,70 @@ append(xs)
 const ys = xs
 ```
 
-On the last line I cannot replace `xs` with its initial value `[1, 2, 3]` since it has been changed by calling `append`.
+마지막 라인에서 `xs` 는 초기값인 `[1, 2, 3]` 으로 대체할 수 없습니다. 왜냐하면 `append` 함수를 호출해 값이 변경되었기 때문입니다.
 
-Why is referential transparency so important? Because it allows us to:
+왜 참조 투명성이 중요할까요? 다음과 같은 것을 얻을 수 있기 때문입니다:
 
-- **reason about code locally**, there is no need to know external context in order to understand a fragment of code
-- **refactor** without changing our system's behaviour
+- **지역적인 코드분석** 코드를 이해하기 위해 외부 문맥을 알 필요가 없습니다
+- **코드 수정** 시스템의 동작을 변경하지 않고 코드를 수정할 수 있습니다
 
-**Quiz**. Suppose we have the following program:
+**Quiz**. 다음과 같은 프로그램이 있다고 가정합시다:
 
 ```ts
-// In TypeScript `declare` allows to introduce a definition without requiring an implementation
+// Typescript 에서 `declare` 를 사용하면 함수의 구현부 없이 선언부만 작성할 수 있습니다
 declare const question: (message: string) => Promise<string>
 
 const x = await question('What is your name?')
 const y = await question('What is your name?')
 ```
 
-Can I refactor in this way? Does the program's behavior change or is it going to change?
+다음과 같이 코드를 수정해도 괜찮을까요? 프로그램 동작이 변할까요?
 
 ```ts
 const x = await question('What is your name?')
 const y = x
 ```
 
-As you can see refactoring a program including non-referentially transparent expressions might be challenging.
-In functional programming, where every expression is referentially transparent, the cognitive load required to make changes is severely reduced.
+보시다시피 참조 투명하지 않은 표현식을 수정하는 것은 매우 어렵습니다.
+모든 표현식이 참조 투명한 함수형 프로그램에선 수정에 필요한 인지 부하를 상당히 줄일 수 있습니다.
+> (원문) In functional programming, where every expression is referentially transparent, the cognitive load required to make changes is severely reduced.
 
-## Composition
+## 합성
 
-Functional programming's fundamental pattern is _composition_: we compose small units of code accomplishing very specific tasks into larger and complex units.
+함수형 프로그래밍의 기본 패턴은 합성입니다: 특정한 작업을 수행하는 작은 단위의 코드를 합성해 크고 복잡한 단위로 구성합니다.
 
-An example of a "from the smallest to the largest" composition pattern we can think of:
+"가장 작은것에서 가장 큰것으로" 합성하는 패턴의 예로 다음과 같은 것이 있습니다:
 
-- composing two or more primitive values (numbers or strings)
-- composing two or more functions
-- composing entire programs
+- 두 개 이상의 기본타입 값을 합성 (숫자나 문자열)
+- 두 개 이상의 함수를 합성
+- 전체 프로그램의 합성
 
-In the very last example we can speak of _modular programming_:
+마지막 예는 _모듈화 프로그래밍_ 이라 할 수 있습니다:
 
-> By modular programming I mean the process of building large programs by gluing together smaller programs - Simon Peyton Jones
+> 모듈화 프로그래밍이란 더 작은 프로그램을 붙여 큰 프로그램을 만드는 과정을 의미한다 - Simon Peyton Jones
 
-This programming style is achievable through the use of combinators.
+이러한 프로그래밍 스타일은 combinator 를 통해 이루어집니다.
 
-The term **combinator** refers to the [combinator pattern](https://wiki.haskell.org/Combinator):
+여기서 combinator 는 [combinator pattern](https://wiki.haskell.org/Combinator) 에서 말하는 용어입니다.
 
-> A style of organizing libraries centered around the idea of combining things. Usually there is some type `T`, some "primitive" values of type `T`, and some "combinators" which can combine values of type `T` in various ways to build up more complex values of type `T`
+> 사물들을 조합한다는 개념을 중심으로 하여 라이브러리를 만드는 방법. 보통 어떤 타입 `T`와 `T`의 기본값들, 그리고 `T`의 값들을 다양한 방법으로 조합해 더 복잡한 값을 만든는 "combinator" 가 있습니다.
+> 
+> (원문) A style of organizing libraries centered around the idea of combining things. Usually there is some type `T`, some "primitive" values of type `T`, and some "combinators" which can combine values of type `T` in various ways to build up more complex values of type `T`
 
-The general concept of a combinator is rather vague and it can appear in different forms, but the simplest one is this:
+combinator 의 일반적인 개념은 다소 모호하고 다른 형태로 나타날 수 있지만, 가장 간단한 것은 다음과 같다:
 
 ```ts
 combinator: Thing -> Thing
 ```
 
-**Example**. The function `double` combines two numbers.
+**예제**. `double` 함수는 두 수를 조합합니다.
 
-The goal of a combinator is to create new *Thing*s from *Thing*s already defined.
+combinator 의 목적은 이미 정의된 *어떤 것*으로 부터 새로운 *어떤 것*을 만드는 것입니다.
 
-Since the output of a combinator, the new _Thing_, can be passed around as input to other programs and combinators, we obtain a combinatorial explosion of opportunities, which makes this pattern extremely powerful.
+combinator 의 출력인 새로운 *어떤 것*은 다른 프로그램이나 combinator 로 전달할 수 있기 때문에, 우리는 조합적 폭발을 얻을 수 있으며 이는 이 패턴이 매우 강력하다는 것을 의미합니다.
+> (원문) Since the output of a combinator, the new _Thing_, can be passed around as input to other programs and combinators, we obtain a combinatorial explosion of opportunities, which makes this pattern extremely powerful.
 
-**Example**
+**예제**
 
 ```ts
 import { pipe } from 'fp-ts/function'
@@ -246,23 +250,23 @@ const double = (n: number): number => n * 2
 console.log(pipe(2, double, double, double)) // => 16
 ```
 
-Thus the usual design you can find in a functional module is:
+따라서 함수형 모듈에서 다음과 같은 일반적인 형태를 볼 수 있습니다:
 
-- a model for some type `T`
-- a small set of "primitives" of type `T`
-- a set of combinators to combine the primitives in larger structures
+- 타입 `T`에 대한 model
+- 타입 `T`의 "primitives"
+- primitives 를 더 큰 구조로 조합하기 위한 combinators
 
-Let's try to implement such a module:
+이와 같은 모듈을 만들어봅시다.
 
 **Demo**
 
 [`01_retry.ts`](src/01_retry.ts)
 
-As you can see from the previous demo, with merely 3 primitives and two combinators we've been able to express a pretty complex policy.
+위 데모를 통해 알 수 있듯이, 3개의 primitive 와 2 개의 combinator 만으로도 꽤 복잡한 정책을 표현할 수 있었습니다.
 
-Think at how just adding a single new primitive, or a single combinator to those already defined, adds expressive possibilities exponentially.
+만약 새로운 primitive 나 combinator 를 기존것들과 조합한다면 표현가능한 경우의 수가 기하급수적으로 증가하는 것을 알 수 있습니다.
 
-Of the two combinators in `01_retry.ts` a special mention goes to `concat` since it refers to a very powerful functional programming abstraction: semigroups.
+`01_retry.ts`에 있는 두 개의 combinator 에서 특히 중요한 함수는 `concat`인데 강력한 함수형 프로그래밍 추상화인 semigroup 과 관련있기 때문입니다.
 
 # Modelling composition with Semigroups
 
