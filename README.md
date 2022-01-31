@@ -91,7 +91,7 @@ for (let i = 0; i <= xs.length; i++) {
 
 이는 **에러**를 만들어 낼 수 있음을 의미하며 따라서 결과물에 대한 확신이 줄어듭니다.
 
-**Quiz**. 위 `for 반복문`은 올바른가요?
+**문제**. 위 `for 반복문`은 올바른가요?
 
 위 예제를 `map`을 활용해 작성해봅시다.
 
@@ -184,7 +184,7 @@ const ys = xs
 - **지역적인 코드분석** 코드를 이해하기 위해 외부 문맥을 알 필요가 없습니다
 - **코드 수정** 시스템의 동작을 변경하지 않고 코드를 수정할 수 있습니다
 
-**Quiz**. 다음과 같은 프로그램이 있다고 가정합시다:
+**문제**. 다음과 같은 프로그램이 있다고 가정합시다:
 
 ```ts
 // Typescript 에서 `declare` 를 사용하면 함수의 구현부 없이 선언부만 작성할 수 있습니다
@@ -268,37 +268,41 @@ console.log(pipe(2, double, double, double)) // => 16
 
 `01_retry.ts`에 있는 두 개의 combinator 에서 특히 중요한 함수는 `concat`인데 강력한 함수형 프로그래밍 추상화인 semigroup 과 관련있기 때문입니다.
 
-# Modelling composition with Semigroups
+# Semigroup 으로 합성 모델링
 
-A semigroup is a recipe to combine two, or more, values.
+semigroup 은 두 개 이상의 값을 조합하는 설계도입니다.
 
-A semigroup is an **algebra**, which is generally defined as a specific combination of:
+semigroup 은 **대수 (algebra)** 이며, 다음과 같은 조합으로 정의됩니다.
 
-- one or more sets
-- one or more operations on those sets
-- zero or more laws on the previous operations
+- 하나 이상의 집합
+- 해당 집합에 대한 하나 이상의 연산
+- 이전 연산에 대한 0개 이상의 법칙
 
-Algebras are how mathematicians try to capture an idea in its purest form, eliminating everything that is superfluous.
+대수학은 수학자들이 어떤 개념을 불필요한 모든 것을 제거한 가장 순수한 형태로 만드려는 방법입니다.
 
-> When an algebra is modified the only allowed operations are those defined by the algebra itself according to its own laws
+> 대수는 자신의 법칙에 따라 대수 그 자체로 정의되는 연산에 의해서만 변경이 허용된다.
+> 
+> (원문) When an algebra is modified the only allowed operations are those defined by the algebra itself according to its own laws
 
-Algebras can be thought of as an abstraction of **interfaces**:
+대수학은 **인터페이스** 의 추상화로 생각할 수 있습니다.
 
-> When an interface is modified the only allowed operations are those defined by the interface itself according to its own laws
+> 인터페이스는 자신의 법칙에 따라 인터페이스 그 자체로 정의되는 연산에 의해서만 변경이 허용된다.
+>
+> (원문) When an interface is modified the only allowed operations are those defined by the interface itself according to its own laws
 
-Before getting into semigroups, let's see first an example of an algebra, a _magma_.
+semigroups 에 대해 알아보기 전에, 첫 대수의 예인 _magma_ 를 살펴봅시다.
 
-## Definition of a Magma
+## Magma 의 정의
 
-A Magma<A> is a very simple algebra:
+Magma<A> 는 매우 간단한 대수입니다:
 
-- a set or type (A)
-- a `concat` operation
-- no laws to obey
+- 타입 (A) 의 집합
+- `concat` 연산
+- 지켜야 할 법칙은 없음
 
-**Note**: in most cases the terms _set_ and _type_ can be used interchangeably.
+**Note**: 대부분의 경우 _set_ 과 _type_ 은 같은 의미로 사용됩니다.
 
-We can use a TypeScript `interface` to model a Magma.
+Magma 를 정의하기 위해 Typescript 의 `interface` 를 활용할 수 있습니다.
 
 ```ts
 interface Magma<A> {
@@ -306,12 +310,12 @@ interface Magma<A> {
 }
 ```
 
-Thus, we have have the ingredients for an algebra:
+이를통해, 대수를 위한 재료를 얻게됩니다.
 
-- a set `A`
-- an operation on the set `A`, `concat`. This operation is said to be _closed on_ the set `A` which means that whichever elements `A` we apply the operation on the result will still be an element of `A`. Since the result is still an `A`, it can be used again as an input for `concat` and the operation can be repeated how many times we want. In other words `concat` is a `combinator` for the type `A`.
+- 집합 `A`
+- 집합 `A` 에 대한 연산인 `concat`. 이 연산은 집합 `A` 에 대해 _닫혀있다_ 고 말합니다. 임의의 `A` 요소에 대해 연산의 결과도 항상 `A` 이며 이 값은 다시 `concat` 의 입력으로 쓸 수 있습니다. `concat` 은 다른 말로 타입 `A` 의 `combinator` 입니다.
 
-Let's implement a concrete instance of `Magma<A>` with `A` being the `number` type.
+`Magma<A>` 의 구체적인 인스턴스 하나를 구현해봅니다. 여기서 `A` 는 `number` 입니다.
 
 ```ts
 import { Magma } from 'fp-ts/Magma'
@@ -326,7 +330,7 @@ const getPipeableConcat = <A>(M: Magma<A>) => (second: A) => (first: A): A =>
 
 const concat = getPipeableConcat(MagmaSub)
 
-// usage example
+// 사용 예제
 
 import { pipe } from 'fp-ts/function'
 
@@ -334,17 +338,17 @@ pipe(10, concat(2), concat(3), concat(1), concat(2), console.log)
 // => 2
 ```
 
-**Quiz**. The fact that `concat` is a _closed_ operation isn't a trivial detail. If `A` is the set of natural numbers (defined as positive integers) instead of the JavaScript number type (a set of positive and negative floats), could we define a `Magma<Natural>` with `concat` implemented like in `MagmaSub`? Can you think of any other `concat` operation on natural numbers for which the `closure` property isn't valid?
+**문제**. 위 `concat` 이 _닫힌_ 연산이라는 점은 쉽게 알 수 있습니다. 만약 `A` JavaScript 의 number(양수와 음수 float 집합)가 아닌 가 자연수의 집합(양수로 정의된) 이라면, `MagmaSub` 에 구현된 `concat` 과 같은 연산을 가진 `Magma<Natural>` 을 정의할 수 있을까요? 자연수에 대해 닫혀있지 않는 또다른 `concat` 연산을 생각해 볼 수 있나요?
 
-**Definition**. Given `A` a non empty set and `*` a binary operation _closed on_ (or _internal to_) `A`, then the pair `(A, *)` is called a _magma_.
+**정의**. 주어진 `A` 가 공집합이 아니고 이항연산 `*` 가 `A` 에 대해 닫혀있다면, 쌍 `(A, *)` 를 _magma_라 합니다.
 
-Magmas do not obey any law, they only have the closure requirement. Let's see an algebra that do requires another law: semigroups.
+Magma 는 닫힘 조건외에 다른 법칙을 요구하지 않습니다. 이제 semigroup 이라는 추가 법칙을 요구하는 대수를 살펴봅시다.
 
-## Definition of a Semigroup
+## Semigroup 의 정의
 
-> Given a `Magma` if the `concat` operation is **associative** then it's a _semigroup_.
+> 어떤 `Magma` 의 `concat` 연산이 **결합법칙**을 만족하면 _semigroup_이다.
 
-The term "associative" means that the equation:
+여기서 "결합법칙" 은 `A` 의 모든 `x`, `y`, `z` 에 대해 다음 등식이 성립하는 것을 의미합니다:
 
 ```ts
 (x * y) * z = x * (y * z)
@@ -353,27 +357,25 @@ The term "associative" means that the equation:
 concat(concat(a, b), c) = concat(a, concat(b, c))
 ```
 
-holds for any `x`, `y`, `z` in `A`.
+쉽게 말하면 _결합법칙_은 표현식에서 괄호를 신경쓸 필요없이 단순히 `x * y * z` 로 쓸 수 있다는 사실을 알려줍니다.
 
-In layman terms _associativity_ tells us that we do not have to worry about parentheses in expressions and that we can simply write `x * y * z` (there's no ambiguity).
+**예제**
 
-**Example**
-
-String concatenation benefits from associativity.
+문자열 연결은 결합법칙을 만족합니다.
 
 ```ts
 ("a" + "b") + "c" = "a" + ("b" + "c") = "abc"
 ```
 
-Every semigroup is a magma, but not every magma is a semigroup.
+모든 semigroup 은 magma 입니다, 하지만 모든 magma 가 semigroup 인것은 아닙니다.
 
 <center>
 <img src="images/semigroup.png" width="300" alt="Magma vs Semigroup" />
 </center>
 
-**Example**
+**예제**
 
-The previous `MagmaSub` is not a semigroup because its `concat` operation is not associative.
+이전 예제 `MagmaSub` 는 `concat` 이 결합법칙을 만족하지 않기에 semigroup 이 아닙니다. 
 
 ```ts
 import { pipe } from 'fp-ts/function'
@@ -387,17 +389,18 @@ pipe(MagmaSub.concat(MagmaSub.concat(1, 2), 3), console.log) // => -4
 pipe(MagmaSub.concat(1, MagmaSub.concat(2, 3)), console.log) // => 2
 ```
 
+Semigroup 은 병렬 연산이 가능하다는 의미를 내포합니다
 Semigroups capture the essence of parallelizable operations
 
-If we know that there is such an operation that follows the associativity law, we can further split a computation into two sub computations, each of them could be further split into sub computations.
+어떤 계산이 결합법칙을 만족한다는 것을 안다면, 계산을 두 개의 하위 계산으로 더 분할할 수 있고, 각각의 계산은 하위 계산으로 더 분할될 수 있습니다.
 
 ```ts
 a * b * c * d * e * f * g * h = ((a * b) * (c * d)) * ((e * f) * (g * h))
 ```
 
-Sub computations can be run in parallel mode.
+하위 계산은 병렬로 실행할 수 있습니다.
 
-As for `Magma`, `Semigroup`s are implemented through a TypeScript `interface`:
+`Magga` 처럼, `Semigroup` 도 Typescript `interface` 로 정의할 수 있습니다:
 
 ```ts
 // fp-ts/lib/Semigroup.ts
@@ -405,19 +408,17 @@ As for `Magma`, `Semigroup`s are implemented through a TypeScript `interface`:
 interface Semigroup<A> extends Magma<A> {}
 ```
 
-The following law has to hold true:
+다음 법칙을 만족해야 합니다:
 
-- **Associativity**: If `S` is a semigroup the following has to hold true:
+- **결합법칙**: 만약 `S` 가 semigroup 이면 타입 `A` 의 모든 `x`, `y`, `z` 에 대해 다음 등식이 성립합니다
 
 ```ts
 S.concat(S.concat(x, y), z) = S.concat(x, S.concat(y, z))
 ```
 
-for every `x`, `y`, `z` of type `A`
+**Note**. 안타깝게도 Typescript 의 타입시스템 만으론 이 법칙을 강제할 수 없습니다.
 
-**Note**. Sadly it is not possible to encode this law using TypeScript's type system.
-
-Let's implement a semigroup for some `ReadonlyArray<string>`:
+`ReadonlyArray<string>` 에 대한 semigroup 을 구현해봅시다:
 
 ```ts
 import * as Se from 'fp-ts/Semigroup'
@@ -427,7 +428,8 @@ const Semigroup: Se.Semigroup<ReadonlyArray<string>> = {
 }
 ```
 
-The name `concat` makes sense for arrays (as we'll see later) but, depending on the context and the type `A` on whom we're implementing an instance, the `concat` semigroup operation may have different interpretations and meanings:
+`concat` 이란 이름은 (이후 알게 되겠지만) 배열에 대해서는 적절합니다. 하지만 인스턴스를 만드려는 타입 `A` 와 문맥에 따라, `concat` 연산은 아래와 같은 다른 해석과 의미를 가질 수 있습니다.
+> (원문) The name `concat` makes sense for arrays (as we'll see later) but, depending on the context and the type `A` on whom we're implementing an instance, the `concat` semigroup operation may have different interpretations and meanings:
 
 - "concatenation"
 - "combination"
@@ -437,37 +439,36 @@ The name `concat` makes sense for arrays (as we'll see later) but, depending on 
 - "sum"
 - "substitution"
 
-and many others.
+**예제**
 
-**Example**
-
-This is how to implement the semigroup `(number, +)` where `+` is the usual addition of numbers:
+다음은 semigroup `(number, +)` 을 정의한 것입니다. 여기서 `+` 는 숫자에 대한 덧셈을 의미합니다:
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'
 
-/** number `Semigroup` under addition */
+/** 덧셈에 대한 number `Semigroup` */
 const SemigroupSum: Semigroup<number> = {
   concat: (first, second) => first + second
 }
 ```
 
-**Quiz**. Can the `concat` combinator defined in the demo [`01_retry.ts`](src/01_retry.ts) be used to define a `Semigroup` instance for the `RetryPolicy` type?
+**문제**. 이전 demo 의 [`01_retry.ts`](src/01_retry.ts) 에 정의된 `concat` combinator 를 `RetryPolicy` 타입에 대한 `Semigroup` 인스턴스로 정의할 수 있을까요?
 
-This is the implementation for the semigroup `(number, *)` where `*` is the usual number multiplication:
+다음은 semigroup `(number, *)` 을 정의한 것입니다. 여기서 `*` 는 숫자에 대한 덧셈을 의미합니다:
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'
 
-/** number `Semigroup` under multiplication */
+/** 곱셈에 대한 number `Semigroup` */
 const SemigroupProduct: Semigroup<number> = {
   concat: (first, second) => first * second
 }
 ```
 
-**Note** It is a common mistake to think about the _semigroup of numbers_, but for the same type `A` it is possible to define more **instances** of `Semigroup<A>`. We've seen how for `number` we can define a semigroup under _addition_ and _multiplication_. It is also possible to have `Semigroup`s that share the same operation but differ in types. `SemigroupSum` could've been implemented on natural numbers instead of unsigned floats like `number`.
+**Note** 흔히 _number 의 semigroup_ 에 한정지어 생각하곤 하지만, 임의의 타입 `A` 에 대해 다른 `Semigroup<A>` **인스턴스**를 정의하는 것도 가능합니다. `number` 타입의 _덧셈_ 과 _곱셈_ 연산에 대한 semigroup 을 정의한것처럼 다른 타입에 대해 같은 연산으로 `Semigroup` 을 만들 수 있습니다. 예들들어 `SemigoupSum` 은 `number` 와 같은 타입대신 자연수에 대해서도 구현할 수 있습니다.
+> (원문) It is a common mistake to think about the _semigroup of numbers_, but for the same type `A` it is possible to define more **instances** of `Semigroup<A>`. We've seen how for `number` we can define a semigroup under _addition_ and _multiplication_. It is also possible to have `Semigroup`s that share the same operation but differ in types. `SemigroupSum` could've been implemented on natural numbers instead of unsigned floats like `number`.
 
-Another example, with the `string` type:
+`string` 타입에 대한 다른 예제입니다:
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'
@@ -477,7 +478,7 @@ const SemigroupString: Semigroup<string> = {
 }
 ```
 
-Another two examples, this time with the `boolean` type:
+이번에는 `boolean` 타입에 대한 또 다른 2개의 에제입니다:
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'
