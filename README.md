@@ -614,9 +614,9 @@ const v2: Vector = { x: 1, y: 2 }
 console.log(SemigroupVector.concat(v1, v2)) // => { x: 2, y: 3 }
 ```
 
-<div style="text-align: center;">
-<img src="images/semigroupVector.png" width="300" alt="SemigroupVector" />
-</div>
+<p align="center">
+    <img src="images/semigroupVector.png" width="300" alt="SemigroupVector" />
+</p>
 
 boilerplate 코드가 너무 많나요? 좋은 소식은 semigroup 의 **수학적 법칙**에 따르면 각 필드에 대한 semigroup 인스턴스를 만들 수 있다면 `Vector` 같은 구조체의 semigroup 인스턴스를 만들 수 있습니다. 
 
@@ -1514,9 +1514,9 @@ The consequence of the previous proof is that there can be only one unit per mon
 
 We have seen how each semigroup was a magma, but not every magma was a semigroup. In the same way, each monoid is a semigroup, but not every semigroup is a monoid.
 
-<center>
-<img src="images/monoid.png" width="300" alt="Magma vs Semigroup vs Monoid" />
-</center>
+<p align="center">
+    <img src="images/monoid.png" width="300" alt="Magma vs Semigroup vs Monoid" />
+</p>
 
 **Example**
 
@@ -1861,9 +1861,9 @@ Two common families of algebraic data types are:
 - **product types**
 - **sum types**
 
-<center>
-<img src="images/adt.png" width="400" alt="ADT" />
-</center>
+<p align="center">
+    <img src="images/adt.png" width="400" alt="ADT" />
+</p>
 
 Let's begin with the more familiar ones: product types.
 
@@ -2826,7 +2826,7 @@ Luckily, for the last 70 years ago, a large number of researchers, members of th
 
 Saunders Mac Lane
 
-<center>
+<div align="center">
 <img src="images/maclane.jpg" width="300" alt="Saunders Mac Lane" />
 
 (Saunders Mac Lane)
@@ -2834,8 +2834,7 @@ Saunders Mac Lane
 <img src="images/eilenberg.jpg" width="300" alt="Samuel Eilenberg" />
 
 (Samuel Eilenberg)
-
-</center>
+</div>
 
 We'll see in the following chapters how a category can form the basis for:
 
