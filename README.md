@@ -369,9 +369,9 @@ concat(concat(a, b), c) = concat(a, concat(b, c))
 
 모든 semigroup 은 magma 입니다, 하지만 모든 magma 가 semigroup 인것은 아닙니다.
 
-<center>
-<img src="images/semigroup.png" width="300" alt="Magma vs Semigroup" />
-</center>
+<p align="center">
+    <img src="images/semigroup.png" width="300" alt="Magma vs Semigroup" />
+</p>
 
 **예제**
 
@@ -492,15 +492,15 @@ const SemigroupAny: Semigroup<boolean> = {
 }
 ```
 
-## The `concatAll` function
+## `concatAll` 함수
 
-By definition `concat` combines merely two elements of `A` every time. Is it possible to combine any number of them?
+정의상 `concat` 은 단지 2개의 요소 `A` 를 조합합니다. 몇 개라도 조합이 가능할까요?
 
-The `concatAll` function takes:
+`concatAll` 함수는 다음 값을 요구합니다:
 
-- an instance of a semigroup
-- an initial value
-- an array of elements
+- semigroup 인스턴스
+- 초기값
+- 요소의 배열
 
 ```ts
 import * as S from 'fp-ts/Semigroup'
@@ -515,11 +515,12 @@ const product = S.concatAll(N.SemigroupProduct)(3)
 console.log(product([1, 2, 3, 4])) // => 72
 ```
 
-**Quiz**. Why do I need to provide an initial value?
+**문제**. 왜 초기값을 제공해야 할까요?
 
-**Example**
+**예제**
 
-Lets provide some applications of `concatAll`, by reimplementing some popular functions from the JavaScript standard library.
+
+Javascript 기본 라이브러리의 유명한 함수 몇가지를 `concatAll` 으로 구현해봅시다.
 
 ```ts
 import * as B from 'fp-ts/boolean'
@@ -539,38 +540,38 @@ const assign: (as: ReadonlyArray<object>) => object = concatAll(
 )({})
 ```
 
-**Quiz**. Is the following semigroup instance lawful (does it respect semigroup laws)?
+**문제**. 다음 인스턴스는 semigroup 법칙을 만족합니까?
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'
 
-/** Always return the first argument */
+/** 항상 첫 번째 인자를 반환 */
 const first = <A>(): Semigroup<A> => ({
   concat: (first, _second) => first
 })
 ```
 
-**Quiz**. Is the following semigroup instance lawful?
+**문제**. 다음 인스턴스는 semigroup 법칙을 만족합니까?
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'
 
-/** Always return the second argument */
+/** 항상 두 번째 인자를 반환 */
 const last = <A>(): Semigroup<A> => ({
   concat: (_first, second) => second
 })
 ```
 
-## The dual semigroup
+## Dual semigroup
 
-Given a semigroup instance, it is possible to obtain a new semigroup instance by simply swapping the order in which the operands are combined:
+semigroup 인스턴스가 주어지면, 단순히 조합되는 피연산자의 순서를 변경해 새로운 semigroup 인스턴스를 얻을 수 있습니다.
 
 ```ts
 import { pipe } from 'fp-ts/function'
 import { Semigroup } from 'fp-ts/Semigroup'
 import * as S from 'fp-ts/string'
 
-// This is a Semigroup combinator
+// Semigroup combinator
 const reverse = <A>(S: Semigroup<A>): Semigroup<A> => ({
   concat: (first, second) => S.concat(second, first)
 })
@@ -579,23 +580,23 @@ pipe(S.Semigroup.concat('a', 'b'), console.log) // => 'ab'
 pipe(reverse(S.Semigroup).concat('a', 'b'), console.log) // => 'ba'
 ```
 
-**Quiz**. This combinator makes sense because, generally speaking, the `concat` operation is not [**commutative**](https://en.wikipedia.org/wiki/Commutative_property), can you find an example where `concat` is commutative and one where it isn't?
+**문제**. 이 combinator 이치에 맞습니다만, 일반적으로 `concat` 연산은 [**교환법칙**](https://en.wikipedia.org/wiki/Commutative_property) 을 만족하지 않습니다, 교환법칙을 만족하는 `concat` 과 그렇지 않은것을 찾을 수 있습니까?
 
 ## Semigroup product
 
-Let's try defining a semigroup instance for more complex types:
+더 복잡한 semigroup 인스턴스를 정의해봅시다:
 
 ```ts
 import * as N from 'fp-ts/number'
 import { Semigroup } from 'fp-ts/Semigroup'
 
-// models a vector starting at the origin
+// 정점에서 시작하는 vector 를 모델링
 type Vector = {
   readonly x: number
   readonly y: number
 }
 
-// models a sum of two vectors
+// 두 vector 의 합을 모델링
 const SemigroupVector: Semigroup<Vector> = {
   concat: (first, second) => ({
     x: N.SemigroupSum.concat(first.x, second.x),
@@ -604,7 +605,7 @@ const SemigroupVector: Semigroup<Vector> = {
 }
 ```
 
-**Example**
+**예제**
 
 ```ts
 const v1: Vector = { x: 1, y: 1 }
@@ -613,34 +614,34 @@ const v2: Vector = { x: 1, y: 2 }
 console.log(SemigroupVector.concat(v1, v2)) // => { x: 2, y: 3 }
 ```
 
-<center>
+<div style="text-align: center;">
 <img src="images/semigroupVector.png" width="300" alt="SemigroupVector" />
-</center>
+</div>
 
-Too much boilerplate? The good news is that the **mathematical theory** behind semigroups tells us we can implement a semigroup instance for a struct like `Vector` if we can implement a semigroup instance for each of its fields.
+boilerplate 코드가 너무 많나요? 좋은 소식은 semigroup 의 **수학적 법칙**에 따르면 각 필드에 대한 semigroup 인스턴스를 만들 수 있다면 `Vector` 같은 구조체의 semigroup 인스턴스를 만들 수 있습니다. 
 
-Conveniently the `fp-ts/Semigroup` module exports a `struct` combinator:
+편리하게도 `fp-ts/Semigroup` 모둘은 `struct` combinator 를 제공합니다:
 
 ```ts
 import { struct } from 'fp-ts/Semigroup'
 
-// models the sum of two vectors
+// 두 vector 의 합을 모델링
 const SemigroupVector: Semigroup<Vector> = struct({
   x: N.SemigroupSum,
   y: N.SemigroupSum
 })
 ```
 
-**Note**. There is a combinator similar to `struct` that works with tuples: `tuple`
+**Note**. `struct` 와 유사한 tuple 에 대해 동작하는 combinator 도 존재합니다: `tuple`
 
 ```ts
 import * as N from 'fp-ts/number'
 import { Semigroup, tuple } from 'fp-ts/Semigroup'
 
-// models a vector starting from origin
+// 정점에서 시작하는 vector 모델링
 type Vector = readonly [number, number]
 
-// models the sum of two vectors
+// 두 vector 의 합을 모델링
 const SemigroupVector: Semigroup<Vector> = tuple(N.SemigroupSum, N.SemigroupSum)
 
 const v1: Vector = [1, 1]
@@ -649,7 +650,7 @@ const v2: Vector = [1, 2]
 console.log(SemigroupVector.concat(v1, v2)) // => [2, 3]
 ```
 
-**Quiz**. Is it true that given any `Semigroup<A>` and having chosen any `middle` of `A`, if I insert it between the two `concat` parameters the result is still a semigroup?
+**문제**. 만약 임의의 `Semigroup<A>` 와 `A` 의 임의의 값 middle 을 두 `concat` 인자 사이에 넣도록 만든 인스턴스는 여전히 semigroup 일까요?
 
 ```ts
 import { pipe } from 'fp-ts/function'
@@ -670,11 +671,11 @@ pipe(
 ) // => 'a|b|c'
 ```
 
-## Finding a Semigroup instance for any type
+## 임의의 타입에 대한 semigroup 인스턴스 찾기
 
-The associativity property is a very strong requirement, what happens if, given a specific type `A` we can't find an associative operation on `A`?
+결합법칙은 매우 까다로운 조건이기 때문에, 만약 어떤 타입 `A` 에 대한 결합법칙을 만족하는 연산을 찾을 수 없다면 어떻게될까요?
 
-Suppose we have a type `User` defined as:
+아래와 같은 `User` 를 정의했다고 가정합시다:
 
 ```ts
 type User = {
@@ -682,24 +683,23 @@ type User = {
   readonly name: string
 }
 ```
-
-and that inside my database we have multiple copies of the same `User` (e.g. they could be historical entries of its modifications).
+그리고 데이터베이스에는 같은 `User` 에 대한 여러 복사본이 있다고 가정합니다 (예를들면 수정이력일 수 있습니다)
 
 ```ts
-// internal APIs
+// 내부 API
 declare const getCurrent: (id: number) => User
 declare const getHistory: (id: number) => ReadonlyArray<User>
 ```
 
-and that we need to implement a public API
+그리고 다음 외부 API 를 구현해야합니다.
 
 ```ts
 export declare const getUser: (id: number) => User
 ```
 
-which takes into account all of its copies depending on some criteria. The criteria should be to return the most recent copy, or the oldest one, or the current one, etc..
+API 는 다음 조건에 따라 적절한 `User` 를 가져와야 합니다. 조건은 가장 최근 또는 가장 오래된, 아니면 현재 값 등이 될 수 있습니다.
 
-Naturally we can define a specific API for each of these criterias:
+보통은 다음처럼 각 조건에 따라 여러 API 를 만들 수 있습니다:
 
 ```ts
 export declare const getMostRecentUser: (id: number) => User
@@ -708,21 +708,21 @@ export declare const getCurrentUser: (id: number) => User
 // etc...
 ```
 
-Thus, to return a value of type `User` I need to consider all the copies and make a `merge` (or `selection`) of them, meaning I can model the criteria problem with a `Semigroup<User>`.
+따라서, `User` 를 반환하기 위해 모든 복사본에 대한 `병합` (이나 `선택`)이 필요합니다. 이는 조건에 대한 문제를 `Semigroup<User>` 로 다룰 수 있다는 것을 의미합니다.
 
-That being said, it is not really clear right now what it means to "merge two `User`s" nor if this merge operation is associative.
+그렇지만, 아직 "두 `User`를 병합하기"가 어떤 의미인지, 그리고 해당 병합 연산이 결합법칙을 만족하는지 알기 쉽지 않습니다.
 
-You can **always** define a Semigroup instance for **any** given type `A` by defining a semigroup instance not for `A` itself but for `NonEmptyArray<A>` called the **free semigroup** of `A`:
+주어진 **어떠한** 타입 `A` 에 대해서도 **항상** semigroup 인스턴스를 만들 수 있습니다. `A` 자체에 대한 인스턴스가 아닌 `NonEmptyArray<A>` 의 인스턴스로 만들 수 있으며 이는 `A` 의 **free semigroup** 이라고 불립니다.
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'
 
-// represents a non-empty array, meaning an array that has at least one element A
+// 적어도 하나의 A 의 요소가 있는 배열을 표현합니다
 type ReadonlyNonEmptyArray<A> = ReadonlyArray<A> & {
   readonly 0: A
 }
 
-// the concatenation of two NonEmptyArrays is still a NonEmptyArray
+// 비어있지 않은 두 배열을 합해도 여전히 비어있지 않은 배열입니다
 const getSemigroup = <A>(): Semigroup<ReadonlyNonEmptyArray<A>> => ({
   concat: (first, second) => [first[0], ...first.slice(1), ...second]
 })
