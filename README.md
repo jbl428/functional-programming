@@ -728,14 +728,14 @@ const getSemigroup = <A>(): Semigroup<ReadonlyNonEmptyArray<A>> => ({
 })
 ```
 
-and then we can map the elements of `A` to "singletons" of `ReadonlyNonEmptyArray<A>`, meaning arrays with only one element.
+그러면 `A` 의 요소  `ReadonlyNonEmptyArray<A>` 의 "싱글톤" 으로 만들 수 있으며 이는 하나를 하나의 요소만 있는 배열을 의미합니다.
 
 ```ts
-// insert an element into a non empty array
+// 비어있지 않은 배열에 값 하나를 넣습니다
 const of = <A>(a: A): ReadonlyNonEmptyArray<A> => [a]
 ```
 
-Let's apply this technique to the `User` type:
+이 방식을 `User` 타입에도 적용해봅시다:
 
 ```ts
 import {
@@ -750,29 +750,30 @@ type User = {
   readonly name: string
 }
 
-// this semigroup is not for the `User` type but for `ReadonlyNonEmptyArray<User>`
+// 이 semigroup 은 `User` 타입이 아닌 `ReadonlyNonEmptyArray<User>` 를 위한 것입니다
 const S: Semigroup<ReadonlyNonEmptyArray<User>> = getSemigroup<User>()
 
 declare const user1: User
 declare const user2: User
 declare const user3: User
 
-// const merge: ReadonlyNonEmptyArray<User>
+// 병합: ReadonlyNonEmptyArray<User>
 const merge = S.concat(S.concat(of(user1), of(user2)), of(user3))
 
-// I can get the same result by "packing" the users manually into an array
+// 배열에 직접 user 를 넣어서 같은 결과를 얻을 수 있습니다.
 const merge2: ReadonlyNonEmptyArray<User> = [user1, user2, user3]
 ```
 
+따라서, `A` 의 free semigroup 이란 비어있지 않은 모든 유한 순열을 다루는 semigroup 일 뿐입니다.
 Thus, the free semigroup of `A` is merely another semigroup in which the elements are all possible, non empty, finite sequences of `A`.
 
-The free semigroup of `A` can be seen as a _lazy_ way to `concat`enate elements of type `A` while preserving their data content.
+`A` 의 free semigroup 이란 데이터 내용을 유지한채로 `A` 의 요소들의 `결합`을 _게으른_ 방법으로 처리하는 것으로 볼 수 있습니다.
 
-The `merge` value, containing `[user1, user2, user3]`, tells us which are the elements to concatenate and in which order they are.
+이전 예제에서 `[user1, user2, user3]` 을 가지는 `merge` 상수는 어떤 요소가 어떤 순서로 결합되어 있는지 알려줍니다.
 
-Now I have three possible options to design the `getUser` API:
+이제 `getUser` API 설계를 위한 세 가지 옵션이 있습니다:
 
-1. I can define `Semigroup<User>` and I want to get straight into `merge`ing.
+1. `Semigroup<User>` 를 정의하고 바로 `병합`한다.
 
 ```ts
 declare const SemigroupUser: Semigroup<User>
@@ -784,7 +785,7 @@ export const getUser = (id: number): User => {
 }
 ```
 
-2. I can't define `Semigroup<User>` or I want to leave the merging strategy open to implementation, thus I'll ask it to the API consumer:
+2. `Semigroup<User>` 을 직접 정의하는 대신 병합 전략을 외부에서 구현하게 한다. 즉 API 사용자가 제공하도록 한다.
 
 ```ts
 export const getUser = (SemigroupUser: Semigroup<User>) => (
@@ -792,33 +793,33 @@ export const getUser = (SemigroupUser: Semigroup<User>) => (
 ): User => {
   const current = getCurrent(id)
   const history = getHistory(id)
-  // merge immediately
+  // 바로 병합
   return concatAll(SemigroupUser)(current)(history)
 }
 ```
 
-3. I can't define `Semigroup<User>` nor I want to require it.
+3. `Semigroup<User>` 를 정의할 수 없고 외부로 부터 제공받지 않는다. 
 
-In this case the free semigroup of `User` can come to the rescue:
+이럴 때에는 `User` 의 free semigroup 을 활용합니다:
 
 ```ts
 export const getUser = (id: number): ReadonlyNonEmptyArray<User> => {
   const current = getCurrent(id)
   const history = getHistory(id)
-  // I DO NOT proceed with merging and return the free semigroup of User
+  // 병합을 진행하지 않고 User 의 free semigroup 을 반환한다
   return [current, ...history]
 }
 ```
 
-It should be noted that, even when I do have a `Semigroup<A>` instance, using a free semigroup might be still convenient for the following reasons:
+`Semigroup<A>` 인스턴스를 만들수 있는 상황일 지라도 다음과 같은 이유로 free semigroup 을 사용하는게 여전히 유용할 수 있습니다:
 
-- avoids executing possibly expensive and pointless computations
-- avoids passing around the semigroup instance
-- allors the API consumer to decide which is the correct merging strategy (by using `concatAll`).
+- 비싸고 무의미한 계산을 하지 않음
+- semigroup 인스턴스를 직접 사용하지 않음
+- API 사용자에게 (`concatAll` 을 사용해) 어떤 병합전략이 좋을지 결정할 수 있게함
 
 ## Order-derivable Semigroups
 
-Given that `number` is **a total order** (meaning that whichever `x` and `y` we choose, one of those two conditions has to hold true: `x <= y` or `y <= x`) we can define another two `Semigroup<number>` instances using the `min` or `max` operations.
+만약 주어진 `number` 가 **total order** (전순서 집합, 어떤 임의의 `x` 와 `y` 를 선택해도, 다음 두 조건 중 하나가 참이다: `x <= y` 또는 `y <= x`) 라면 `min` 또는 `max` 연산을 활용해 또 다른 두 개의 `Semigroup<number>` 인스턴스를 얻을 수 있습니다.
 
 ```ts
 import { Semigroup } from 'fp-ts/Semigroup'
@@ -832,13 +833,14 @@ const SemigroupMax: Semigroup<number> = {
 }
 ```
 
-**Quiz**. Why is it so important that `number` is a _total_ order?
+**문제**. 왜 `number` 가 _total order_ 이어야 할까요?
 
-It would be very useful to define such semigroups (`SemigroupMin` and `SemigroupMax`) for different types than `number`.
 
-Is it possible to capture the notion of being _totally ordered_ for other types?
+이러한 두 semigroup (`SemigroupMin` 과 `SemigroupMax`) 을 `number` 외 다른 타입에 대해서 정의한다면 유용할 것입니다.
 
-To speak about _ordering_ we first need to capture the notion of _equality_.
+다른 타입에 대해서도 _전순서 집합_ 이라는 개념을 적용할 수 있을까요?
+
+// _순서_ 의 개념을 설명하기 이전에 _동등_ 의 개념을 생각할 필요가 있습니다.
 
 # Modelling equivalence with `Eq`
 
