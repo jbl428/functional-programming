@@ -765,7 +765,6 @@ const merge2: ReadonlyNonEmptyArray<User> = [user1, user2, user3]
 ```
 
 따라서, `A` 의 free semigroup 이란 비어있지 않은 모든 유한 순열을 다루는 semigroup 일 뿐입니다.
-Thus, the free semigroup of `A` is merely another semigroup in which the elements are all possible, non empty, finite sequences of `A`.
 
 `A` 의 free semigroup 이란 데이터 내용을 유지한채로 `A` 의 요소들의 `결합`을 _게으른_ 방법으로 처리하는 것으로 볼 수 있습니다.
 
@@ -840,7 +839,7 @@ const SemigroupMax: Semigroup<number> = {
 
 다른 타입에 대해서도 _전순서 집합_ 이라는 개념을 적용할 수 있을까요?
 
-// _순서_ 의 개념을 설명하기 이전에 _동등_ 의 개념을 생각할 필요가 있습니다.
+_순서_ 의 개념을 설명하기 앞서 _동등_ 의 개념을 생각할 필요가 있습니다.
 
 # Modelling equivalence with `Eq`
 
