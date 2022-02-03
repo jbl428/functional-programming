@@ -841,11 +841,11 @@ const SemigroupMax: Semigroup<number> = {
 
 _순서_ 의 개념을 설명하기 앞서 _동등_ 의 개념을 생각할 필요가 있습니다.
 
-# Modelling equivalence with `Eq`
+# `Eq` 를 활용한 동등성 모델링
 
-Yet again, we can model the notion of equality.
+이번에는 동등성의 개념을 모델링 해봅시다.
 
-_Equivalence relations_ capture the concept of _equality_ of elements of the same type. The concept of an _equivalence relation_ can be implemented in TypeScript with the following interface:
+동치관계는 같은 유형의 요소의 동등이라는 개념을 의미합니다. 동치관계의 개념은 Typescript 의 interface 를 통해 구현할 수 있습니다.
 
 ```ts
 interface Eq<A> {
@@ -853,14 +853,14 @@ interface Eq<A> {
 }
 ```
 
-Intuitively:
+직관적으로:
 
-- if `equals(x, y) = true` then we say `x` and `y` are equal
-- if `equals(x, y) = false` then we say `x` and `y` are different
+- 만약 `equals(x, y) = true` 이면, `x` 와 `y` 는 같다고 할 수 있습니다
+- 만약 `equals(x, y) = false` 이면, `x` 와 `y` 는 다르다고 할 수 있습니다
 
-**Example**
+**예제**
 
-This is an instance of `Eq` for the `number` type:
+다음은 `number` 타입에 대한 `Eq` 인스턴스 입니다:
 
 ```ts
 import { Eq } from 'fp-ts/Eq'
@@ -874,15 +874,15 @@ pipe(EqNumber.equals(1, 1), console.log) // => true
 pipe(EqNumber.equals(1, 2), console.log) // => false
 ```
 
-The following laws have to hold true:
+인스턴스는 다음 법칙을 만족해야 합니다:
 
-1. **Reflexivity**: `equals(x, x) === true`, for every `x` in `A`
-2. **Symmetry**: `equals(x, y) === equals(y, x)`, for every `x`, `y` in `A`
-3. **Transitivity**: if `equals(x, y) === true` and `equals(y, z) === true`, then `equals(x, z) === true`, for every `x`, `y`, `z` in `A`
+1. **반사적**: `A` 의 모든 `x` 에 대해 `equals(x, x) === true` 를 만족합니다
+2. **대칭적**: `A` 의 모든 `x`, `y` 에 대해 `equals(x, y) === equals(y, x)` 를 만족합니다
+3. **전이적**: `A` 의 모든 `x`, `y`, `z` 에 대해 만약 `equals(x, y) === true` 이고 `equals(y, z) === true` 이면, `equals(x, z) === true` 를 만족합니다
 
-**Quiz**. Would a combinator `reverse: <A>(E: Eq<A>) => Eq<A>` make sense?
+**문제**. 다음 combinator 는 올바른 표현일까요? `reverse: <A>(E: Eq<A>) => Eq<A>`
 
-**Quiz**. Would a combinator `not: <A>(E: Eq<A>) => Eq<A>` make sense?
+**문제**. 다음 combinator 는 올바른 표현일까요? `not: <A>(E: Eq<A>) => Eq<A>`
 
 ```ts
 import { Eq } from 'fp-ts/Eq'
@@ -892,16 +892,16 @@ export const not = <A>(E: Eq<A>): Eq<A> => ({
 })
 ```
 
-**Example**
+**예제**
 
-Let's see the first example of the usage of the `Eq` abstraction by defining a function `elem` that checks whether a given value is an element of `ReadonlyArray`.
+주어진 요소가 `ReadonlyArray` 가 포함하는지 확인하는 `elem` 함수를 좀전에 만든 `Eq` 인스턴스를 사용해 구현해봅시다.
 
 ```ts
 import { Eq } from 'fp-ts/Eq'
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
 
-// returns `true` if the element `a` is included in the list `as`
+// 만약 `a` 가 `as` 리스트에 포함되면 `true` 를 반환합니다
 const elem = <A>(E: Eq<A>) => (a: A) => (as: ReadonlyArray<A>): boolean =>
   as.some((e) => E.equals(a, e))
 
@@ -909,14 +909,14 @@ pipe([1, 2, 3], elem(N.Eq)(2), console.log) // => true
 pipe([1, 2, 3], elem(N.Eq)(4), console.log) // => false
 ```
 
-Why would we not use the native `includes` Array method?
+왜 내장 `includes` 배열 메소드를 사용하지 않을까요?
 
 ```ts
 console.log([1, 2, 3].includes(2)) // => true
 console.log([1, 2, 3].includes(4)) // => false
 ```
 
-Let's define some `Eq` instance for more complex types.
+`Eq` 인스턴스를 더 복잡한 타입에 대해 정의해봅시다.
 
 ```ts
 import { Eq } from 'fp-ts/Eq'
@@ -934,7 +934,7 @@ console.log(EqPoint.equals({ x: 1, y: 2 }, { x: 1, y: 2 })) // => true
 console.log(EqPoint.equals({ x: 1, y: 2 }, { x: 1, y: -2 })) // => false
 ```
 
-and check the results of `elem` and `includes`
+그리고 `elem` 과 `includes` 의 결과를 확인해봅시다.
 
 ```ts
 const points: ReadonlyArray<Point> = [
@@ -949,11 +949,11 @@ console.log(points.includes(search)) // => false :(
 console.log(pipe(points, elem(EqPoint)(search))) // => true :)
 ```
 
-**Quiz** (JavaScript). Why does the `includes` method returns `false`?
+**문제** (JavaScript). 왜 `includes` 메소드의 결과는 `false` 일까요?
 
-Abstracting the concept of equality is of paramount importance, especially in a language like JavaScript where some data types do not offer handy APIs for checking user-defined equality.
+사용자가 정의한 동등성 검사로직을 위한 유용한 API 가 없는 Javascript 같은 언어에서는 동등성의 개념을 추상화하는게 가장 중요합니다.
 
-The JavaScript native `Set` datatype suffers by the same issue:
+JavaScript 내장 `Set` 자료구조도 같은 이슈가 발생합니다:
 
 ```ts
 type Point = {
