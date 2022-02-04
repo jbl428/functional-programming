@@ -969,13 +969,14 @@ console.log(points)
 // => Set { { x: 0, y: 0 }, { x: 0, y: 0 } }
 ```
 
-Given the fact that `Set` uses `===` ("strict equality") for comparing values, `points` now contains **two identical copies** of `{ x: 0, y: 0 }`, a result we definitely did not want. Thus it is convenient to define a new API to add an element to a `Set`, one that leverages the `Eq` abstraction.
+`Set` 은 값 비교를 위해 `===` ("엄격한 비교") 를 하기에, `points` 는 두개의 동일한 복사본인 `{ x: 0, y: 0 }` 을 가지며 이는 우리는 원하는 결과가 아닙니다. 따라서 `Set` 에 요소를 추가하는 새로운 API 를 정의하는게 유용하며 그 방법 중 하나가 `Eq` 추상화를 활용하는 것입니다.
 
-**Quiz**. What would be the signature of this API?
+**문제**. 이 API 의 시그니쳐는 어떻게 될까요?
+**문제**. What would be the signature of this API?
 
-Does `EqPoint` require too much boilerplate? The good news is that theory offers us yet again the possibility of implementing an `Eq` instance for a struct like `Point` if we are able to define an `Eq` instance for each of its fields.
+`EqPoint` 를 정의하는데 많은 boilerplate 코드가 필요할까요? 좋은 소식은 각각의 필드의 `Eq` 인스턴스를 정의할 수 있다면 `Point` 같은 구조체의 인스턴스도 정의할 수 있습니다.
 
-Conveniently the `fp-ts/Eq` module exports a `struct` combinator:
+`fp-ts/Eq` 모듈은 유용한 `struct` combinator 을 제공합니다:
 
 ```ts
 import { Eq, struct } from 'fp-ts/Eq'
@@ -992,7 +993,7 @@ const EqPoint: Eq<Point> = struct({
 })
 ```
 
-**Note**. Like for Semigroup, we aren't limited to `struct`-like data types, we also have combinators for working with tuples: `tuple`
+**Note**. Semigroup 처럼, `구조체` 같은 데이터 타입에만 적용할 수 있는것은 아닙니다. tuple 에 적용되는 combinator 도 제공합니다: `tuple`
 
 ```ts
 import { Eq, tuple } from 'fp-ts/Eq'
@@ -1006,7 +1007,7 @@ console.log(EqPoint.equals([1, 2], [1, 2])) // => true
 console.log(EqPoint.equals([1, 2], [1, -2])) // => false
 ```
 
-There are other combinators exported by `fp-ts`, here we can see a combinator that allows us to derive an `Eq` instance for `ReadonlyArray`s.
+`fp-ts` 에는 다른 combinator 들이 존재하며, 여기 `ReadonlyArray` 에 대한 `Eq` 인스턴스를 만들어주는 combinator 를 볼 수 있습니다.
 
 ```ts
 import { Eq, tuple } from 'fp-ts/Eq'
@@ -1020,7 +1021,7 @@ const EqPoint: Eq<Point> = tuple(N.Eq, N.Eq)
 const EqPoints: Eq<ReadonlyArray<Point>> = RA.getEq(EqPoint)
 ```
 
-Similarly to Semigroups, it is possible to define more than one `Eq` instance for the same given type. Suppose we have modeled a `User` with the following type:
+Semigroups 처럼, 동일한 주어진 타입에 대한 하나 이상의 `Eq` 인스턴스를 만들 수 있습니다. 다음과 같은 `User` 모델이 있다고 가정해봅시다:
 
 ```ts
 type User = {
@@ -1029,7 +1030,7 @@ type User = {
 }
 ```
 
-we can define a "standard" `Eq<User>` instance using the `struct` combinator:
+`struct` combinator 를 활용해 "표준" `Eq<User>` 인스턴스를 만들 수 있습니다:
 
 ```ts
 import { Eq, struct } from 'fp-ts/Eq'
@@ -1047,18 +1048,19 @@ const EqStandard: Eq<User> = struct({
 })
 ```
 
-Several languages, even pure functional languages like Haskell, do not allow to have more than one `Eq` instance per data type. But we may have different contexts where the meaning of `User` equality might differ. One common context is where two `User`s are equal if their `id` field is equal.
+Haskell 같은 더 순수한 함수형 언어에서는 데이터 타입에 따라 두개 이상의 `Eq` 인스턴스를 만드는 것을 허용하지 않습니다. 하지만 문맥에 따라 `User` 의 동등성의 의미가 달라질 수 있습니다. 흔한 예는 `id` 필드가 같다면 두 `User` 는 같다고 보는 것입니다.
 
 ```ts
-/** two users are equal if their `id` fields are equal */
+/** `id` 필드가 동일하면 두 user 는 동일하다 */
 const EqID: Eq<User> = {
   equals: (first, second) => N.Eq.equals(first.id, second.id)
 }
 ```
 
-Now that we made an abstract concept concrete by representing it as a data structure, we can programmatically manipulate `Eq` instances like we do with other data structures. Let's see an example.
+추상 개념을 구체적인 데이터 구조로 표현했으므로, 다른 일반적은 데이터 구조에 하듯 `Eq` 인스턴스를 프로그래밍적으로 다룰 수 있습니다. 예제를 살벼봅시다. 
 
-**Example**. Rather than manually defining `EqId` we can use the combinator `contramap`: given an instance `Eq<A>` and a function from `B` to `A`, we can derive an `Eq<B>`
+
+**예제**. 직접 `EqId` 을 정의하는 대신, `contramap` combinator 를 활용할 수 있습니다: `Eq<A>` 인스턴스와 `B` 에서 `A` 로 가는 함수가 주어지면, `Eq<B>` 를 만들 수 있습니다
 
 ```ts
 import { Eq, struct, contramap } from 'fp-ts/Eq'
@@ -1083,17 +1085,17 @@ const EqID: Eq<User> = pipe(
 
 console.log(
   EqStandard.equals({ id: 1, name: 'Giulio' }, { id: 1, name: 'Giulio Canti' })
-) // => false (because the `name` property differs)
+) // => false (`name` 필드가 다르기 때문에)
 
 console.log(
   EqID.equals({ id: 1, name: 'Giulio' }, { id: 1, name: 'Giulio Canti' })
-) // => true (even though the `name` property differs)
+) // => true (`name` 필드가 다를 지라도)
 
 console.log(EqID.equals({ id: 1, name: 'Giulio' }, { id: 2, name: 'Giulio' }))
-// => false (even though the `name` property is equal)
+// => false (`name` 필드가 동일할 지라도)
 ```
 
-**Quiz**. Given a data type `A`, is it possible to define a `Semigroup<Eq<A>>`? What could it represent?
+**문제**. 주어진 데이터 타입 `A` 에 대해, `Semigroup<Eq<A>>` 을 정의할 수 있을까요? 정의할 수 있다면 무엇을 의미하는 걸까요?
 
 ## Modeling ordering relations with `Ord`
 
