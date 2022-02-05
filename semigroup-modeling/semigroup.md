@@ -1,6 +1,6 @@
 ## Semigroup 의 정의
 
-> 어떤 `Magma` 의 `concat` 연산이 **결합법칙**을 만족하면 _semigroup_이다.
+> 어떤 `Magma` 의 `concat` 연산이 **결합법칙**을 만족하면 _semigroup_ 이다.
 
 여기서 "결합법칙" 은 `A` 의 모든 `x`, `y`, `z` 에 대해 다음 등식이 성립하는 것을 의미합니다:
 
