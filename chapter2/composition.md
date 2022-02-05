@@ -53,7 +53,7 @@ console.log(pipe(2, double, double, double)) // => 16
 
 **데모**
 
-[`01_retry.ts`](src/01_retry.ts)
+[`01_retry.ts`](../src/01_retry.ts)
 
 위 데모를 통해 알 수 있듯이, 3개의 primitive 와 2 개의 combinator 만으로도 꽤 복잡한 정책을 표현할 수 있었습니다.
 
