@@ -24,7 +24,7 @@ concat(concat(a, b), c) = concat(a, concat(b, c))
 모든 semigroup 은 magma 입니다, 하지만 모든 magma 가 semigroup 인것은 아닙니다.
 
 <p align="center">
-    <img src="images/semigroup.png" width="300" alt="Magma vs Semigroup" />
+    <img src="/images/semigroup.png" width="300" alt="Magma vs Semigroup" />
 </p>
 
 **예제**
@@ -106,7 +106,7 @@ const SemigroupSum: Semigroup<number> = {
 }
 ```
 
-**문제**. 이전 데모 의 [`01_retry.ts`](src/01_retry.ts) 에 정의된 `concat` combinator 를 `RetryPolicy` 타입에 대한 `Semigroup` 인스턴스로 정의할 수 있을까요?
+**문제**. 이전 데모 의 [`01_retry.ts`](/src/01_retry.ts) 에 정의된 `concat` combinator 를 `RetryPolicy` 타입에 대한 `Semigroup` 인스턴스로 정의할 수 있을까요?
 
 다음은 semigroup `(number, *)` 을 정의한 것입니다. 여기서 `*` 는 숫자에 대한 덧셈을 의미합니다:
 

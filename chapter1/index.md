@@ -30,7 +30,7 @@ const program = pipe(
 
 **데모**
 
-[`00_pipe_and_flow.ts`](src/00_pipe_and_flow.ts)
+[`00_pipe_and_flow.ts`](/src/00_pipe_and_flow.ts)
 
 앞으로 함수형 프로그래밍이 위와 같은 구조를 만들어주는 도구를 제공하는지 보게될 것입니다.
 
