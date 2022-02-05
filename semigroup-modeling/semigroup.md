@@ -4,7 +4,7 @@
 
 여기서 "결합법칙" 은 `A` 의 모든 `x`, `y`, `z` 에 대해 다음 등식이 성립하는 것을 의미합니다:
 
-```ts
+```typescript
 (x * y) * z = x * (y * z)
 
 // or
@@ -17,7 +17,7 @@ concat(concat(a, b), c) = concat(a, concat(b, c))
 
 문자열 연결은 결합법칙을 만족합니다.
 
-```ts
+```typescript
 ("a" + "b") + "c" = "a" + ("b" + "c") = "abc"
 ```
 
@@ -31,7 +31,7 @@ concat(concat(a, b), c) = concat(a, concat(b, c))
 
 이전 예제 `MagmaSub` 는 `concat` 이 결합법칙을 만족하지 않기에 semigroup 이 아닙니다.
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import { Magma } from 'fp-ts/Magma'
 
@@ -48,7 +48,7 @@ Semigroups capture the essence of parallelizable operations
 
 어떤 계산이 결합법칙을 만족한다는 것을 안다면, 계산을 두 개의 하위 계산으로 더 분할할 수 있고, 각각의 계산은 하위 계산으로 더 분할될 수 있습니다.
 
-```ts
+```typescript
 a * b * c * d * e * f * g * h = ((a * b) * (c * d)) * ((e * f) * (g * h))
 ```
 
@@ -56,7 +56,7 @@ a * b * c * d * e * f * g * h = ((a * b) * (c * d)) * ((e * f) * (g * h))
 
 `Magga` 처럼, `Semigroup` 도 Typescript `interface` 로 정의할 수 있습니다:
 
-```ts
+```typescript
 // fp-ts/lib/Semigroup.ts
 
 interface Semigroup<A> extends Magma<A> {}
@@ -66,7 +66,7 @@ interface Semigroup<A> extends Magma<A> {}
 
 - **결합법칙**: 만약 `S` 가 semigroup 이면 타입 `A` 의 모든 `x`, `y`, `z` 에 대해 다음 등식이 성립합니다
 
-```ts
+```typescript
 S.concat(S.concat(x, y), z) = S.concat(x, S.concat(y, z))
 ```
 
@@ -74,7 +74,7 @@ S.concat(S.concat(x, y), z) = S.concat(x, S.concat(y, z))
 
 `ReadonlyArray<string>` 에 대한 semigroup 을 구현해봅시다:
 
-```ts
+```typescript
 import * as Se from 'fp-ts/Semigroup'
 
 const Semigroup: Se.Semigroup<ReadonlyArray<string>> = {
@@ -97,7 +97,7 @@ const Semigroup: Se.Semigroup<ReadonlyArray<string>> = {
 
 다음은 semigroup `(number, +)` 을 정의한 것입니다. 여기서 `+` 는 숫자에 대한 덧셈을 의미합니다:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 /** 덧셈에 대한 number `Semigroup` */
@@ -110,7 +110,7 @@ const SemigroupSum: Semigroup<number> = {
 
 다음은 semigroup `(number, *)` 을 정의한 것입니다. 여기서 `*` 는 숫자에 대한 덧셈을 의미합니다:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 /** 곱셈에 대한 number `Semigroup` */
@@ -124,7 +124,7 @@ const SemigroupProduct: Semigroup<number> = {
 
 `string` 타입에 대한 다른 예제입니다:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 const SemigroupString: Semigroup<string> = {
@@ -134,7 +134,7 @@ const SemigroupString: Semigroup<string> = {
 
 이번에는 `boolean` 타입에 대한 또 다른 2개의 에제입니다:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 const SemigroupAll: Semigroup<boolean> = {

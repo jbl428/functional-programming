@@ -32,7 +32,7 @@ npm i
 
 보통 함수형 프로그램은 **pipeline** 형태로 이루어져 있습니다.
 
-```ts
+```typescript
 const program = pipe(
   input,
   f1, // 순수 함수
@@ -69,7 +69,7 @@ const program = pipe(
 
 왜 `for`반복문보다 `Array`의 `map`이 더 함수형이라고 할까요?
 
-```ts
+```typescript
 // 입력
 const xs: Array<number> = [1, 2, 3]
 
@@ -95,7 +95,7 @@ for (let i = 0; i <= xs.length; i++) {
 
 위 예제를 `map`을 활용해 작성해봅시다.
 
-```ts
+```typescript
 // 입력
 const xs: Array<number> = [1, 2, 3]
 
@@ -132,7 +132,7 @@ const ys: Array<number> = xs.map(double)
 
 **예제** (참조 투명성은 순수함수를 사용하는 것을 의미합니다)
 
-```ts
+```typescript
 const double = (n: number): number => n * 2
 
 const x = double(2)
@@ -143,7 +143,7 @@ const y = double(2)
 
 따라서 코드를 아래와 같이 바꿀 수 있습니다.
 
-```ts
+```typescript
 const x = 4
 const y = x
 ```
@@ -152,7 +152,7 @@ const y = x
 
 **예제** (참조 투명성은 에러를 던지지 않는것을 의미합니다)
 
-```ts
+```typescript
 const inverse = (n: number): number => {
   if (n === 0) throw new Error('cannot divide by zero')
   return 1 / n
@@ -165,7 +165,7 @@ const x = inverse(0) + 1
 
 **예제** (참조 투명성을 위해 불변 자료구조를 사용해야 합니다)
 
-```ts
+```typescript
 const xs = [1, 2, 3]
 
 const append = (xs: Array<number>): void => {
@@ -186,7 +186,7 @@ const ys = xs
 
 **문제**. 다음과 같은 프로그램이 있다고 가정합시다:
 
-```ts
+```typescript
 // Typescript 에서 `declare` 를 사용하면 함수의 구현부 없이 선언부만 작성할 수 있습니다
 declare const question: (message: string) => Promise<string>
 
@@ -196,7 +196,7 @@ const y = await question('What is your name?')
 
 다음과 같이 코드를 수정해도 괜찮을까요? 프로그램 동작이 변할까요?
 
-```ts
+```typescript
 const x = await question('What is your name?')
 const y = x
 ```
@@ -229,7 +229,7 @@ const y = x
 
 combinator 의 일반적인 개념은 다소 모호하고 다른 형태로 나타날 수 있지만, 가장 간단한 것은 다음과 같다:
 
-```ts
+```typescript
 combinator: Thing -> Thing
 ```
 
@@ -242,7 +242,7 @@ combinator 의 출력인 새로운 *어떤 것*은 다른 프로그램이나 com
 
 **예제**
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 
 const double = (n: number): number => n * 2
@@ -304,7 +304,7 @@ Magma<A> 는 매우 간단한 대수입니다:
 
 Magma 를 정의하기 위해 Typescript 의 `interface` 를 활용할 수 있습니다.
 
-```ts
+```typescript
 interface Magma<A> {
   readonly concat: (first: A, second: A) => A
 }
@@ -317,7 +317,7 @@ interface Magma<A> {
 
 `Magma<A>` 의 구체적인 인스턴스 하나를 구현해봅니다. 여기서 `A` 는 `number` 입니다.
 
-```ts
+```typescript
 import { Magma } from 'fp-ts/Magma'
 
 const MagmaSub: Magma<number> = {
@@ -350,7 +350,7 @@ Magma 는 닫힘 조건외에 다른 법칙을 요구하지 않습니다. 이제
 
 여기서 "결합법칙" 은 `A` 의 모든 `x`, `y`, `z` 에 대해 다음 등식이 성립하는 것을 의미합니다:
 
-```ts
+```typescript
 (x * y) * z = x * (y * z)
 
 // or
@@ -363,7 +363,7 @@ concat(concat(a, b), c) = concat(a, concat(b, c))
 
 문자열 연결은 결합법칙을 만족합니다.
 
-```ts
+```typescript
 ("a" + "b") + "c" = "a" + ("b" + "c") = "abc"
 ```
 
@@ -377,7 +377,7 @@ concat(concat(a, b), c) = concat(a, concat(b, c))
 
 이전 예제 `MagmaSub` 는 `concat` 이 결합법칙을 만족하지 않기에 semigroup 이 아닙니다. 
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import { Magma } from 'fp-ts/Magma'
 
@@ -394,7 +394,7 @@ Semigroups capture the essence of parallelizable operations
 
 어떤 계산이 결합법칙을 만족한다는 것을 안다면, 계산을 두 개의 하위 계산으로 더 분할할 수 있고, 각각의 계산은 하위 계산으로 더 분할될 수 있습니다.
 
-```ts
+```typescript
 a * b * c * d * e * f * g * h = ((a * b) * (c * d)) * ((e * f) * (g * h))
 ```
 
@@ -402,7 +402,7 @@ a * b * c * d * e * f * g * h = ((a * b) * (c * d)) * ((e * f) * (g * h))
 
 `Magga` 처럼, `Semigroup` 도 Typescript `interface` 로 정의할 수 있습니다:
 
-```ts
+```typescript
 // fp-ts/lib/Semigroup.ts
 
 interface Semigroup<A> extends Magma<A> {}
@@ -412,7 +412,7 @@ interface Semigroup<A> extends Magma<A> {}
 
 - **결합법칙**: 만약 `S` 가 semigroup 이면 타입 `A` 의 모든 `x`, `y`, `z` 에 대해 다음 등식이 성립합니다
 
-```ts
+```typescript
 S.concat(S.concat(x, y), z) = S.concat(x, S.concat(y, z))
 ```
 
@@ -420,7 +420,7 @@ S.concat(S.concat(x, y), z) = S.concat(x, S.concat(y, z))
 
 `ReadonlyArray<string>` 에 대한 semigroup 을 구현해봅시다:
 
-```ts
+```typescript
 import * as Se from 'fp-ts/Semigroup'
 
 const Semigroup: Se.Semigroup<ReadonlyArray<string>> = {
@@ -443,7 +443,7 @@ const Semigroup: Se.Semigroup<ReadonlyArray<string>> = {
 
 다음은 semigroup `(number, +)` 을 정의한 것입니다. 여기서 `+` 는 숫자에 대한 덧셈을 의미합니다:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 /** 덧셈에 대한 number `Semigroup` */
@@ -456,7 +456,7 @@ const SemigroupSum: Semigroup<number> = {
 
 다음은 semigroup `(number, *)` 을 정의한 것입니다. 여기서 `*` 는 숫자에 대한 덧셈을 의미합니다:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 /** 곱셈에 대한 number `Semigroup` */
@@ -470,7 +470,7 @@ const SemigroupProduct: Semigroup<number> = {
 
 `string` 타입에 대한 다른 예제입니다:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 const SemigroupString: Semigroup<string> = {
@@ -480,7 +480,7 @@ const SemigroupString: Semigroup<string> = {
 
 이번에는 `boolean` 타입에 대한 또 다른 2개의 에제입니다:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 const SemigroupAll: Semigroup<boolean> = {
@@ -502,7 +502,7 @@ const SemigroupAny: Semigroup<boolean> = {
 - 초기값
 - 요소의 배열
 
-```ts
+```typescript
 import * as S from 'fp-ts/Semigroup'
 import * as N from 'fp-ts/number'
 
@@ -522,7 +522,7 @@ console.log(product([1, 2, 3, 4])) // => 72
 
 Javascript 기본 라이브러리의 유명한 함수 몇가지를 `concatAll` 으로 구현해봅시다.
 
-```ts
+```typescript
 import * as B from 'fp-ts/boolean'
 import { concatAll } from 'fp-ts/Semigroup'
 import * as S from 'fp-ts/struct'
@@ -542,7 +542,7 @@ const assign: (as: ReadonlyArray<object>) => object = concatAll(
 
 **문제**. 다음 인스턴스는 semigroup 법칙을 만족합니까?
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 /** 항상 첫 번째 인자를 반환 */
@@ -553,7 +553,7 @@ const first = <A>(): Semigroup<A> => ({
 
 **문제**. 다음 인스턴스는 semigroup 법칙을 만족합니까?
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 /** 항상 두 번째 인자를 반환 */
@@ -566,7 +566,7 @@ const last = <A>(): Semigroup<A> => ({
 
 semigroup 인스턴스가 주어지면, 단순히 조합되는 피연산자의 순서를 변경해 새로운 semigroup 인스턴스를 얻을 수 있습니다.
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import { Semigroup } from 'fp-ts/Semigroup'
 import * as S from 'fp-ts/string'
@@ -586,7 +586,7 @@ pipe(reverse(S.Semigroup).concat('a', 'b'), console.log) // => 'ba'
 
 더 복잡한 semigroup 인스턴스를 정의해봅시다:
 
-```ts
+```typescript
 import * as N from 'fp-ts/number'
 import { Semigroup } from 'fp-ts/Semigroup'
 
@@ -607,7 +607,7 @@ const SemigroupVector: Semigroup<Vector> = {
 
 **예제**
 
-```ts
+```typescript
 const v1: Vector = { x: 1, y: 1 }
 const v2: Vector = { x: 1, y: 2 }
 
@@ -622,7 +622,7 @@ boilerplate 코드가 너무 많나요? 좋은 소식은 semigroup 의 **수학�
 
 편리하게도 `fp-ts/Semigroup` 모둘은 `struct` combinator 를 제공합니다:
 
-```ts
+```typescript
 import { struct } from 'fp-ts/Semigroup'
 
 // 두 vector 의 합을 모델링
@@ -634,7 +634,7 @@ const SemigroupVector: Semigroup<Vector> = struct({
 
 **Note**. `struct` 와 유사한 tuple 에 대해 동작하는 combinator 도 존재합니다: `tuple`
 
-```ts
+```typescript
 import * as N from 'fp-ts/number'
 import { Semigroup, tuple } from 'fp-ts/Semigroup'
 
@@ -652,7 +652,7 @@ console.log(SemigroupVector.concat(v1, v2)) // => [2, 3]
 
 **문제**. 만약 임의의 `Semigroup<A>` 와 `A` 의 임의의 값 middle 을 두 `concat` 인자 사이에 넣도록 만든 인스턴스는 여전히 semigroup 일까요?
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import { Semigroup } from 'fp-ts/Semigroup'
 import * as S from 'fp-ts/string'
@@ -677,7 +677,7 @@ pipe(
 
 아래와 같은 `User` 를 정의했다고 가정합시다:
 
-```ts
+```typescript
 type User = {
   readonly id: number
   readonly name: string
@@ -685,7 +685,7 @@ type User = {
 ```
 그리고 데이터베이스에는 같은 `User` 에 대한 여러 복사본이 있다고 가정합니다 (예를들면 수정이력일 수 있습니다)
 
-```ts
+```typescript
 // 내부 API
 declare const getCurrent: (id: number) => User
 declare const getHistory: (id: number) => ReadonlyArray<User>
@@ -693,7 +693,7 @@ declare const getHistory: (id: number) => ReadonlyArray<User>
 
 그리고 다음 외부 API 를 구현해야합니다.
 
-```ts
+```typescript
 export declare const getUser: (id: number) => User
 ```
 
@@ -701,7 +701,7 @@ API 는 다음 조건에 따라 적절한 `User` 를 가져와야 합니다. 조
 
 보통은 다음처럼 각 조건에 따라 여러 API 를 만들 수 있습니다:
 
-```ts
+```typescript
 export declare const getMostRecentUser: (id: number) => User
 export declare const getLeastRecentUser: (id: number) => User
 export declare const getCurrentUser: (id: number) => User
@@ -714,7 +714,7 @@ export declare const getCurrentUser: (id: number) => User
 
 주어진 **어떠한** 타입 `A` 에 대해서도 **항상** semigroup 인스턴스를 만들 수 있습니다. `A` 자체에 대한 인스턴스가 아닌 `NonEmptyArray<A>` 의 인스턴스로 만들 수 있으며 이는 `A` 의 **free semigroup** 이라고 불립니다.
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 // 적어도 하나의 A 의 요소가 있는 배열을 표현합니다
@@ -730,14 +730,14 @@ const getSemigroup = <A>(): Semigroup<ReadonlyNonEmptyArray<A>> => ({
 
 그러면 `A` 의 요소  `ReadonlyNonEmptyArray<A>` 의 "싱글톤" 으로 만들 수 있으며 이는 하나를 하나의 요소만 있는 배열을 의미합니다.
 
-```ts
+```typescript
 // 비어있지 않은 배열에 값 하나를 넣습니다
 const of = <A>(a: A): ReadonlyNonEmptyArray<A> => [a]
 ```
 
 이 방식을 `User` 타입에도 적용해봅시다:
 
-```ts
+```typescript
 import {
   getSemigroup,
   of,
@@ -774,7 +774,7 @@ const merge2: ReadonlyNonEmptyArray<User> = [user1, user2, user3]
 
 1. `Semigroup<User>` 를 정의하고 바로 `병합`한다.
 
-```ts
+```typescript
 declare const SemigroupUser: Semigroup<User>
 
 export const getUser = (id: number): User => {
@@ -786,7 +786,7 @@ export const getUser = (id: number): User => {
 
 2. `Semigroup<User>` 을 직접 정의하는 대신 병합 전략을 외부에서 구현하게 한다. 즉 API 사용자가 제공하도록 한다.
 
-```ts
+```typescript
 export const getUser = (SemigroupUser: Semigroup<User>) => (
   id: number
 ): User => {
@@ -801,7 +801,7 @@ export const getUser = (SemigroupUser: Semigroup<User>) => (
 
 이럴 때에는 `User` 의 free semigroup 을 활용합니다:
 
-```ts
+```typescript
 export const getUser = (id: number): ReadonlyNonEmptyArray<User> => {
   const current = getCurrent(id)
   const history = getHistory(id)
@@ -820,7 +820,7 @@ export const getUser = (id: number): ReadonlyNonEmptyArray<User> => {
 
 만약 주어진 `number` 가 **total order** (전순서 집합, 어떤 임의의 `x` 와 `y` 를 선택해도, 다음 두 조건 중 하나가 참이다: `x <= y` 또는 `y <= x`) 라면 `min` 또는 `max` 연산을 활용해 또 다른 두 개의 `Semigroup<number>` 인스턴스를 얻을 수 있습니다.
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 const SemigroupMin: Semigroup<number> = {
@@ -847,7 +847,7 @@ _순서_ 의 개념을 설명하기 앞서 _동등_ 의 개념을 생각할 필�
 
 동치관계는 같은 유형의 요소의 동등이라는 개념을 의미합니다. 동치관계의 개념은 Typescript 의 interface 를 통해 구현할 수 있습니다.
 
-```ts
+```typescript
 interface Eq<A> {
   readonly equals: (first: A, second: A) => boolean
 }
@@ -862,7 +862,7 @@ interface Eq<A> {
 
 다음은 `number` 타입에 대한 `Eq` 인스턴스 입니다:
 
-```ts
+```typescript
 import { Eq } from 'fp-ts/Eq'
 import { pipe } from 'fp-ts/function'
 
@@ -884,7 +884,7 @@ pipe(EqNumber.equals(1, 2), console.log) // => false
 
 **문제**. 다음 combinator 는 올바른 표현일까요? `not: <A>(E: Eq<A>) => Eq<A>`
 
-```ts
+```typescript
 import { Eq } from 'fp-ts/Eq'
 
 export const not = <A>(E: Eq<A>): Eq<A> => ({
@@ -896,7 +896,7 @@ export const not = <A>(E: Eq<A>): Eq<A> => ({
 
 주어진 요소가 `ReadonlyArray` 가 포함하는지 확인하는 `elem` 함수를 좀전에 만든 `Eq` 인스턴스를 사용해 구현해봅시다.
 
-```ts
+```typescript
 import { Eq } from 'fp-ts/Eq'
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
@@ -911,14 +911,14 @@ pipe([1, 2, 3], elem(N.Eq)(4), console.log) // => false
 
 왜 내장 `includes` 배열 메소드를 사용하지 않을까요?
 
-```ts
+```typescript
 console.log([1, 2, 3].includes(2)) // => true
 console.log([1, 2, 3].includes(4)) // => false
 ```
 
 `Eq` 인스턴스를 더 복잡한 타입에 대해 정의해봅시다.
 
-```ts
+```typescript
 import { Eq } from 'fp-ts/Eq'
 
 type Point = {
@@ -936,7 +936,7 @@ console.log(EqPoint.equals({ x: 1, y: 2 }, { x: 1, y: -2 })) // => false
 
 그리고 `elem` 과 `includes` 의 결과를 확인해봅시다.
 
-```ts
+```typescript
 const points: ReadonlyArray<Point> = [
   { x: 0, y: 0 },
   { x: 1, y: 1 },
@@ -955,7 +955,7 @@ console.log(pipe(points, elem(EqPoint)(search))) // => true :)
 
 JavaScript 내장 `Set` 자료구조도 같은 이슈가 발생합니다:
 
-```ts
+```typescript
 type Point = {
   readonly x: number
   readonly y: number
@@ -978,7 +978,7 @@ console.log(points)
 
 `fp-ts/Eq` 모듈은 유용한 `struct` combinator 을 제공합니다:
 
-```ts
+```typescript
 import { Eq, struct } from 'fp-ts/Eq'
 import * as N from 'fp-ts/number'
 
@@ -995,7 +995,7 @@ const EqPoint: Eq<Point> = struct({
 
 **Note**. Semigroup 처럼, `구조체` 같은 데이터 타입에만 적용할 수 있는것은 아닙니다. tuple 에 적용되는 combinator 도 제공합니다: `tuple`
 
-```ts
+```typescript
 import { Eq, tuple } from 'fp-ts/Eq'
 import * as N from 'fp-ts/number'
 
@@ -1009,7 +1009,7 @@ console.log(EqPoint.equals([1, 2], [1, -2])) // => false
 
 `fp-ts` 에는 다른 combinator 들이 존재하며, 여기 `ReadonlyArray` 에 대한 `Eq` 인스턴스를 만들어주는 combinator 를 볼 수 있습니다.
 
-```ts
+```typescript
 import { Eq, tuple } from 'fp-ts/Eq'
 import * as N from 'fp-ts/number'
 import * as RA from 'fp-ts/ReadonlyArray'
@@ -1023,7 +1023,7 @@ const EqPoints: Eq<ReadonlyArray<Point>> = RA.getEq(EqPoint)
 
 Semigroups 처럼, 동일한 주어진 타입에 대한 하나 이상의 `Eq` 인스턴스를 만들 수 있습니다. 다음과 같은 `User` 모델이 있다고 가정해봅시다:
 
-```ts
+```typescript
 type User = {
   readonly id: number
   readonly name: string
@@ -1032,7 +1032,7 @@ type User = {
 
 `struct` combinator 를 활용해 "표준" `Eq<User>` 인스턴스를 만들 수 있습니다:
 
-```ts
+```typescript
 import { Eq, struct } from 'fp-ts/Eq'
 import * as N from 'fp-ts/number'
 import * as S from 'fp-ts/string'
@@ -1050,7 +1050,7 @@ const EqStandard: Eq<User> = struct({
 
 Haskell 같은 더 순수한 함수형 언어에서는 데이터 타입에 따라 두개 이상의 `Eq` 인스턴스를 만드는 것을 허용하지 않습니다. 하지만 문맥에 따라 `User` 의 동등성의 의미가 달라질 수 있습니다. 흔한 예는 `id` 필드가 같다면 두 `User` 는 같다고 보는 것입니다.
 
-```ts
+```typescript
 /** `id` 필드가 동일하면 두 user 는 동일하다 */
 const EqID: Eq<User> = {
   equals: (first, second) => N.Eq.equals(first.id, second.id)
@@ -1062,7 +1062,7 @@ const EqID: Eq<User> = {
 
 **예제**. 직접 `EqId` 을 정의하는 대신, `contramap` combinator 를 활용할 수 있습니다: `Eq<A>` 인스턴스와 `B` 에서 `A` 로 가는 함수가 주어지면, `Eq<B>` 를 만들 수 있습니다
 
-```ts
+```typescript
 import { Eq, struct, contramap } from 'fp-ts/Eq'
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
@@ -1103,7 +1103,7 @@ console.log(EqID.equals({ id: 1, name: 'Giulio' }, { id: 2, name: 'Giulio' }))
 
 전순서 관계는 Typescript 로 다음과 같이 구현할 수 있습니다:
 
-```ts
+```typescript
 import { Eq } from 'fp-ts/lib/Eq'
 
 type Ordering = -1 | 0 | 1
@@ -1125,7 +1125,7 @@ interface Ord<A> extends Eq<A> {
 
 `number` 타입에 대한 `Ord` 인스턴스를 만들어봅시다:
 
-```ts
+```typescript
 import { Ord } from 'fp-ts/Ord'
 
 const OrdNumber: Ord<number> = {
@@ -1148,13 +1148,13 @@ const OrdNumber: Ord<number> = {
 
 **Note**. `equals` 는 `compare` 를 활용해 다음 방법으로 도출할 수 있습니다:
 
-```ts
+```typescript
 equals: (first, second) => compare(first, second) === 0
 ```
 
 사실 `fp-ts/Ord` 모듈에 있는 `fromComapre` 하는 경우 `compare` 함수만 제공하면 `Ord` 인스턴스를 만들어줍니다:
 
-```ts
+```typescript
 import { Ord, fromCompare } from 'fp-ts/Ord'
 
 const OrdNumber: Ord<number> = fromCompare((first, second) =>
@@ -1166,7 +1166,7 @@ const OrdNumber: Ord<number> = fromCompare((first, second) =>
 
 `ReadonlyArray` 요소의 정렬을 위한 `sort` 함수를 만들어보면서 `Ord` 인스턴스의 실용적인 사용법을 확인해봅시다.
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
 import { Ord } from 'fp-ts/Ord'
@@ -1182,7 +1182,7 @@ pipe([3, 1, 2], sort(N.Ord), console.log) // => [1, 2, 3]
 
 주어진 두 값중 작은것을 반환하는 `min` 함수를 만들어보면서 또 다른 `Ord` 활용법을 살펴봅시다:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
 import { Ord } from 'fp-ts/Ord'
@@ -1199,7 +1199,7 @@ pipe(2, min(N.Ord)(1), console.log) // => 1
 
 `Ord` 에 대한 `reserve` combinator 를 만들어봅시다:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
 import { fromCompare, Ord } from 'fp-ts/Ord'
@@ -1210,7 +1210,7 @@ export const reverse = <A>(O: Ord<A>): Ord<A> =>
 
 `reverse` 활용 예로 `min` 을 반전시켜 `max` 를 얻을 수 있습니다:
 
-```ts
+```typescript
 import { flow, pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
 import { Ord, reverse } from 'fp-ts/Ord'
@@ -1226,7 +1226,7 @@ pipe(2, max(N.Ord)(1), console.log) // => 2
 
 **전순서** (모든 `x`, `y` 에 대해 다음 조건이 만족합니다: `x <= y` 이거나 `y <= z`)는 숫자에 대해선 명백하게 만족하는 것으로 보이지만, 모든 상황에서 그런것은 아닙니다. 조금 더 복잡한 상황을 가정해봅시다:
 
-```ts
+```typescript
 type User = {
   readonly name: string
   readonly age: number
@@ -1239,7 +1239,7 @@ type User = {
 
 문맥에 따라 다르지만, `User` 의 나이로 순서를 매기는 방법이 있습니다:
 
-```ts
+```typescript
 import * as N from 'fp-ts/number'
 import { fromCompare, Ord } from 'fp-ts/Ord'
 
@@ -1255,7 +1255,7 @@ const byAge: Ord<User> = fromCompare((first, second) =>
 
 이번에도 `contramap` combinator 를 사용하면 `Ord<A>` 와 `B` 에서 `A` 로 가는 함수만 제공해 `Ord<B>` 를 만들 수 있으며 이를통해 작성하는 코드의 양을 줄일 수 있습니다:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
 import { contramap, Ord } from 'fp-ts/Ord'
@@ -1273,7 +1273,7 @@ const byAge: Ord<User> = pipe(
 
 이전에 정의한 `min` 함수를 사용해 주어진 두 `User` 중 더 젊은 `User` 를 얻을 수 있습니다.
 
-```ts
+```typescript
 // const getYounger: (second: User) => (first: User) => User
 const getYounger = min(byAge)
 
@@ -1286,7 +1286,7 @@ pipe(
 
 **문제**. `fp-ts/ReadonlyMap` 모듈에는 다음과 같은 API 가 있습니다:
 
-```ts
+```typescript
 /**
  * `ReadonlyMap` 의 키들이 정렬된 `ReadonlyArray` 를 얻습니다.
  * Get a sorted `ReadonlyArray` of the keys contained in a `ReadonlyMap`.
@@ -1300,7 +1300,7 @@ declare const keys: <K>(
 
 이전에 만난 첫 문제상황으로 돌아가봅시다: `number` 가 아닌 다른 타입에 대한 다음 두 semigroup 을 정의하는 것입니다 `SemigroupMin` 과 `SemigroupMax`:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 const SemigroupMin: Semigroup<number> = {
@@ -1314,7 +1314,7 @@ const SemigroupMax: Semigroup<number> = {
 
 이제 `Ord` 추상화가 있기에 문제를 해결할 수 있습니다:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
 import { Ord, contramap } from 'fp-ts/Ord'
@@ -1352,7 +1352,7 @@ console.log(
 
 데이터베이스에 다음과 같은 형태의 고객의 기록이 있는 시스템을 구축하는 상황을 가정해봅시다:
 
-```ts
+```typescript
 interface Customer {
   readonly name: string
   readonly favouriteThings: ReadonlyArray<string>
@@ -1366,7 +1366,7 @@ interface Customer {
 
 병합 전략이 필요한 순간입니다. 하지만 우리에겐 Semigroup 있습니다!
 
-```ts
+```typescript
 import * as B from 'fp-ts/boolean'
 import { pipe } from 'fp-ts/function'
 import * as N from 'fp-ts/number'
@@ -1440,7 +1440,7 @@ We have seen how an **algebra** is a combination of:
 
 The first algebra we have seen has been the magma, an algebra defined on some type A equipped with one operation called `concat`. There were no laws involved in `Magma<A>` the only requirement we had was that the `concat` operation had to be _closed_ on `A` meaning that the result:
 
-```ts
+```typescript
 concat(first: A, second: A) => A
 ```
 
@@ -1461,7 +1461,7 @@ then the `Semigroup` is also a `Monoid`.
 
 We have seen how in TypeScript `Magma`s and `Semigroup`s, can be modeled with `interface`s, so it should not come as a surprise that the very same can be done for `Monoid`s.
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 interface Monoid<A> extends Semigroup<A> {
@@ -1471,7 +1471,7 @@ interface Monoid<A> extends Semigroup<A> {
 
 Many of the semigroups we have seen in the previous sections can be extended to become `Monoid`s. All we need to find is some element of type `A` for which the Right and Left identities hold true.
 
-```ts
+```typescript
 import { Monoid } from 'fp-ts/Monoid'
 
 /** number `Monoid` under addition */
@@ -1506,7 +1506,7 @@ const MonoidAny: Monoid<boolean> = {
 
 **Quiz**. In the semigroup section we have seen how the type `ReadonlyArray<string>` admits a `Semigroup` instance:
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 const Semigroup: Semigroup<ReadonlyArray<string>> = {
@@ -1530,7 +1530,7 @@ We have seen how each semigroup was a magma, but not every magma was a semigroup
 
 Let's consider the following example:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import { intercalate } from 'fp-ts/Semigroup'
 import * as S from 'fp-ts/string'
@@ -1550,7 +1550,7 @@ And now one final, slightly more "exotic" example, involving functions:
 
 An **endomorphism** is a function whose input and output type is the same:
 
-```ts
+```typescript
 type Endomorphism<A> = (a: A) => A
 ```
 
@@ -1559,7 +1559,7 @@ Given a type `A`, all endomorphisms defined on `A` are a monoid, such as:
 - the `concat` operation is the usual function composition
 - the unit, our `empty` value is the identity function
 
-```ts
+```typescript
 import { Endomorphism, flow, identity } from 'fp-ts/function'
 import { Monoid } from 'fp-ts/Monoid'
 
@@ -1571,7 +1571,7 @@ export const getEndomorphismMonoid = <A>(): Monoid<Endomorphism<A>> => ({
 
 **Note**: The `identity` function has one, and only one possible implementation:
 
-```ts
+```typescript
 const identity = (a: A) => a
 ```
 
@@ -1586,7 +1586,7 @@ We can start having a small taste of the importance of the `identity` function. 
 
 One great property of monoids, compared to semigrops, is that the concatenation of multiple elements becomes even easier: it is not necessary anymore to provide an initial value.
 
-```ts
+```typescript
 import { concatAll } from 'fp-ts/Monoid'
 import * as S from 'fp-ts/string'
 import * as N from 'fp-ts/number'
@@ -1607,7 +1607,7 @@ As we have already seen with semigroups, it is possible to define a monoid insta
 
 **Example**
 
-```ts
+```typescript
 import { Monoid, struct } from 'fp-ts/Monoid'
 import * as N from 'fp-ts/number'
 
@@ -1624,7 +1624,7 @@ const Monoid: Monoid<Point> = struct({
 
 **Note**. There is a combinator similar to `struct` that works with tuples: `tuple`.
 
-```ts
+```typescript
 import { Monoid, tuple } from 'fp-ts/Monoid'
 import * as N from 'fp-ts/number'
 
@@ -1672,7 +1672,7 @@ The function `double: Nat ⟶ Nat` is the subset of the cartesian product `Nat �
 
 In TypeScript we could define `f` as
 
-```ts
+```typescript
 const f: Record<number, number> = {
   1: 2,
   2: 4,
@@ -1695,7 +1695,7 @@ We can get around this issue by introducing the one that is called _intensional_
 
 This the familiar form in which we write the `double` function and its definition in TypeScript:
 
-```ts
+```typescript
 const double = (x: number): number => x * 2
 ```
 
@@ -1704,7 +1704,7 @@ In functional programming the implementation of functions has to follow as much 
 
 **Quiz**. Which of the following procedures are pure functions?
 
-```ts
+```typescript
 const coefficient1 = 2
 export const f1 = (n: number) => n * coefficient1
 
@@ -1756,7 +1756,7 @@ The fact that a function is pure does not imply automatically a ban on local mut
 
 **Example** (Implementazion details of the `concatAll` function for monoids)
 
-```ts
+```typescript
 import { Monoid } from 'fp-ts/Monoid'
 
 const concatAll = <A>(M: Monoid<A>) => (as: ReadonlyArray<A>): A => {
@@ -1772,7 +1772,7 @@ The ultimate goal is to guarantee: **referential transparency**.
 
 The contract we sign with a user of our APIs is defined by the APIs signature:
 
-```ts
+```typescript
 declare const concatAll: <A>(M: Monoid<A>) => (as: ReadonlyArray<A>) => A
 ```
 
@@ -1810,7 +1810,7 @@ The function `f: number ⟶ number` is not defined for `x = 0`.
 
 **Example**
 
-```ts
+```typescript
 // Get the first element of a `ReadonlyArray`
 declare const head: <A>(as: ReadonlyArray<A>) => A
 ```
@@ -1819,14 +1819,14 @@ declare const head: <A>(as: ReadonlyArray<A>) => A
 
 **Quiz**. Is `JSON.parse` a total function?
 
-```ts
+```typescript
 parse: (text: string, reviver?: (this: any, key: string, value: any) => any) =>
   any
 ```
 
 **Quiz**. Is `JSON.stringify` a total function?
 
-```ts
+```typescript
 stringify: (
   value: any,
   replacer?: (this: any, key: string, value: any) => any,
@@ -1881,7 +1881,7 @@ A product type is a collection of types T<sub>i</sub> indexed by a set `I`.
 
 Two members of this family are `n`-tuples, where `I` is an interval of natural numbers:
 
-```ts
+```typescript
 type Tuple1 = [string] // I = [0]
 type Tuple2 = [string, number] // I = [0, 1]
 type Tuple3 = [string, number, boolean] // I = [0, 1, 2]
@@ -1893,7 +1893,7 @@ type Snd = Tuple2[1] // number
 
 and structs, where `I` is a set of labels:
 
-```ts
+```typescript
 // I = {"name", "age"}
 interface Person {
   name: string
@@ -1909,7 +1909,7 @@ Product types can be **polimorphic**.
 
 **Example**
 
-```ts
+```typescript
 //                ↓ type parameter
 type HttpResponse<A> = {
   readonly code: number
@@ -1921,7 +1921,7 @@ type HttpResponse<A> = {
 
 If we label with `C(A)` the number of elements of type `A` (also called in mathematics, **cardinality**), then the following equation hold true:
 
-```ts
+```typescript
 C([A, B]) = C(A) * C(B)
 ```
 
@@ -1935,7 +1935,7 @@ The `null` type has cardinality `1` because it has only one member: `null`.
 
 **Example**
 
-```ts
+```typescript
 type Hour = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 type Period = 'AM' | 'PM'
 type Clock = [Hour, Period]
@@ -1947,7 +1947,7 @@ Thus type `Clock` has `12 * 2 = 24` elements.
 
 **Quiz**: What is the cardinality of the following `Clock` type?
 
-```ts
+```typescript
 // same as before
 type Hour = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
 // same as before
@@ -1964,7 +1964,7 @@ type Clock = {
 
 Each time it's components are **independent**.
 
-```ts
+```typescript
 type Clock = [Hour, Period]
 ```
 
@@ -1982,7 +1982,7 @@ It is important to note that the members of the union have to be **disjoint**, t
 
 The type:
 
-```ts
+```typescript
 type StringsOrNumbers = ReadonlyArray<string> | ReadonlyArray<number>
 
 declare const sn: StringsOrNumbers
@@ -1994,7 +1994,7 @@ is not a disjoint union because the value `[]`, the empty array, belongs to both
 
 **Quiz**. Is the following union disjoint?
 
-```ts
+```typescript
 type Member1 = { readonly a: string }
 type Member2 = { readonly b: number }
 type MyUnion = Member1 | Member2
@@ -2010,7 +2010,7 @@ Fortunately `TypeScript` has a way to guarantee that a union is disjoint: add a 
 
 The `Action` sum type models a portion of the operation that the user can take i a [todo app](https://todomvc.com/).
 
-```ts
+```typescript
 type Action =
   | {
       type: 'ADD_TODO'
@@ -2040,7 +2040,7 @@ Sum types can be **polymorphic** and **recursive**.
 
 **Example** (linked list)
 
-```ts
+```typescript
 //               ↓ type parameter
 export type List<A> =
   | { readonly _tag: 'Nil' }
@@ -2062,7 +2062,7 @@ A sum type with `n` elements needs at least `n` **constructors**, one for each m
 
 **Example** (redux action creators)
 
-```ts
+```typescript
 export type Action =
   | {
       readonly type: 'ADD_TODO'
@@ -2103,7 +2103,7 @@ export const del = (id: number): Action => ({
 
 **Example** (TypeScript, linked lists)
 
-```ts
+```typescript
 export type List<A> =
   | { readonly _tag: 'Nil' }
   | { readonly _tag: 'Cons'; readonly head: A; readonly tail: List<A> }
@@ -2127,7 +2127,7 @@ JavaScript doesn't support [pattern matching](https://github.com/tc39/proposal-p
 
 **Example** (TypeScript, linked lists)
 
-```ts
+```typescript
 interface Nil {
   readonly _tag: 'Nil'
 }
@@ -2179,7 +2179,7 @@ export const length: <A>(fa: List<A>) => number = match(
 
 Because the following identity holds true:
 
-```ts
+```typescript
 C(A | B) = C(A) + C(B)
 ```
 
@@ -2187,7 +2187,7 @@ C(A | B) = C(A) + C(B)
 
 **Example** (the `Option` type)
 
-```ts
+```typescript
 interface None {
   readonly _tag: 'None'
 }
@@ -2208,7 +2208,7 @@ When the components would be **dependent** if implemented with a product type.
 
 **Example** (`React` props)
 
-```ts
+```typescript
 import * as React from 'react'
 
 interface Props {
@@ -2231,7 +2231,7 @@ The problem here is that `Props` is modeled like a product, but `onChange` **dep
 
 A sum type fits the use case better:
 
-```ts
+```typescript
 import * as React from 'react'
 
 type Props =
@@ -2256,7 +2256,7 @@ class Textbox extends React.Component<Props> {
 
 **Example** (node callbacks)
 
-```ts
+```typescript
 declare function readFile(
   path: string,
   //         ↓ ---------- ↓ CallbackArgs
@@ -2266,7 +2266,7 @@ declare function readFile(
 
 The result of the `readFile` operation is modeled like a product type (to be more precise, as a tuple) which is later on passed to the `callback` function:
 
-```ts
+```typescript
 type CallbackArgs = [Error | undefined, string | undefined]
 ```
 
@@ -2288,7 +2288,7 @@ We'll see how to handle errors in a functional way.
 
 **Quiz**. Recently API's based on callbacks have been largely replaced by their `Promise` equivalents.
 
-```ts
+```typescript
 declare function readFile(path: string): Promise<string>
 ```
 
@@ -2312,7 +2312,7 @@ Now that we know a bit more about sum types in TypeScript we can define the `Opt
 
 The type `Option` represents the effect of a computation which may fail (case `None`) or return a type `A` (case `Some<A>`):
 
-```ts
+```typescript
 // represents a failure
 interface None {
   readonly _tag: 'None'
@@ -2329,7 +2329,7 @@ type Option<A> = None | Some<A>
 
 Constructors and pattern matching:
 
-```ts
+```typescript
 const none: Option<never> = { _tag: 'None' }
 
 const some = <A>(value: A): Option<A> => ({ _tag: 'Some', value })
@@ -2348,7 +2348,7 @@ const match = <R, A>(onNone: () => R, onSome: (a: A) => R) => (
 
 The `Option` type can be used to avoid throwing exceptions or representing the optional values, thus we can move from:
 
-```ts
+```typescript
 //                        this is a lie ↓
 const head = <A>(as: ReadonlyArray<A>): A => {
   if (as.length === 0) {
@@ -2367,7 +2367,7 @@ try {
 
 where the type system is ignorant about the possibility of failure, to:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 
 //                                      ↓ the type system "knows" that this computation may fail
@@ -2389,7 +2389,7 @@ where **the possibility of an error is encoded in the type system**.
 
 If we attempt to access the `value` property of an `Option` without checking in which case we are, the type system will warn us about the possibility of getting an error:
 
-```ts
+```typescript
 declare const numbers: ReadonlyArray<number>
 
 const result = head(numbers)
@@ -2398,7 +2398,7 @@ result.value // type checker error: Property 'value' does not exist on type 'Opt
 
 The only way to access the value contained in an `Option` is to handle also the failure case using the `match` function.
 
-```ts
+```typescript
 pipe(result, match(
   () => ...handle error...
   (n) => ...go on with my business logic...
@@ -2411,7 +2411,7 @@ Is it possible to define instances for the abstractions we've seen in the chapte
 
 Suppose we have two values of type `Option<string>` and that we want to compare them to check if their equal:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import { match, Option } from 'fp-ts/Option'
 
@@ -2453,7 +2453,7 @@ Thus we can generalize the necessary code by requiring the user to provide an `E
 
 In other words we can define a **combinator** `getEq`: given an `Eq<A>` this combinator will return an `Eq<Option<A>>`:
 
-```ts
+```typescript
 import { Eq } from 'fp-ts/Eq'
 import { pipe } from 'fp-ts/function'
 import { match, Option, none, some } from 'fp-ts/Option'
@@ -2500,7 +2500,7 @@ The best thing about being able to define an `Eq` instance for a type `Option<A>
 
 An `Eq` instance for the type `Option<readonly [string, number]>`:
 
-```ts
+```typescript
 import { tuple } from 'fp-ts/Eq'
 import * as N from 'fp-ts/number'
 import { getEq, Option, some } from 'fp-ts/Option'
@@ -2523,7 +2523,7 @@ console.log(EqOptionMyTuple.equals(o1, o3)) // => false
 
 If we slightly modify the imports in the following snippet we can obtain a similar result for `Ord`:
 
-```ts
+```typescript
 import * as N from 'fp-ts/number'
 import { getOrd, Option, some } from 'fp-ts/Option'
 import { tuple } from 'fp-ts/Ord'
@@ -2565,14 +2565,14 @@ If only we had such a recipe..Isn't that the job our old good friends `Semigroup
 
 All we need to do is to require the user to provide a `Semigroup` instance for `A` and then derive a `Semigroup` instance for `Option<A>`.
 
-```ts
+```typescript
 // the implementation is left as an exercise for the reader
 declare const getApplySemigroup: <A>(S: Semigroup<A>) => Semigroup<Option<A>>
 ```
 
 **Quiz**. Is it possible to add a neutral element to the previous semigroup to make it a monoid?
 
-```ts
+```typescript
 // the implementation is left as an exercise for the reader
 declare const getApplicativeMonoid: <A>(M: Monoid<A>) => Monoid<Option<A>>
 ```
@@ -2586,7 +2586,7 @@ It is possible to define a monoid instance for `Option<A>` that behaves like tha
 | none     | some(a2) | some(a2)               |
 | some(a1) | some(a2) | some(S.concat(a1, a2)) |
 
-```ts
+```typescript
 // the implementation is left as an exercise for the reader
 declare const getMonoid: <A>(S: Semigroup<A>) => Monoid<Option<A>>
 ```
@@ -2606,7 +2606,7 @@ Using `getMonoid` we can derive another two useful monoids:
 | none     | some(a2) | some(a2)     |
 | some(a1) | some(a2) | some(a1)     |
 
-```ts
+```typescript
 import { Monoid } from 'fp-ts/Monoid'
 import { getMonoid, Option } from 'fp-ts/Option'
 import { first } from 'fp-ts/Semigroup'
@@ -2626,7 +2626,7 @@ and its dual:
 | none     | some(a2) | some(a2)     |
 | some(a1) | some(a2) | some(a2)     |
 
-```ts
+```typescript
 import { Monoid } from 'fp-ts/Monoid'
 import { getMonoid, Option } from 'fp-ts/Option'
 import { last } from 'fp-ts/Semigroup'
@@ -2639,7 +2639,7 @@ export const getLastMonoid = <A = never>(): Monoid<Option<A>> =>
 
 `getLastMonoid` can be useful to manage optional values. Let's seen an example where we want to derive user settings for a text editor, in this case VSCode.
 
-```ts
+```typescript
 import { Monoid, struct } from 'fp-ts/Monoid'
 import { getMonoid, none, Option, some } from 'fp-ts/Option'
 import { last } from 'fp-ts/Semigroup'
@@ -2691,7 +2691,7 @@ This data type might be limiting in some use cases tho. While in the case of suc
 
 In order to fix this we simply need to another data type to represent failure, we'll call it `Left<E>`. We'll also replace the `Some<A>` type with the `Right<A>`.
 
-```ts
+```typescript
 // represents a failure
 interface Left<E> {
   readonly _tag: 'Left'
@@ -2709,7 +2709,7 @@ type Either<E, A> = Left<E> | Right<A>
 
 Constructors and pattern matching:
 
-```ts
+```typescript
 const left = <E, A>(left: E): Either<E, A> => ({ _tag: 'Left', left })
 
 const right = <A, E>(right: A): Either<E, A> => ({ _tag: 'Right', right })
@@ -2728,7 +2728,7 @@ const match = <E, R, A>(onLeft: (left: E) => R, onRight: (right: A) => R) => (
 
 Let's get back to the previous callback example:
 
-```ts
+```typescript
 declare function readFile(
   path: string,
   callback: (err?: Error, data?: string) => void
@@ -2750,7 +2750,7 @@ readFile('./myfile', (err, data) => {
 
 we can change it's signature to:
 
-```ts
+```typescript
 declare function readFile(
   path: string,
   callback: (result: Either<Error, string>) => void
@@ -2759,7 +2759,7 @@ declare function readFile(
 
 and consume the API in such way:
 
-```ts
+```typescript
 readFile('./myfile', (e) =>
   pipe(
     e,
@@ -2784,7 +2784,7 @@ But what does it means exactly? How can we state whether two things _compose_? A
 
 We've briefly mentioned how a program written in functional styles tends to resemble a pipeline:
 
-```ts
+```typescript
 const program = pipe(
   input,
   f1, // pure function
@@ -2796,7 +2796,7 @@ const program = pipe(
 
 But how simple it is to code in such a style? Let's try:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as RA from 'fp-ts/ReadonlyArray'
 
@@ -2815,7 +2815,7 @@ const program = (input: ReadonlyArray<number>): number =>
 
 Why do I get a compilation error? Because `head` and `double` do not compose.
 
-```ts
+```typescript
 head: (as: ReadonlyArray<number>) => Option<number>
 double: (n: number) => number
 ```
@@ -2920,7 +2920,7 @@ Example given:
 
 The implementation could be something like:
 
-```ts
+```typescript
 const idA = (s: string): string => s
 
 const idB = (n: number): string => n
@@ -2950,7 +2950,7 @@ As a model of TypeScript, the _TS_ category may seem a bit limited: no loops, no
 
 In the _TS_ category we can compose two generic functions `f: (a: A) => B` and `g: (c: C) => D` as long as `C = B`
 
-```ts
+```typescript
 function flow<A, B, C>(f: (a: A) => B, g: (b: B) => C): (a: A) => C {
   return (a) => g(f(a))
 }
@@ -2975,7 +2975,7 @@ In the next section we'll see under which conditions such a composition is possi
 
 The problem we started with at the beginning of this chapter corresponds to the second situation, where `F` is the `Option` type:
 
-```ts
+```typescript
 // A = ReadonlyArray<number>, B = number, F = Option
 head: (as: ReadonlyArray<number>) => Option<number>
 double: (n: number) => number
@@ -3010,7 +3010,7 @@ Let's see two possible techniques to do so in JavaScript:
 
 The first technique, using a DSL, means modifying a program like:
 
-```ts
+```typescript
 function log(message: string): void {
   console.log(message) // side effect
 }
@@ -3018,7 +3018,7 @@ function log(message: string): void {
 
 changing its codomain to make the function return a **description** of the side effect:
 
-```ts
+```typescript
 type DSL = ... // sum type of every possible effect handled by the system
 
 function log(message: string): DSL {
@@ -3035,7 +3035,7 @@ This technique requires a way to combine effects and the definition of an interp
 
 The second technique, way simpler in TypeScript, is to enclose the computation in a _thunk_:
 
-```ts
+```typescript
 // a thunk representing a synchronous side effect
 type IO<A> = () => A
 
@@ -3046,7 +3046,7 @@ const log = (message: string): IO<void> => {
 
 The `log` program, once executed, won't cause immediately a side effect, but returns **a value representing the computation** (also known as _action_).
 
-```ts
+```typescript
 import { IO } from 'fp-ts/IO'
 
 export const log = (message: string): IO<void> => {
@@ -3072,7 +3072,7 @@ Even with this thunk technique (the same technique used in `fp-ts`) we need a wa
 
 We first need a bit of (informal) terminology: we'll call **pure program** a function with the following signature:
 
-```ts
+```typescript
 (a: A) => B
 ```
 
@@ -3082,13 +3082,13 @@ Such a signature models a program that takes an input of type `A` and returns a 
 
 The `len` program:
 
-```ts
+```typescript
 const len = (s: string): number => s.length
 ```
 
 We'll call an **effectful program** a function with the following signature:
 
-```ts
+```typescript
 (a: A) => F<B>
 ```
 
@@ -3100,7 +3100,7 @@ Let's recall that a [type constructor](https://en.wikipedia.org/wiki/Type_constr
 
 The `head` program:
 
-```ts
+```typescript
 import { Option, some, none } from 'fp-ts/Option'
 
 const head = <A>(as: ReadonlyArray<A>): Option<A> =>
@@ -3122,12 +3122,12 @@ When we talk about effects we are interested in `n`-ary type constructors where 
 
 where
 
-```ts
+```typescript
 // a thunk returning a `Promise`
 type Task<A> = () => Promise<A>
 ```
 
-```ts
+```typescript
 // `R` represents an "environment" needed for the computation
 // (we can "read" from it) and `A` is the result
 type Reader<R, A> = (r: R) => A
@@ -3141,7 +3141,7 @@ With our current set of rules this general problem is not solvable. We need to a
 
 We already know that if `B = C` then the solution is the usual function composition.
 
-```ts
+```typescript
 function flow<A, B, C>(f: (a: A) => B, g: (b: B) => C): (a: A) => C {
   return (a) => g(f(a))
 }
@@ -3166,7 +3166,7 @@ Let's see some practical example:
 
 **Example** (`F = ReadonlyArray`)
 
-```ts
+```typescript
 import { flow, pipe } from 'fp-ts/function'
 
 // transforms functions `B -> C` to functions `ReadonlyArray<B> -> ReadonlyArray<C>`
@@ -3208,7 +3208,7 @@ console.log(getFollowersNames(user)) // => [ 'Terry R. Emerson', 'Marsha J. Josl
 
 **Example** (`F = Option`)
 
-```ts
+```typescript
 import { flow } from 'fp-ts/function'
 import { none, Option, match, some } from 'fp-ts/Option'
 
@@ -3240,7 +3240,7 @@ console.log(getDoubleHead([])) // => none
 
 **Example** (`F = IO`)
 
-```ts
+```typescript
 import { flow } from 'fp-ts/function'
 import { IO } from 'fp-ts/IO'
 
@@ -3277,7 +3277,7 @@ console.log(getUserName(1)()) // => Ruth R. Gonzalez
 
 **Example** (`F = Task`)
 
-```ts
+```typescript
 import { flow } from 'fp-ts/function'
 import { Task } from 'fp-ts/Task'
 
@@ -3314,7 +3314,7 @@ getUserName(1)().then(console.log) // => Ruth R. Gonzalez
 
 **Example** (`F = Reader`)
 
-```ts
+```typescript
 import { flow } from 'fp-ts/function'
 import { Reader } from 'fp-ts/Reader'
 
@@ -3383,7 +3383,7 @@ A functor is a pair `(F, map)` where:
 - `F` is an `n`-ary (`n >= 1`) type constructor mapping every type `X` in a type `F<X>` (**map between objects**)
 - `map` is a function with the following signature:
 
-```ts
+```typescript
 map: <A, B>(f: (a: A) => B) => ((fa: F<A>) => F<B>)
 ```
 
@@ -3396,7 +3396,7 @@ The following properties have to hold true:
 
 The second law allows to refactor and optimize the following computation:
 
-```ts
+```typescript
 import { flow, increment, pipe } from 'fp-ts/function'
 import { map } from 'fp-ts/ReadonlyArray'
 
@@ -3413,7 +3413,7 @@ console.log(pipe([1, 2, 3], map(flow(double, increment)))) // => [ 3, 5, 7 ]
 
 Functors have a positive impact on functional error handling, let's see a practical example:
 
-```ts
+```typescript
 declare const doSomethingWithIndex: (index: number) => string
 
 export const program = (ns: ReadonlyArray<number>): string => {
@@ -3430,7 +3430,7 @@ Using the native `findIndex` API we are forced to use an `if` branch to test whe
 
 Let's see how easier it is to obtain the same behavior using `Option` and its functor instance:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import { map, Option } from 'fp-ts/Option'
 import { findIndex } from 'fp-ts/ReadonlyArray'
@@ -3459,7 +3459,7 @@ Functors compose, meaning that given two functors `F` and `G` then the compositi
 
 **Example** (`F = Task`, `G = Option`)
 
-```ts
+```typescript
 import { flow } from 'fp-ts/function'
 import * as O from 'fp-ts/Option'
 import * as T from 'fp-ts/Task'
@@ -3509,7 +3509,7 @@ The definition of a contravariant functor is pretty much the same of the covaria
 
 **Example**
 
-```ts
+```typescript
 import { map } from 'fp-ts/Option'
 import { contramap } from 'fp-ts/Eq'
 
@@ -3549,7 +3549,7 @@ How do we define a functor instance in `fp-ts`? Let's see some example.
 
 The following interface represents the model of some result we get by calling some HTTP API:
 
-```ts
+```typescript
 interface Response<A> {
   url: string
   status: number
@@ -3562,7 +3562,7 @@ Please note that since `body` is parametric, this makes `Response` a good candid
 
 To define a functor instance for `Response` we need to define a `map` function along some [technical details](https://gcanti.github.io/fp-ts/recipes/HKT.html) required by `fp-ts`.
 
-```ts
+```typescript
 // `Response.ts` module
 
 import { pipe } from 'fp-ts/function'
@@ -3622,7 +3622,7 @@ But `g` has to be unary, it can only accept a single argument as input. What hap
 
 First of all we need to model a function that accepts two arguments of type `B` and `C` (we can use a tuple for this) and returns a value of type `D`:
 
-```ts
+```typescript
 g: (b: B, c: C) => D
 ```
 
@@ -3634,13 +3634,13 @@ We can rewrite `g` using a technique called **currying**.
 
 Thus, through currying, we can rewrite `g` as:
 
-```ts
+```typescript
 g: (b: B) => (c: C) => D
 ```
 
 **Example**
 
-```ts
+```typescript
 interface User {
   readonly id: number
   readonly name: string
@@ -3655,7 +3655,7 @@ const addFollower = (follower: User, user: User): User => ({
 
 Let's refactor `addFollower` through currying
 
-```ts
+```typescript
 interface User {
   readonly id: number
   readonly name: string
@@ -3692,7 +3692,7 @@ Suppose that:
 - we do not have a `user` but only his `id`
 - that we have an API `fetchUser` which, given an `id`, queries an endpoint that returns the corresponding `User`
 
-```ts
+```typescript
 import * as T from 'fp-ts/Task'
 
 interface User {
@@ -3718,7 +3718,7 @@ I can't use `addFollower` anymore! How can we proceed?
 
 If only we had a function with the following signature:
 
-```ts
+```typescript
 declare const addFollowerAsync: (
   follower: T.Task<User>
 ) => (user: T.Task<User>) => T.Task<User>
@@ -3726,7 +3726,7 @@ declare const addFollowerAsync: (
 
 we could proceed with ease:
 
-```ts
+```typescript
 import * as T from 'fp-ts/Task'
 
 interface User {
@@ -3752,7 +3752,7 @@ We can obviously implement `addFollowerAsyn` manually, but is it possible instea
 
 More generally what we would like to have is a transformation, call it `liftA2`, which beginning with a function `g: (b: B) => (c: C) => D` returns a function with the following signature:
 
-```ts
+```typescript
 liftA2(g): (fb: F<B>) => (fc: F<C>) => F<D>
 ```
 
@@ -3760,7 +3760,7 @@ liftA2(g): (fb: F<B>) => (fc: F<C>) => F<D>
 
 How can we obtain it? Given that `g` is now a unary function, we can leverage the functor instance and the good old `map`:
 
-```ts
+```typescript
 map(g): (fb: F<B>) => F<(c: C) => D>
 ```
 
@@ -3770,13 +3770,13 @@ Now we are blocked: there's no legal operation the functor instance provides us 
 
 We need to introduce a new operation `ap` which realizes this unpacking:
 
-```ts
+```typescript
 declare const ap: <A>(fa: Task<A>) => <B>(fab: Task<(a: A) => B>) => Task<B>
 ```
 
 **Note**. Why is it names "ap"? Because it can be seen like some sort of function application.
 
-```ts
+```typescript
 // `apply` applies a function to a value
 declare const apply: <A>(a: A) => <B>(f: (a: A) => B) => B
 
@@ -3786,7 +3786,7 @@ declare const ap: <A>(a: Task<A>) => <B>(f: Task<(a: A) => B>) => Task<B>
 
 Now that we have `ap` we can define `liftA2`:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as T from 'fp-ts/Task'
 
@@ -3811,7 +3811,7 @@ const addFollowerAsync = liftA2(addFollower)
 
 and finally, we can compose `fetchUser` with the previous result:
 
-```ts
+```typescript
 import { flow, pipe } from 'fp-ts/function'
 import * as T from 'fp-ts/Task'
 
@@ -3853,7 +3853,7 @@ Let's see how's the `ap` operation implemented for some of the type constructors
 
 **Example** (`F = ReadonlyArray`)
 
-```ts
+```typescript
 import { increment, pipe } from 'fp-ts/function'
 
 const ap = <A>(fa: ReadonlyArray<A>) => <B>(
@@ -3875,7 +3875,7 @@ pipe([double, increment], ap([1, 2, 3]), console.log) // => [ 2, 4, 6, 2, 3, 4 ]
 
 **Example** (`F = Option`)
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as O from 'fp-ts/Option'
 
@@ -3907,7 +3907,7 @@ pipe(O.none, ap(O.none), console.log) // => none
 
 **Example** (`F = IO`)
 
-```ts
+```typescript
 import { IO } from 'fp-ts/IO'
 
 const ap = <A>(fa: IO<A>) => <B>(fab: IO<(a: A) => B>): IO<B> => () => {
@@ -3919,7 +3919,7 @@ const ap = <A>(fa: IO<A>) => <B>(fab: IO<(a: A) => B>): IO<B> => () => {
 
 **Example** (`F = Task`)
 
-```ts
+```typescript
 import { Task } from 'fp-ts/Task'
 
 const ap = <A>(fa: Task<A>) => <B>(fab: Task<(a: A) => B>): Task<B> => () =>
@@ -3928,7 +3928,7 @@ const ap = <A>(fa: Task<A>) => <B>(fab: Task<(a: A) => B>): Task<B> => () =>
 
 **Example** (`F = Reader`)
 
-```ts
+```typescript
 import { Reader } from 'fp-ts/Reader'
 
 const ap = <R, A>(fa: Reader<R, A>) => <B>(
@@ -3944,7 +3944,7 @@ We've seen how with `ap` we can manage functions with two parameters, but what h
 
 Good news is no, `map` and `ap` are sufficient:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as T from 'fp-ts/Task'
 
@@ -3974,7 +3974,7 @@ Now we cam update ore "composition table":
 
 Now we know that given two function `f: (a: A) => F<B>`, `g: (b: B, c: C) => D` we can obtain the composition `h`:
 
-```ts
+```typescript
 h: (a: A) => (fb: F<B>) => F<D>
 ```
 
@@ -3986,7 +3986,7 @@ It would be helpful to have an operation which can transform a value of type `B`
 
 Let's introduce such operation, called `of` (other synonyms: **pure**, **return**):
 
-```ts
+```typescript
 declare const of: <B>(b: B) => F<B>
 ```
 
@@ -3996,13 +3996,13 @@ Let's see how `of` is defined for some type constructors we've already seen:
 
 **Example** (`F = ReadonlyArray`)
 
-```ts
+```typescript
 const of = <A>(a: A): ReadonlyArray<A> => [a]
 ```
 
 **Example** (`F = Option`)
 
-```ts
+```typescript
 import * as O from 'fp-ts/Option'
 
 const of = <A>(a: A): O.Option<A> => O.some(a)
@@ -4010,7 +4010,7 @@ const of = <A>(a: A): O.Option<A> => O.some(a)
 
 **Example** (`F = IO`)
 
-```ts
+```typescript
 import { IO } from 'fp-ts/IO'
 
 const of = <A>(a: A): IO<A> => () => a
@@ -4018,7 +4018,7 @@ const of = <A>(a: A): IO<A> => () => a
 
 **Example** (`F = Task`)
 
-```ts
+```typescript
 import { Task } from 'fp-ts/Task'
 
 const of = <A>(a: A): Task<A> => () => Promise.resolve(a)
@@ -4026,7 +4026,7 @@ const of = <A>(a: A): Task<A> => () => Promise.resolve(a)
 
 **Example** (`F = Reader`)
 
-```ts
+```typescript
 import { Reader } from 'fp-ts/Reader'
 
 const of = <R, A>(a: A): Reader<R, A> => () => a
@@ -4044,7 +4044,7 @@ Applicative functors compose, meaning that given two applicative functors `F` an
 
 The `of` of the composition is the composition of the `of`s:
 
-```ts
+```typescript
 import { flow } from 'fp-ts/function'
 import * as O from 'fp-ts/Option'
 import * as T from 'fp-ts/Task'
@@ -4056,7 +4056,7 @@ const of: <A>(a: A) => TaskOption<A> = flow(O.of, T.of)
 
 the `ap` of the composition is obtained by the following pattern:
 
-```ts
+```typescript
 const ap = <A>(
   fa: TaskOption<A>
 ): (<B>(fab: TaskOption<(a: A) => B>) => TaskOption<B>) =>
@@ -4095,7 +4095,7 @@ In the last chapter we have seen how we can compose an effectful program `f: (a:
 
 But we need to solve one last, quite common, case: when **both** programs are effectful:
 
-```ts
+```typescript
 f: (a: A) => F<B>
 g: (b: B) => F<C>
 ```
@@ -4110,7 +4110,7 @@ Let's see few examples on why we need something more.
 
 Suppose we want to get followers' followers.
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as A from 'fp-ts/ReadonlyArray'
 
@@ -4134,7 +4134,7 @@ We need to **flatten** nested arrays.
 
 The function `flatten: <A>(mma: ReadonlyArray<ReadonlyArray<A>>) => ReadonlyArray<A>` exported by the `fp-ts/ReadonlyArray` is exactly what we need:
 
-```ts
+```typescript
 // followersOfFollowers: ReadonlyArray<User>
 const followersOfFollowers = pipe(
   user,
@@ -4149,7 +4149,7 @@ Cool! Let's see some other data type.
 **Example** (`F = Option`)
 Suppose you want to calculate the reciprocal of the first element of a numerical array:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as O from 'fp-ts/Option'
 import * as A from 'fp-ts/ReadonlyArray'
@@ -4167,7 +4167,7 @@ We need to flatten again the nested `Option`s.
 
 The `flatten: <A>(mma: Option<Option<A>>) => Option<A>` function exported by the `fp-ts/Option` module is what we need:
 
-```ts
+```typescript
 // inverseHead: O.Option<number>
 const inverseHead = pipe([1, 2, 3], A.head, O.map(inverse), O.flatten)
 ```
@@ -4191,13 +4191,13 @@ Here is how they are often presented...
 
 (2) a function `of` (also called **pure** or **return**) with the following signature:
 
-```ts
+```typescript
 of: <A>(a: A) => M<A>
 ```
 
 (3) a `chain` function (also called **flatMap** or **bind**) with the following signature:
 
-```ts
+```typescript
 chain: <A, B>(f: (a: A) => M<B>) => (ma: M<A>) => M<B>
 ```
 
@@ -4325,7 +4325,7 @@ What about `of`? Well, `of` comes from the identity morphisms in _K_: for every 
 
 The fact that `of` is the neutral element for `chain` allows this kind of flux control (pretty common):
 
-```ts
+```typescript
 pipe(
   mb,
   M.chain((b) => (predicate(b) ? M.of(b) : g(b)))
@@ -4344,7 +4344,7 @@ Last question: where do the laws come from? They are nothing else but the catego
 
 If we now go back to the examples that showed the problem with nested contexts we can solve them using `chain`:
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import * as O from 'fp-ts/Option'
 import * as A from 'fp-ts/ReadonlyArray'
@@ -4375,7 +4375,7 @@ Let's see how is `chain` implemented for the usual type constructors we've alrea
 
 **Example** (`F = ReadonlyArray`)
 
-```ts
+```typescript
 // transforms functions `B -> ReadonlyArray<C>` into functions `ReadonlyArray<B> -> ReadonlyArray<C>`
 const chain = <B, C>(g: (b: B) => ReadonlyArray<C>) => (
   mb: ReadonlyArray<B>
@@ -4390,7 +4390,7 @@ const chain = <B, C>(g: (b: B) => ReadonlyArray<C>) => (
 
 **Example** (`F = Option`)
 
-```ts
+```typescript
 import { match, none, Option } from 'fp-ts/Option'
 
 // transforms functions `B -> Option<C>` into functions `Option<B> -> Option<C>`
@@ -4400,7 +4400,7 @@ const chain = <B, C>(g: (b: B) => Option<C>): ((mb: Option<B>) => Option<C>) =>
 
 **Example** (`F = IO`)
 
-```ts
+```typescript
 import { IO } from 'fp-ts/IO'
 
 // transforms functions `B -> IO<C>` into functions `IO<B> -> IO<C>`
@@ -4410,7 +4410,7 @@ const chain = <B, C>(g: (b: B) => IO<C>) => (mb: IO<B>): IO<C> => () =>
 
 **Example** (`F = Task`)
 
-```ts
+```typescript
 import { Task } from 'fp-ts/Task'
 
 // transforms functions `B -> Task<C>` into functions `Task<B> -> Task<C>`
@@ -4420,7 +4420,7 @@ const chain = <B, C>(g: (b: B) => Task<C>) => (mb: Task<B>): Task<C> => () =>
 
 **Example** (`F = Reader`)
 
-```ts
+```typescript
 import { Reader } from 'fp-ts/Reader'
 
 // transforms functions `B -> Reader<R, C>` into functions `Reader<R, B> -> Reader<R, C>`
@@ -4435,7 +4435,7 @@ Let's see now, how thanks to referential transparency and the monad concept we c
 
 Here's a small program that reads / writes a file:
 
-```ts
+```typescript
 import { log } from 'fp-ts/Console'
 import { IO, chain } from 'fp-ts/IO'
 import { pipe } from 'fp-ts/function'
@@ -4473,13 +4473,13 @@ const program1 = pipe(
 
 The actions:
 
-```ts
+```typescript
 pipe(readFile('file.txt'), chain(log))
 ```
 
 is repeated more than once in the program, but given that referential transparency holds we can factor it and assign it to a constant:
 
-```ts
+```typescript
 const read = pipe(readFile('file.txt'), chain(log))
 const modify = modifyFile('file.txt', (s) => s + '\n// eof')
 
@@ -4492,7 +4492,7 @@ const program2 = pipe(
 
 We can even define a combinator and leverage it to make the code more compact:
 
-```ts
+```typescript
 const interleave = <A, B>(action: IO<A>, middle: IO<B>): IO<A> =>
   pipe(
     action,
@@ -4505,7 +4505,7 @@ const program3 = interleave(read, modify)
 
 Another example: implementing a function similar to Unix' `time` (the part related to the execution time) for `IO`.
 
-```ts
+```typescript
 import * as IO from 'fp-ts/IO'
 import { now } from 'fp-ts/Date'
 import { log } from 'fp-ts/Console'
@@ -4557,7 +4557,7 @@ time ma = do
 
 TypeScript does not support such syntax, but it can be emulated with something similar:
 
-```ts
+```typescript
 import { log } from 'fp-ts/Console'
 import { now } from 'fp-ts/Date'
 import { pipe } from 'fp-ts/function'
@@ -4579,7 +4579,7 @@ export const time = <A>(ma: IO.IO<A>): IO.IO<A> =>
 
 Let's see a usage example of the `time` combinator:
 
-```ts
+```typescript
 import { randomInt } from 'fp-ts/Random'
 import { Monoid, concatAll } from 'fp-ts/Monoid'
 import { replicate } from 'fp-ts/ReadonlyArray'
@@ -4621,7 +4621,7 @@ Elapsed: 89
 
 Logs also the partial:
 
-```ts
+```typescript
 time(replicateIO(3, time(randomFib)))()
 /*
 [ 33, 5702887 ]
@@ -4638,7 +4638,7 @@ One of the most interesting aspects of working with the monadic interface (`map`
 
 To see that, let's refactor the small program that reads and writes a file:
 
-```ts
+```typescript
 import { IO } from 'fp-ts/IO'
 import { pipe } from 'fp-ts/function'
 
@@ -4695,7 +4695,7 @@ program4(DepsSync)()
 
 There's more, we can even abstract the effect in which the program runs. We can define our own `FileSystem` effect (the effect representing read-write operations over the file system):
 
-```ts
+```typescript
 import { IO } from 'fp-ts/IO'
 import { pipe } from 'fp-ts/function'
 
@@ -4752,7 +4752,7 @@ With a simple change in the definition of the `FileSystem` effect. we can modify
 
 now all there's left is to modify the `Deps` instance to adapt to the new definition.
 
-```ts
+```typescript
 import { Task } from 'fp-ts/Task'
 import { pipe } from 'fp-ts/function'
 
@@ -4820,7 +4820,7 @@ program5(DepsAsync)()
 
 **Quiz**. The previous examples overlook, on purpose, possible errors. Example give: the file we're operating on may not exist at all. How could we modify the `FileSystem` effect to take this into account?
 
-```ts
+```typescript
 import { Task } from 'fp-ts/Task'
 import { pipe } from 'fp-ts/function'
 import * as E from 'fp-ts/Either'

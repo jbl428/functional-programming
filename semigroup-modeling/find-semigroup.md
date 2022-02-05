@@ -4,7 +4,7 @@
 
 아래와 같은 `User` 를 정의했다고 가정합시다:
 
-```ts
+```typescript
 type User = {
   readonly id: number
   readonly name: string
@@ -12,7 +12,7 @@ type User = {
 ```
 그리고 데이터베이스에는 같은 `User` 에 대한 여러 복사본이 있다고 가정합니다 (예를들면 수정이력일 수 있습니다)
 
-```ts
+```typescript
 // 내부 API
 declare const getCurrent: (id: number) => User
 declare const getHistory: (id: number) => ReadonlyArray<User>
@@ -20,7 +20,7 @@ declare const getHistory: (id: number) => ReadonlyArray<User>
 
 그리고 다음 외부 API 를 구현해야합니다.
 
-```ts
+```typescript
 export declare const getUser: (id: number) => User
 ```
 
@@ -28,7 +28,7 @@ API 는 다음 조건에 따라 적절한 `User` 를 가져와야 합니다. 조
 
 보통은 다음처럼 각 조건에 따라 여러 API 를 만들 수 있습니다:
 
-```ts
+```typescript
 export declare const getMostRecentUser: (id: number) => User
 export declare const getLeastRecentUser: (id: number) => User
 export declare const getCurrentUser: (id: number) => User
@@ -41,7 +41,7 @@ export declare const getCurrentUser: (id: number) => User
 
 주어진 **어떠한** 타입 `A` 에 대해서도 **항상** semigroup 인스턴스를 만들 수 있습니다. `A` 자체에 대한 인스턴스가 아닌 `NonEmptyArray<A>` 의 인스턴스로 만들 수 있으며 이는 `A` 의 **free semigroup** 이라고 불립니다.
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 // 적어도 하나의 A 의 요소가 있는 배열을 표현합니다
@@ -57,14 +57,14 @@ const getSemigroup = <A>(): Semigroup<ReadonlyNonEmptyArray<A>> => ({
 
 그러면 `A` 의 요소  `ReadonlyNonEmptyArray<A>` 의 "싱글톤" 으로 만들 수 있으며 이는 하나를 하나의 요소만 있는 배열을 의미합니다.
 
-```ts
+```typescript
 // 비어있지 않은 배열에 값 하나를 넣습니다
 const of = <A>(a: A): ReadonlyNonEmptyArray<A> => [a]
 ```
 
 이 방식을 `User` 타입에도 적용해봅시다:
 
-```ts
+```typescript
 import {
   getSemigroup,
   of,
@@ -101,7 +101,7 @@ const merge2: ReadonlyNonEmptyArray<User> = [user1, user2, user3]
 
 1. `Semigroup<User>` 를 정의하고 바로 `병합`한다.
 
-```ts
+```typescript
 declare const SemigroupUser: Semigroup<User>
 
 export const getUser = (id: number): User => {
@@ -113,7 +113,7 @@ export const getUser = (id: number): User => {
 
 2. `Semigroup<User>` 을 직접 정의하는 대신 병합 전략을 외부에서 구현하게 한다. 즉 API 사용자가 제공하도록 한다.
 
-```ts
+```typescript
 export const getUser = (SemigroupUser: Semigroup<User>) => (
   id: number
 ): User => {
@@ -128,7 +128,7 @@ export const getUser = (SemigroupUser: Semigroup<User>) => (
 
 이럴 때에는 `User` 의 free semigroup 을 활용합니다:
 
-```ts
+```typescript
 export const getUser = (id: number): ReadonlyNonEmptyArray<User> => {
   const current = getCurrent(id)
   const history = getHistory(id)

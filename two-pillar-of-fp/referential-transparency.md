@@ -4,7 +4,7 @@
 
 **예제** (참조 투명성은 순수함수를 사용하는 것을 의미합니다)
 
-```ts
+```typescript
 const double = (n: number): number => n * 2
 
 const x = double(2)
@@ -15,7 +15,7 @@ const y = double(2)
 
 따라서 코드를 아래와 같이 바꿀 수 있습니다.
 
-```ts
+```typescript
 const x = 4
 const y = x
 ```
@@ -24,7 +24,7 @@ const y = x
 
 **예제** (참조 투명성은 에러를 던지지 않는것을 의미합니다)
 
-```ts
+```typescript
 const inverse = (n: number): number => {
   if (n === 0) throw new Error('cannot divide by zero')
   return 1 / n
@@ -37,7 +37,7 @@ const x = inverse(0) + 1
 
 **예제** (참조 투명성을 위해 불변 자료구조를 사용해야 합니다)
 
-```ts
+```typescript
 const xs = [1, 2, 3]
 
 const append = (xs: Array<number>): void => {
@@ -58,7 +58,7 @@ const ys = xs
 
 **문제**. 다음과 같은 프로그램이 있다고 가정합시다:
 
-```ts
+```typescript
 // Typescript 에서 `declare` 를 사용하면 함수의 구현부 없이 선언부만 작성할 수 있습니다
 declare const question: (message: string) => Promise<string>
 
@@ -68,7 +68,7 @@ const y = await question('What is your name?')
 
 다음과 같이 코드를 수정해도 괜찮을까요? 프로그램 동작이 변할까요?
 
-```ts
+```typescript
 const x = await question('What is your name?')
 const y = x
 ```

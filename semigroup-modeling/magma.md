@@ -10,7 +10,7 @@
 
 Magma 를 정의하기 위해 Typescript 의 `interface` 를 활용할 수 있습니다.
 
-```ts
+```typescript
 interface Magma<A> {
   readonly concat: (first: A, second: A) => A
 }
@@ -23,7 +23,7 @@ interface Magma<A> {
 
 `Magma<A>` 의 구체적인 인스턴스 하나를 구현해봅니다. 여기서 `A` 는 `number` 입니다.
 
-```ts
+```typescript
 import { Magma } from 'fp-ts/Magma'
 
 const MagmaSub: Magma<number> = {

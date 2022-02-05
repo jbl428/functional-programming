@@ -2,7 +2,7 @@
 
 더 복잡한 semigroup 인스턴스를 정의해봅시다:
 
-```ts
+```typescript
 import * as N from 'fp-ts/number'
 import { Semigroup } from 'fp-ts/Semigroup'
 
@@ -23,7 +23,7 @@ const SemigroupVector: Semigroup<Vector> = {
 
 **예제**
 
-```ts
+```typescript
 const v1: Vector = { x: 1, y: 1 }
 const v2: Vector = { x: 1, y: 2 }
 
@@ -38,7 +38,7 @@ boilerplate 코드가 너무 많나요? 좋은 소식은 semigroup 의 **수학�
 
 편리하게도 `fp-ts/Semigroup` 모둘은 `struct` combinator 를 제공합니다:
 
-```ts
+```typescript
 import { struct } from 'fp-ts/Semigroup'
 
 // 두 vector 의 합을 모델링
@@ -50,7 +50,7 @@ const SemigroupVector: Semigroup<Vector> = struct({
 
 **Note**. `struct` 와 유사한 tuple 에 대해 동작하는 combinator 도 존재합니다: `tuple`
 
-```ts
+```typescript
 import * as N from 'fp-ts/number'
 import { Semigroup, tuple } from 'fp-ts/Semigroup'
 
@@ -68,7 +68,7 @@ console.log(SemigroupVector.concat(v1, v2)) // => [2, 3]
 
 **문제**. 만약 임의의 `Semigroup<A>` 와 `A` 의 임의의 값 middle 을 두 `concat` 인자 사이에 넣도록 만든 인스턴스는 여전히 semigroup 일까요?
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 import { Semigroup } from 'fp-ts/Semigroup'
 import * as S from 'fp-ts/string'

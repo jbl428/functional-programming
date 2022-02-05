@@ -4,7 +4,7 @@
 
 Supponiamo di avere definto le seguenti API:
 
-```ts
+```typescript
 import { head } from 'fp-ts/lib/Array'
 import { Option } from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/pipeable'
@@ -58,7 +58,7 @@ In due modi:
 
 Diciamo che sono interessato al primo dei due modi:
 
-```ts
+```typescript
 interface TaskEither<L, A> extends Task<Either<L, A>> {}
 ```
 

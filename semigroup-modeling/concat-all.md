@@ -8,7 +8,7 @@
 - 초기값
 - 요소의 배열
 
-```ts
+```typescript
 import * as S from 'fp-ts/Semigroup'
 import * as N from 'fp-ts/number'
 
@@ -27,7 +27,7 @@ console.log(product([1, 2, 3, 4])) // => 72
 
 Javascript 기본 라이브러리의 유명한 함수 몇가지를 `concatAll` 으로 구현해봅시다.
 
-```ts
+```typescript
 import * as B from 'fp-ts/boolean'
 import { concatAll } from 'fp-ts/Semigroup'
 import * as S from 'fp-ts/struct'
@@ -47,7 +47,7 @@ const assign: (as: ReadonlyArray<object>) => object = concatAll(
 
 **문제**. 다음 인스턴스는 semigroup 법칙을 만족합니까?
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 /** 항상 첫 번째 인자를 반환 */
@@ -58,7 +58,7 @@ const first = <A>(): Semigroup<A> => ({
 
 **문제**. 다음 인스턴스는 semigroup 법칙을 만족합니까?
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 /** 항상 두 번째 인자를 반환 */

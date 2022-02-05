@@ -14,7 +14,7 @@
 
 보통 함수형 프로그램은 **pipeline** 형태로 이루어져 있습니다.
 
-```ts
+```typescript
 const program = pipe(
   input,
   f1, // 순수 함수
@@ -51,7 +51,7 @@ const program = pipe(
 
 왜 `for`반복문보다 `Array`의 `map`이 더 함수형이라고 할까요?
 
-```ts
+```typescript
 // 입력
 const xs: Array<number> = [1, 2, 3]
 
@@ -77,7 +77,7 @@ for (let i = 0; i <= xs.length; i++) {
 
 위 예제를 `map`을 활용해 작성해봅시다.
 
-```ts
+```typescript
 // 입력
 const xs: Array<number> = [1, 2, 3]
 

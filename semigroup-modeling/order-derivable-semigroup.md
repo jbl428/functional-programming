@@ -2,7 +2,7 @@
 
 만약 주어진 `number` 가 **total order** (전순서 집합, 어떤 임의의 `x` 와 `y` 를 선택해도, 다음 두 조건 중 하나가 참이다: `x <= y` 또는 `y <= x`) 라면 `min` 또는 `max` 연산을 활용해 또 다른 두 개의 `Semigroup<number>` 인스턴스를 얻을 수 있습니다.
 
-```ts
+```typescript
 import { Semigroup } from 'fp-ts/Semigroup'
 
 const SemigroupMin: Semigroup<number> = {

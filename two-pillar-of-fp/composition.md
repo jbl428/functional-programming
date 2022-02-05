@@ -22,7 +22,7 @@
 
 combinator 의 일반적인 개념은 다소 모호하고 다른 형태로 나타날 수 있지만, 가장 간단한 것은 다음과 같다:
 
-```ts
+```typescript
 combinator: Thing -> Thing
 ```
 
@@ -35,7 +35,7 @@ combinator 의 출력인 새로운 *어떤 것*은 다른 프로그램이나 com
 
 **예제**
 
-```ts
+```typescript
 import { pipe } from 'fp-ts/function'
 
 const double = (n: number): number => n * 2
