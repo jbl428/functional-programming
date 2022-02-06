@@ -3,13 +3,12 @@
 지금까지 배운것을 다시 정리해봅시다.
 
 **대수**이 아래 조합으로 이루어져 있다는 것을 보았습니다:
-We have seen how an **algebra** is a combination of:
 
 - 타입 `A`
 - 타입 `A` 와 연관된 몇가지 연산들
 - 조합을 위한 몇가지 법칙과 속성
 
-처음 살펴본 대수는 `concat` 으로 불리는 연산을 하나 가진 magma 였습니다. `Maga<A>` 에 대한 특별한 법칙은 없었고 다만 `concat` 연산이 `A` 에 대해 닫혀있어야 했습니다. 즉 다음 연산의 결과는
+처음 살펴본 대수는 `concat` 으로 불리는 연산을 하나 가진 magma 였습니다. `Magma<A>` 에 대한 특별한 법칙은 없었고 다만 `concat` 연산이 `A` 에 대해 닫혀있어야 했습니다. 즉 다음 연산의 결과는
 
 ```typescript
 concat(first: A, second: A) => A
@@ -85,7 +84,7 @@ const Semigroup: Semigroup<ReadonlyArray<string>> = {
 
 이 semigroup 에 대한 `unit` 을 찾을 수 있을까요? 만약 그렇다면, `ReadonlyArray<string>` 뿐만 아니라 `ReadonlyArray<A>` 에 대해서도 그렇다고 일반화할 수 있을까요?
 
-**문제** (더 복잡함). 임의의 monoid 에 대해, unit 이 도직 하나만 있음을 증명해보세요.
+**문제** (더 복잡함). 임의의 monoid 에 대해, unit 이 오직 하나만 있음을 증명해보세요.
 
 위 증명을 통해 monoid 당 오직 하나의 unit 만 있다는 것이 보증되기에, 우리는 monoid 에서 unit 을 하나 찾았다면 더 이상 찾지 않아도 됩니다.
 
@@ -118,7 +117,6 @@ console.log(SemigroupIntercalate.concat('a', '')) // => 'a|'
 **예제**
 
 **endomorphism** 은 입력과 출력 타입이 같은 함수를 말합니다:
-**endomorphism** is a function whose input and output type is the same:
 
 ```typescript
 type Endomorphism<A> = (a: A) => A
@@ -145,7 +143,7 @@ export const getEndomorphismMonoid = <A>(): Monoid<Endomorphism<A>> => ({
 const identity = (a: A) => a
 ```
 
-입력으로 무엇을 받아도, 그것을 그대로 결과로 돌려줍니다.
+입력으로 무엇을 받든지, 그것을 그대로 결과로 돌려줍니다.
 
 <!--
 TODO:
