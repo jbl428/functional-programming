@@ -70,7 +70,7 @@ interface Semigroup<A> extends Magma<A> {}
 S.concat(S.concat(x, y), z) = S.concat(x, S.concat(y, z))
 ```
 
-**Note**. 안타깝게도 Typescript 의 타입시스템 만으론 이 법칙을 강제할 수 없습니다.
+**참고**. 안타깝게도 Typescript 의 타입시스템 만으론 이 법칙을 강제할 수 없습니다.
 
 `ReadonlyArray<string>` 에 대한 semigroup 을 구현해봅시다:
 
@@ -119,7 +119,7 @@ const SemigroupProduct: Semigroup<number> = {
 }
 ```
 
-**Note** 흔히 _number 의 semigroup_ 에 한정지어 생각하곤 하지만, 임의의 타입 `A` 에 대해 다른 `Semigroup<A>` **인스턴스**를 정의하는 것도 가능합니다. `number` 타입의 _덧셈_ 과 _곱셈_ 연산에 대한 semigroup 을 정의한것처럼 다른 타입에 대해 같은 연산으로 `Semigroup` 을 만들 수 있습니다. 예들들어 `SemigoupSum` 은 `number` 와 같은 타입대신 자연수에 대해서도 구현할 수 있습니다.
+**참고** 흔히 _number 의 semigroup_ 에 한정지어 생각하곤 하지만, 임의의 타입 `A` 에 대해 다른 `Semigroup<A>` **인스턴스**를 정의하는 것도 가능합니다. `number` 타입의 _덧셈_ 과 _곱셈_ 연산에 대한 semigroup 을 정의한것처럼 다른 타입에 대해 같은 연산으로 `Semigroup` 을 만들 수 있습니다. 예들들어 `SemigoupSum` 은 `number` 와 같은 타입대신 자연수에 대해서도 구현할 수 있습니다.
 > (원문) It is a common mistake to think about the _semigroup of numbers_, but for the same type `A` it is possible to define more **instances** of `Semigroup<A>`. We've seen how for `number` we can define a semigroup under _addition_ and _multiplication_. It is also possible to have `Semigroup`s that share the same operation but differ in types. `SemigroupSum` could've been implemented on natural numbers instead of unsigned floats like `number`.
 
 `string` 타입에 대한 다른 예제입니다:

@@ -6,7 +6,7 @@
 - `concat` 연산
 - 지켜야 할 법칙은 없음
 
-**Note**: 대부분의 경우 _set_ 과 _type_ 은 같은 의미로 사용됩니다.
+**참고**: 대부분의 경우 _set_ 과 _type_ 은 같은 의미로 사용됩니다.
 
 Magma 를 정의하기 위해 Typescript 의 `interface` 를 활용할 수 있습니다.
 

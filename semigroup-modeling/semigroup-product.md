@@ -48,7 +48,7 @@ const SemigroupVector: Semigroup<Vector> = struct({
 })
 ```
 
-**Note**. `struct` 와 유사한 tuple 에 대해 동작하는 combinator 도 존재합니다: `tuple`
+**참고**. `struct` 와 유사한 tuple 에 대해 동작하는 combinator 도 존재합니다: `tuple`
 
 ```typescript
 import * as N from 'fp-ts/number'

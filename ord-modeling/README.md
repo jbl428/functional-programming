@@ -47,7 +47,7 @@ const OrdNumber: Ord<number> = {
 
 `compare(x, y) === 0` if and only if `equals(x, y) === true`
 
-**Note**. `equals` 는 `compare` 를 활용해 다음 방법으로 도출할 수 있습니다:
+**참고**. `equals` 는 `compare` 를 활용해 다음 방법으로 도출할 수 있습니다:
 
 ```typescript
 equals: (first, second) => compare(first, second) === 0

@@ -150,7 +150,7 @@ const EqPoint: Eq<Point> = struct({
 })
 ```
 
-**Note**. Semigroup 처럼, `구조체` 같은 데이터 타입에만 적용할 수 있는것은 아닙니다. tuple 에 적용되는 combinator 도 제공합니다: `tuple`
+**참고**. Semigroup 처럼, `구조체` 같은 데이터 타입에만 적용할 수 있는것은 아닙니다. tuple 에 적용되는 combinator 도 제공합니다: `tuple`
 
 ```typescript
 import { Eq, tuple } from 'fp-ts/Eq'

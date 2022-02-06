@@ -23,3 +23,7 @@
 
 * [`Ord` 를 활용한 순서 관계 모델링](ord-modeling/README.md)
     * [Dual Ordering](ord-modeling/dual-ordering.md)
+
+* [`Monoid` 를 활용한 합성 모델링](monoid-modeling/README.md)
+    * [concatAll 함수](monoid-modeling/concat-all.md)
+    * [product monoid](monoid-modeling/product-monoid.md)
