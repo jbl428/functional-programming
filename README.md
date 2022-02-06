@@ -1,3 +1,5 @@
+# 소개
+
 이 저장소는 Typescript 와 fp-ts 라이브러리를 활용해 함수형 프로그래밍을 소개합니다.
 
 모든 내용은 [enricopolanski](https://github.com/enricopolanski/functional-programming) 의 저장소에서 나온 것입니다.
@@ -15,3 +17,6 @@ git clone https://github.com/jbl428/functional-programming.git
 cd functional-programming
 npm i
 ```
+
+> 본 문서는 `Gitbook` 으로도 볼 수 있습니다.
+> [GitBook Link](https://jbl428.gitbook.io/typescript-fp-ts)
