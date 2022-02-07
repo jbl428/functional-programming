@@ -1,6 +1,6 @@
-// run `npm run shapes` to execute
+// 실행하려면 다음 명령어를 수행하세요 `npm run shapes`
 /*
-  PROBLEM: devise a system to draw shapes on canvas.
+  문제: 캔버스에 도형을 그리는 시스템을 고안하세요.
 */
 import { pipe } from 'fp-ts/function'
 import { Monoid, concatAll } from 'fp-ts/Monoid'
@@ -15,8 +15,7 @@ export interface Point {
 }
 
 /**
- * A shape is a function that given a point
- * returns `true` if the point belongs to the shape and `false` otherwise
+ * 도형은 주어진 point 가 도형 안에 포함되면 `ture` 를 반환하고 그렇지 않으면 `false` 를 반환하는 함수입니다
  */
 export type Shape = (point: Point) => boolean
 
@@ -43,12 +42,12 @@ export type Shape = (point: Point) => boolean
 // -------------------------------------------------------------------------------------
 
 /**
- * Crea a shape representing a circle
+ * 원을 표현하는 도형을 만듭니다
  */
 export const disk = (center: Point, radius: number): Shape => (point) =>
   distance(point, center) <= radius
 
-// euclidean distance
+// 유클리드 거리
 const distance = (p1: Point, p2: Point) =>
   Math.sqrt(
     Math.pow(Math.abs(p1.x - p2.x), 2) + Math.pow(Math.abs(p1.y - p2.y), 2)
@@ -61,8 +60,7 @@ const distance = (p1: Point, p2: Point) =>
 // -------------------------------------------------------------------------------------
 
 /**
- * We can define the first combinator which given a shape
- * returns its complimentary one (the negative)
+ * 주어진 도형을 반전(부정)시키는 첫 번째 combinator 를 정의할 수 있습니다
  */
 export const outside = (s: Shape): Shape => (point) => !s(point)
 
@@ -73,7 +71,7 @@ export const outside = (s: Shape): Shape => (point) => !s(point)
 // -------------------------------------------------------------------------------------
 
 /**
- * A monoid where `concat` represents the union of two `Shape`s
+ * 두 `도형`의 합집합을 계산하는 `concat` 을 가진 monoid
  */
 export const MonoidUnion: Monoid<Shape> = {
   concat: (first, second) => (point) => first(point) || second(point),
@@ -89,7 +87,7 @@ export const MonoidUnion: Monoid<Shape> = {
 // )
 
 /**
- * A monoid where `concat` represents the intersection of two `Shape`s
+ * 두 `도형`의 교집합을 계산하는 `concat` 을 가진 monoid
  */
 const MonoidIntersection: Monoid<Shape> = {
   concat: (first, second) => (point) => first(point) && second(point),
@@ -105,8 +103,7 @@ const MonoidIntersection: Monoid<Shape> = {
 // )
 
 /**
- * Using the combinator `outside` and `MonoidIntersection` we can
- * create a `Shape` representing a ring
+ * `outside` 와 `MonoidIntersection` 를 사용해 반지를 표현하는 `도형`을 만들 수 있습니다
  */
 export const ring = (
   point: Point,
