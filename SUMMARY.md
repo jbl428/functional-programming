@@ -27,3 +27,5 @@
 * [`Monoid` 를 활용한 합성 모델링](monoid-modeling/README.md)
     * [concatAll 함수](monoid-modeling/concat-all.md)
     * [product monoid](monoid-modeling/product-monoid.md)
+
+* [순수함수와 부분함수](pure-and-partial-functions/README.md)
