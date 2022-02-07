@@ -1,6 +1,6 @@
-## The `concatAll` function
+## `concatAll` 함수
 
-One great property of monoids, compared to semigrops, is that the concatenation of multiple elements becomes even easier: it is not necessary anymore to provide an initial value.
+semigroup 과 비교해서 monoid 의 한 가지 큰 특징은 다수의 요소를 결합하는게 훨씬 쉬워진다는 것입니다: 더 이상 초기값을 제공하지 않아도 됩니다.
 
 ```typescript
 import { concatAll } from 'fp-ts/Monoid'
@@ -15,4 +15,4 @@ console.log(concatAll(B.MonoidAll)([true, false, true])) // => false
 console.log(concatAll(B.MonoidAny)([true, false, true])) // => true
 ```
 
-**Quiz**. Why is the initial value not needed anymore?
+**문제**. 왜 초기값이 더 이상 필요없을까요?
