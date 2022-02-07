@@ -1,35 +1,35 @@
-# Pure and partial functions
+# 순수함수와 부분함수
 
-In the first chapter we've seen an informal definition of a pure function:
+첫 번째 챕터에서 순수함수에 대한 비공식적인 정의를 보았습니다:
 
-> A pure function is a procedure that given the same input always returns the same output and does not have any observable side effect.
+> 순수함수란 같은 입력에 항상 같은 결과를 내는 관찰 가능한 부작용없는 절차입니다.
 
-Such an informal statement could leave space for some doubts, such as:
+위와같은 비공식적 문구를 보고 다음과 같은 의문점이 생길 수 있습니다:
 
-- what is a "side effect"?
-- what does it means "observable"?
-- what does it mean "same"?
+- "부작용"이란 무엇인가?
+- "관찰가능하다"는 것은 무엇을 의미하는가?
+- "같다"라는게 무엇을 의미하는가?
 
-Let's see a formal definition of the concept of a function.
+이 함수의 공식적인 정의를 살펴봅시다.
 
-**참고**. If `X` and `Y` are sets, then with `X × Y` we indicate their _cartesian product_, meaning the set
+**참고**. 만약 `X` 와 `Y` 가 집합이면,  `X × Y` 은 _곱집합_ 이라 불리며 다음과 같은 집합을 의미합니다
 
 ```
 X × Y = { (x, y) | x ∈ X, y ∈ Y }
 ```
 
-The following [definition](https://en.wikipedia.org/wiki/History_of_the_function_concept) was given a century ago:
+다음 [정의](https://en.wikipedia.org/wiki/History_of_the_function_concept) 는 한 세기 전에 만들어졌습니다:
 
-**Definition**. A \_function: `f: X ⟶ Y` is a subset of `X × Y` such as
-for every `x ∈ X` there's exactly one `y ∈ Y` such that `(x, y) ∈ f`.
+**정의**. 함수 `f: X ⟶ Y` 는 `X × Y` 의 부분집합이면서 다음 조건을 만족합니다,
+모든 `x ∈ X` 에 대해 `(x, y) ∈ f` 를 만족하는 오직 하나의 `y ∈ Y` 가 존재합니다. 
 
-The set `X` is called the _domain_ of `f`, `Y` is it's _codomain_.
+집합 `X` 는 함수 `f` 의 _정의역_ 이라 하며, `Y` 는 `f` 의 _공역_ 이라 합니다.
 
-**Example**
+**예제**
 
-The function `double: Nat ⟶ Nat` is the subset of the cartesian product `Nat × Nat` given by `{ (1, 2), (2, 4), (3, 6), ...}`.
+함수 `double: Nat ⟶ Nat` 곱집합 `Nat × Nat` 의 부분집합이며 형태는 다음과 같습니다: `{ (1, 2), (2, 4), (3, 6), ...}`
 
-In TypeScript we could define `f` as
+Typescript 에서는 `f` 를 다음과 같이 정의할 수 있습니다
 
 ```typescript
 const f: Record<number, number> = {
