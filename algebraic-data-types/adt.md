@@ -1,14 +1,14 @@
-## What is an ADT?
+## 정의
 
-> In computer programming, especially functional programming and type theory, an algebraic data type is a kind of composite type, i.e., **a type formed by combining other types**.
+> 컴퓨터 프로그래밍, 특히 함수형 프로그래밍과 타입 이론에서, 대수적 자료형은 복합 타입의 일종이다. 즉, 다른 타입을 조합하여 만든 타입이다.
 
-Two common families of algebraic data types are:
+대수적 자료형은 다음 두 개의 유형이 있습니다:
 
-- **product types**
-- **sum types**
+- **곱타입**
+- **합타입**
 
 <p align="center">
     <img src="/images/adt.png" width="400" alt="ADT" />
 </p>
 
-Let's begin with the more familiar ones: product types.
+좀 더 친숙한 곱타입부터 시작해봅시다.

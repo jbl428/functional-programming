@@ -1,8 +1,6 @@
-## Product types
+## 곱타입
 
-A product type is a collection of types T<sub>i</sub> indexed by a set `I`.
-
-Two members of this family are `n`-tuples, where `I` is an interval of natural numbers:
+곱타입은 집합 `I` 로 색인된 타입 T<sub>i</sub> 의 목록입니다:
 
 ```typescript
 type Tuple1 = [string] // I = [0]
