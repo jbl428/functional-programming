@@ -31,6 +31,6 @@
 * [순수함수와 부분함수](pure-and-partial-functions/README.md)
 
 * [대수적 자료형](algebraic-data-types/README.md)
-    * [대수적 자료형](algebraic-data-types/adt.md)
+    * [정의](algebraic-data-types/adt.md)
     * [곱타입](algebraic-data-types/product-types.md)
     * [합타입](algebraic-data-types/sum-types.md)
