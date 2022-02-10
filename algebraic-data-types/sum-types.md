@@ -1,14 +1,12 @@
-## Sum types
+## 합타입
 
-A sum type is a a data type that can hold a value of different (but limited) types. Only one of these types can be used in a single instance and there is generally a "tag" value differentiating those types.
+합타입은 서로 다른 (하지만 제한적인) 유형의 값을 가질 수 있는 자료형입니다. 하나의 인스턴스는 이 유형 중 오직 하나에 속하며 보통 이들 유형을 구분하기 위한 "tag" 값이 존재합니다.
 
-In TypeScript's official docs they are called [discriminated union](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html).
+TypeScript 공식 문서에는 이들을 [discriminated union](https://www.typescriptlang.org/docs/handbook/unions-and-intersections.html) 으로 부릅니다.
 
-It is important to note that the members of the union have to be **disjoint**, there can't be values that belong to more than one member.
+이 union 의 각 멤버들은 **disjoint(서로소)** 이어야 하며, 어떤 값이 두 개 이상의 멤버에 속할 수 없습니다.
 
-**Example**
-
-The type:
+**예제**
 
 ```typescript
 type StringsOrNumbers = ReadonlyArray<string> | ReadonlyArray<number>
@@ -18,9 +16,9 @@ declare const sn: StringsOrNumbers
 sn.map() // error: This expression is not callable.
 ```
 
-is not a disjoint union because the value `[]`, the empty array, belongs to both members.
+위 타입은 두 멤버가 빈 배열을 의미하는 `[]` 를 포함하기 때문에 disjoint union 이 아닙니다.
 
-**Quiz**. Is the following union disjoint?
+**문제**. 다음 union 은 disjoint 한가요? 
 
 ```typescript
 type Member1 = { readonly a: string }
@@ -28,13 +26,13 @@ type Member2 = { readonly b: number }
 type MyUnion = Member1 | Member2
 ```
 
-Disjoint unions are recurring in functional programming.
+Disjoint union 은 함수형 프로그래밍에서 재귀적입니다.
 
-Fortunately `TypeScript` has a way to guarantee that a union is disjoint: add a specific field that works as a **tag**.
+다행히 `TypeScript` 는 union 이 disjoint 임을 보장할 수 있는 방법이 있습니다: **tag** 로 동작하는 필드를 추가하는 것입니다.
 
-**참고**: Disjoint unions, sum types and tagged unions are used interchangeably to indicate the same thing.
+**참고**: Disjoint unions, 합타입 그리고 tagged unions 는 같은 의미로 사용됩니다.
 
-**Example** (redux actions)
+**예제** (redux actions)
 
 The `Action` sum type models a portion of the operation that the user can take i a [todo app](https://todomvc.com/).
 
