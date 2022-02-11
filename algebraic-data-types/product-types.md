@@ -31,7 +31,7 @@ type Age = Person['age'] // number
 **예제**
 
 ```typescript
-//                ↓ type parameter
+//                ↓ 타입 파라미터
 type HttpResponse<A> = {
   readonly code: number
   readonly body: A

@@ -16,9 +16,9 @@ declare const sn: StringsOrNumbers
 sn.map() // error: This expression is not callable.
 ```
 
-위 타입은 두 멤버가 빈 배열을 의미하는 `[]` 를 포함하기 때문에 disjoint union 이 아닙니다.
+위 타입은 두 멤버가 빈 배열을 의미하는 `[]` 를 포함하기 때문에 서로소가 아닙니다.
 
-**문제**. 다음 union 은 disjoint 한가요? 
+**문제**. 다음 조합은 서로소인가요? 
 
 ```typescript
 type Member1 = { readonly a: string }
@@ -26,15 +26,15 @@ type Member2 = { readonly b: number }
 type MyUnion = Member1 | Member2
 ```
 
-Disjoint union 은 함수형 프로그래밍에서 재귀적입니다.
+서로소 조합은 함수형 프로그래밍에서 재귀적입니다.
 
-다행히 `TypeScript` 는 union 이 disjoint 임을 보장할 수 있는 방법이 있습니다: **tag** 로 동작하는 필드를 추가하는 것입니다.
+다행히 `TypeScript` 는 조합이 서로소임을 보장할 수 있는 방법이 있습니다: **tag** 로 동작하는 필드를 추가하는 것입니다.
 
-**참고**: Disjoint unions, 합타입 그리고 tagged unions 는 같은 의미로 사용됩니다.
+**참고**: 서로소 조합, 합타입 그리고 태그된 조합은 같은 의미로 사용됩니다.
 
 **예제** (redux actions)
 
-The `Action` sum type models a portion of the operation that the user can take i a [todo app](https://todomvc.com/).
+`Action` 합타입은 사용자가 [todo app](https://todomvc.com/) 에서 수행할 수 있는 작업의 일부를 모델링합니다.
 
 ```typescript
 type Action =
@@ -54,27 +54,27 @@ type Action =
     }
 ```
 
-The `type` tag makes sure every member of the union is disjointed.
+`type` 태그가 각 멤버가 서로소임을 보장하게 해줍니다.
 
-**참고**. The name of the field that acts as a tag is chosen by the developer. It doesn't have to be "type". In `fp-ts` the convention is to use a `_tag` field.
+**참고**. 태그역할을 하는 필드이름은 개발자가 선택하는 것입니다. 꼭 "type" 일 필요는 없습니다. `fp-ts` 에서는, 보통 `_tag` 필드를 사용합니다.
 
-Now that we've seen few examples we can define more explicitly what algebraic data types are:
+몇 개의 예제를 보았으니 이제 대수적 자료형을 보다 명확하게 정의할 수 있습니다:
 
-> In general, an algebraic data type specifies a sum of one or more alternatives, where each alternative is a product of zero or more fields.
+> 일반적으로, 대수적 자료형은 하나 이상의 독립적 요소들의 합이며, 여기서 각 요소는 0개 이상의 필드의 곱으로 이루어져 있다.
 
-Sum types can be **polymorphic** and **recursive**.
+합타입은 다형적이고 재귀적일 수 있습니다.
 
-**Example** (linked list)
+**예제** (연결 리스트)
 
 ```typescript
-//               ↓ type parameter
+//               ↓ 타입 파라미터
 export type List<A> =
   | { readonly _tag: 'Nil' }
   | { readonly _tag: 'Cons'; readonly head: A; readonly tail: List<A> }
-//                                                              ↑ recursion
+//                                                              ↑ 재귀
 ```
 
-**Quiz** (TypeScript). Which of the following data types is a product or a sum type?
+**문제** (TypeScript). 다음 자료형들은 곱타입 인가요? 합타입 인가요?
 
 - `ReadonlyArray<A>`
 - `Record<string, A>`
