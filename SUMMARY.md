@@ -34,3 +34,9 @@
     * [정의](algebraic-data-types/adt.md)
     * [곱타입](algebraic-data-types/product-types.md)
     * [합타입](algebraic-data-types/sum-types.md)
+
+* [함수적 오류 처리](functional-error-handling/README.md)
+    * [Option 타입](functional-error-handling/option.md)
+    * [Eq 인스턴스](functional-error-handling/eq.md)
+    * [Semigroup, Monoid 인스턴스](functional-error-handling/semigroup-monoid.md)
+    * [Either 타입](functional-error-handling/either.md)
