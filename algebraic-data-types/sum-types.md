@@ -82,11 +82,11 @@ export type List<A> =
 - `ReadonlyMap<string, A>`
 - `ReadonlyMap<'k1' | 'k2', A>`
 
-### Constructors
+### 생성자
 
-A sum type with `n` elements needs at least `n` **constructors**, one for each member:
+`n` 개의 요소를 가진 합타입은 각 멤버에 대해 하나씩 최소 `n` 개의 **생성자** 가 필요합니다:
 
-**Example** (redux action creators)
+**예제** (redux action creators)
 
 ```typescript
 export type Action =
@@ -127,14 +127,14 @@ export const del = (id: number): Action => ({
 })
 ```
 
-**Example** (TypeScript, linked lists)
+**예제** (TypeScript, 연결 리스트)
 
 ```typescript
 export type List<A> =
   | { readonly _tag: 'Nil' }
   | { readonly _tag: 'Cons'; readonly head: A; readonly tail: List<A> }
 
-// a nullary constructor can be implemented as a constant
+// null 생성자는 상수로 구현할 수 있습니다
 export const nil: List<never> = { _tag: 'Nil' }
 
 export const cons = <A>(head: A, tail: List<A>): List<A> => ({
@@ -143,15 +143,15 @@ export const cons = <A>(head: A, tail: List<A>): List<A> => ({
   tail
 })
 
-// equivalent to an array containing [1, 2, 3]
+// 다음 배열과 동일합니다 [1, 2, 3]
 const myList = cons(1, cons(2, cons(3, nil)))
 ```
 
 ### Pattern matching
 
-JavaScript doesn't support [pattern matching](https://github.com/tc39/proposal-pattern-matching) (neither does TypeScript) but we can simulate it with a `match` function.
+JavaScript 는 [pattern matching](https://github.com/tc39/proposal-pattern-matching) 을 지원하지 않습니다 (TypeScript 도 마찬가지입니다) 하지만 `match` 함수로 시뮬레이션 할 수 있습니다.
 
-**Example** (TypeScript, linked lists)
+**예제** (TypeScript, 연결 리스트)
 
 ```typescript
 interface Nil {
@@ -178,40 +178,40 @@ export const match = <R, A>(
   }
 }
 
-// returns `true` if the list is empty
+// 리스트가 비어있다면 `true` 를 반환합니다
 export const isEmpty = match(
   () => true,
   () => false
 )
 
-// returns the first element of the list or `undefined`
+// 리스트의 첫 번째 요소를 반환하거나 없다면 `undefined` 를 반환합니다
 export const head = match(
   () => undefined,
   (head, _tail) => head
 )
 
-// returns the length of the the list, recursively
+// 재귀적으로, 리스트의 길이를 계산해 반환합니다
 export const length: <A>(fa: List<A>) => number = match(
   () => 0,
   (_, tail) => 1 + length(tail)
 )
 ```
 
-**Quiz**. Why's the `head` API sub optimal?
+**문제**. `head` 가 최적의 API 가 아닌 이유는 무엇일까요?
 
-**참고**. TypeScript offers a great feature for sum types: **exhaustive check**. The type checker can _check_, no pun intended, whether all the possible cases are handled by the `switch` defined in the body of the function.
+**참고**. TypeScript 는 합타입에 대한 유용한 기능을 제공합니다: **exhaustive check**. Type checker 는 함수 본문에 정의된 `switch` 가 모든 경우에 대해 처리하고 있는지 _검증_ 할 수 있습니다.
 
-### Why "sum" types?
+### 왜 "합"타입 이라 하는가?
 
-Because the following identity holds true:
+왜냐하면 다음 항등식이 성립하기 때문입니다:
 
 ```typescript
 C(A | B) = C(A) + C(B)
 ```
 
-> The sum of the cardinality is the sum of the cardinalities
+> cardinality 의 합은 각 cardinality 들의 합과 같습니다
 
-**Example** (the `Option` type)
+**예제** (`Option` 타입)
 
 ```typescript
 interface None {
@@ -226,11 +226,11 @@ interface Some<A> {
 type Option<A> = None | Some<A>
 ```
 
-From the general formula `C(Option<A>) = 1 + C(A)` we can derive the cardinality of the `Option<boolean>` type: `1 + 2 = 3` members.
+일반적인 공식인 `C(Option<A>) = 1 + C(A)` 를 통해, `Option<boolean>` 의 cardinality 를 계산할 수 있습니다: `1 + 2 = 3` 개의 멤버를 가집니다.
 
-### When should I use a sum type?
+### 언제 합탕비을 써야하나요?
 
-When the components would be **dependent** if implemented with a product type.
+곱타입으로 구현된 각 요소가 **의존적** 일 때입니다.
 
 **Example** (`React` props)
 
@@ -245,7 +245,7 @@ interface Props {
 class Textbox extends React.Component<Props> {
   render() {
     if (this.props.editable) {
-      // error: Cannot invoke an object which is possibly 'undefined' :(
+      // 오류: onChange 가 'undefined' 일 수 있어서 호출할 수 없습니다 :(
       this.props.onChange('a')
     }
     return <div />
@@ -253,9 +253,9 @@ class Textbox extends React.Component<Props> {
 }
 ```
 
-The problem here is that `Props` is modeled like a product, but `onChange` **depends** on `editable`.
+문제는 `Props` 가 곱타입으로 모델링되었지만, `onChange` 는 `editable` 에 **의존** 하는 것입니다.
 
-A sum type fits the use case better:
+이 경우에는 합타입이 더 유용합니다:
 
 ```typescript
 import * as React from 'react'
@@ -280,7 +280,7 @@ class Textbox extends React.Component<Props> {
 }
 ```
 
-**Example** (node callbacks)
+**예제** (node callbacks)
 
 ```typescript
 declare function readFile(
@@ -290,13 +290,13 @@ declare function readFile(
 ): void
 ```
 
-The result of the `readFile` operation is modeled like a product type (to be more precise, as a tuple) which is later on passed to the `callback` function:
+`readFile` 의 연산 결과는 `callback` 함수를 통해 전달되는 곱타입처럼 모델링됩니다 (정확히 말하면, tuple):
 
 ```typescript
 type CallbackArgs = [Error | undefined, string | undefined]
 ```
 
-the callback components though are **dependent**: we either get an `Error` **or** a `string`:
+callback 요소들은 서로 **의존적** 입니다: `Error` 를 얻거나 **또는** `string` 를 얻습니다:
 
 | err         | data        | legal? |
 | ----------- | ----------- | ------ |
@@ -305,17 +305,17 @@ the callback components though are **dependent**: we either get an `Error` **or*
 | `Error`     | `string`    | ✘      |
 | `undefined` | `undefined` | ✘      |
 
-This API is clarly not modeled on the following premise:
+이 API 는 다음과 같은 전제하에 모델링되지 않았습니다:
 
-> Make impossible state unrepresentable
+> 불가능한 상태를 나타낼 수 없게합니다
 
-A sum type would've been a better choice, but which sum type?
-We'll see how to handle errors in a functional way.
+합타입이 더 좋은 선택입니다만, 어떤 합타입을 써야할까요?
+이후 오류를 함수적인 방법으로 처리하는 방법을 다룰것입니다.
 
-**Quiz**. Recently API's based on callbacks have been largely replaced by their `Promise` equivalents.
+**문제**. 최근 callback 기반 API 들은 상당 부분 `Promise` 로 대체되고 있습니다.
 
 ```typescript
 declare function readFile(path: string): Promise<string>
 ```
 
-Can you find some cons of the Promise solution when using static typing like in TypeScript?
+TypeScript 같은 정적 타입 언어에서 Promise 를 사용할 때의 단점을 찾을 수 있나요?
