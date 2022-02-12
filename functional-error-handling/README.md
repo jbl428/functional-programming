@@ -1,13 +1,13 @@
-## Functional error handling
+## 함수적 오류 처리
 
-Let's see how to handle errors in a functional way.
+오류를 어떻게 함수적으로 다루는지 알아봅시다.
 
-A function that returns errors or throws exceptions is an example of a partial function.
+오류를 반환하거나 던지는 함수는 부분 함수의 예입니다.
 
-In the previous chapters we have seen that every partial function `f` can always be brought back to a total one `f'`.
+이전 챕터에서 모든 부분 함수 `f` 는 전체 함수인 `f` 로 만들 수 있음을 보았습니다.
 
 ```
 f': X ⟶ Option(Y)
 ```
 
-Now that we know a bit more about sum types in TypeScript we can define the `Option` without much issues.
+이제 TypeScript 에서의 합타입에 대해 알고 있으니 큰 문제없이 `Option` 을 정의할 수 있습니다.
