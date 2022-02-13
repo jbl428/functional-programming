@@ -1,19 +1,19 @@
-### The `Either` type
+### `Either` 타입
 
-We have seen how the `Option` data type can be used to handle partial functions, which often represent computations than can fail or throw exceptions.
+계산의 실패나 오류를 던지는 부분 함수를 다루기 위해 어떻게 `Option` 자료형을 활용하는지 살펴보았습니다.
 
-This data type might be limiting in some use cases tho. While in the case of success we get `Some<A>` which contains information of type `A`, the other member, `None` does not carry any data. We know it failed, but we don't know the reason.
+하미잔 이 자료형은 어떤 상황에서는 제한적일 수 있습니다. 성공하는 경우 `A` 의 정보를 포함한 `Some<A>` 을 얻지만 `None` 은 어떠한 데이터도 가지고 있지 않습니다. 즉 실패했다는 것은 알지만 그 이유를 알 수 없습니다.
 
-In order to fix this we simply need to another data type to represent failure, we'll call it `Left<E>`. We'll also replace the `Some<A>` type with the `Right<A>`.
+이를 해결하기 위해 실패를 표현하는 새로운 자료형이 필요하며 이를 `Left<E>` 로 부르겠습니다. 또한 `Some<A>` 도 `Right<A>` 로 변경됩니다.
 
 ```typescript
-// represents a failure
+// 실패를 표현
 interface Left<E> {
   readonly _tag: 'Left'
   readonly left: E
 }
 
-// represents a success
+// 성공을 표현
 interface Right<A> {
   readonly _tag: 'Right'
   readonly right: A
@@ -22,7 +22,7 @@ interface Right<A> {
 type Either<E, A> = Left<E> | Right<A>
 ```
 
-Constructors and pattern matching:
+생성자와 패턴 매칭은 다음과 같습니다:
 
 ```typescript
 const left = <E, A>(left: E): Either<E, A> => ({ _tag: 'Left', left })
@@ -41,7 +41,7 @@ const match = <E, R, A>(onLeft: (left: E) => R, onRight: (right: A) => R) => (
 }
 ```
 
-Let's get back to the previous callback example:
+이전 callback 예제로 돌아가봅시다:
 
 ```typescript
 declare function readFile(
@@ -63,7 +63,7 @@ readFile('./myfile', (err, data) => {
 })
 ```
 
-we can change it's signature to:
+이제 다음과 같이 signature 를 변경할 수 있습니다:
 
 ```typescript
 declare function readFile(
@@ -72,7 +72,7 @@ declare function readFile(
 ): void
 ```
 
-and consume the API in such way:
+그리고 다음과 같이 사용합니다:
 
 ```typescript
 readFile('./myfile', (e) =>
