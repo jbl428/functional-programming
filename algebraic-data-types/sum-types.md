@@ -209,7 +209,7 @@ export const length: <A>(fa: List<A>) => number = match(
 C(A | B) = C(A) + C(B)
 ```
 
-> cardinality 의 합은 각 cardinality 들의 합과 같습니다
+> 합의 cardinality 는 각 cardinality 들의 합과 같습니다
 
 **예제** (`Option` 타입)
 
