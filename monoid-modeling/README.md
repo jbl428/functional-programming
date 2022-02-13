@@ -90,9 +90,7 @@ const Semigroup: Semigroup<ReadonlyArray<string>> = {
 
 모든 semigroup 은 magma 이지만, 역은 성립하지 않았듯이, 모든 monoid 는 semigroup 이지만, 모든 semigroup 이 monoid 는 아닙니다.
 
-<p align="center">
-    <img src="/images/monoid.png" width="300" alt="Magma vs Semigroup vs Monoid" />
-</p>
+![Magma vs Semigroup vs Monoid](/images/monoid.png)
 
 **예제**
 

@@ -58,17 +58,9 @@ Luckily, for the last 70 years ago, a large number of researchers, members of th
 
 > Categories capture the essence of composition.
 
-Saunders Mac Lane
+![Saunders Mac Lane](/images/maclane.jpg)
 
-<div align="center">
-<img src="/images/maclane.jpg" width="300" alt="Saunders Mac Lane" />
-
-(Saunders Mac Lane)
-
-<img src="/images/eilenberg.jpg" width="300" alt="Samuel Eilenberg" />
-
-(Samuel Eilenberg)
-</div>
+![Samuel Eilenberg](/images/eilenberg.jpg)
 
 We'll see in the following chapters how a category can form the basis for:
 

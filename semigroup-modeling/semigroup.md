@@ -23,9 +23,7 @@ concat(concat(a, b), c) = concat(a, concat(b, c))
 
 모든 semigroup 은 magma 입니다, 하지만 모든 magma 가 semigroup 인것은 아닙니다.
 
-<p align="center">
-    <img src="/images/semigroup.png" width="300" alt="Magma vs Semigroup" />
-</p>
+![Magma vs Semigroup](/images/semigroup.png)
 
 **예제**
 

@@ -8,7 +8,7 @@ A category can be seen as a simplified model for a **typed programming language*
 
 The following diagram:
 
-<img src="images/category.png" width="300" alt="a simple programming language" />
+<img src="/images/category.png" width="300" alt="a simple programming language" />
 
 can be seen as an imaginary (and simple) programming language with just three types and six functions
 
@@ -74,7 +74,7 @@ In the next section we'll see under which conditions such a composition is possi
 - to compose `f: (a: A) => F<B>` with `g: (b: B, c: C) => D` we need an **applicative functor** instance for `F`
 - to compose `f: (a: A) => F<B>` with `g: (b: B) => F<C>` we need a **monad** instance for `F`
 
-<img src="images/spoiler.png" width="900" alt="The four composition recipes" />
+<img src="/images/spoiler.png" width="900" alt="The four composition recipes" />
 
 The problem we started with at the beginning of this chapter corresponds to the second situation, where `F` is the `Option` type:
 
@@ -261,7 +261,7 @@ Let's consider the following boundary: `B = F<C>` for some type constructor `F`,
 
 In order to compose `f` with `g` we need to find a procedure that allows us to derive a function `g` from a function `(b: B) => C` to a function `(fb: F<B>) => F<C>` in order to use the usual function composition (this way the codomain of `f` would be the same of the new function's domain).
 
-<img src="images/map.png" width="500" alt="map" />
+<img src="/images/map.png" width="500" alt="map" />
 
 We have mutated the original problem in a new one: can we find a function, let's call it `map`, that operates this way?
 
@@ -471,7 +471,7 @@ Since categories are pairs of objects and morphisms, a functor too is a pair of 
 
 where _C_ e _D_ are two categories (aka two programming languages).
 
-<img src="images/functor.png" width="500" alt="functor" />
+<img src="/images/functor.png" width="500" alt="functor" />
 
 Even though a map between two different programming languages is a fascinating idea, we're more interested in a map where _C_ and _D_ are the same (the _TS_ category). In that case we're talking about **endofunctors** (from the greek "endo" meaning "inside", "internal").
 
@@ -608,7 +608,7 @@ In this section we'll see another variant of the functor concept, **contravarian
 
 The definition of a contravariant functor is pretty much the same of the covariant one, except for the signature of its fundamental operation, which is called `contramap` rather than `map`.
 
-<img src="images/contramap.png" width="300" alt="contramap" />
+<img src="/images/contramap.png" width="300" alt="contramap" />
 
 **Example**
 
@@ -859,7 +859,7 @@ More generally what we would like to have is a transformation, call it `liftA2`,
 liftA2(g): (fb: F<B>) => (fc: F<C>) => F<D>
 ```
 
-<img src="images/liftA2.png" width="500" alt="liftA2" />
+<img src="/images/liftA2.png" width="500" alt="liftA2" />
 
 How can we obtain it? Given that `g` is now a unary function, we can leverage the functor instance and the good old `map`:
 
@@ -867,7 +867,7 @@ How can we obtain it? Given that `g` is now a unary function, we can leverage th
 map(g): (fb: F<B>) => F<(c: C) => D>
 ```
 
-<img src="images/liftA2-first-step.png" width="500" alt="liftA2 (first step)" />
+<img src="/images/liftA2-first-step.png" width="500" alt="liftA2 (first step)" />
 
 Now we are blocked: there's no legal operation the functor instance provides us to "unpack" the type `F<(c: C) => D>` into `(fc: F<C>) => F<D>`.
 
@@ -1178,11 +1178,11 @@ Yet again we need something more, in the following chapter we'll talk about one 
 # Monads
 
 <center>
-<img src="images/moggi.jpg" width="300" alt="Eugenio Moggi" />
+<img src="/images/moggi.jpg" width="300" alt="Eugenio Moggi" />
 
 (Eugenio Moggi is a professor of computer science at the University of Genoa, Italy. He first described the general use of monads to structure programs)
 
-<img src="images/wadler.jpg" width="300" alt="Philip Lee Wadler" />
+<img src="/images/wadler.jpg" width="300" alt="Philip Lee Wadler" />
 
 (Philip Lee Wadler is an American computer scientist known for his contributions to programming language design and type theory)
 
@@ -1323,7 +1323,7 @@ This chapter will try to answer all of these questions.
 
 Let's get back to the core problem: what is the composition of two effectful functions `f` and `g`?
 
-<img src="images/kleisli_arrows.png" alt="two Kleisli arrows, what's their composition?" width="450px" />
+<img src="/images/kleisli_arrows.png" alt="two Kleisli arrows, what's their composition?" width="450px" />
 
 <center>(two Kleisli Arrows)</center>
 
@@ -1340,7 +1340,7 @@ We can transform our problem into a category problem, meaning: can we find a cat
 ## The Kleisli category
 
 <center>
-<img src="images/kleisli.jpg" width="300" alt="Heinrich Kleisli" />
+<img src="/images/kleisli.jpg" width="300" alt="Heinrich Kleisli" />
 
 (Heinrich Kleisli, Swiss mathematician)
 
@@ -1352,7 +1352,7 @@ Let's try building a category _K_ (called **Kleisli category**) which contains _
 - **morphisms** are built like this: every time there is a Kleisli arrow `f: A ⟼ M<B>` in _TS_ we draw an arrow `f': A ⟼ B` in _K_
 
 <center>
-<img src="images/kleisli_category.png" alt="above the TS category, below the K construction" width="400px" />
+<img src="/images/kleisli_category.png" alt="above the TS category, below the K construction" width="400px" />
 
 (above the composition in the _TS_ category, below the composition in the _K_ construction)
 
@@ -1362,7 +1362,7 @@ So what would be the composition of `f` and `g` in _K_?
 It's th red arrow called `h'` in the image below:
 
 <center>
-<img src="images/kleisli_composition.png" alt="above the composition in the TS category, below the composition in the K construction" width="400px" />
+<img src="/images/kleisli_composition.png" alt="above the composition in the TS category, below the composition in the K construction" width="400px" />
 
 (above the composition in the _TS_ category, below the composition in the _K_ construction)
 
@@ -1379,7 +1379,7 @@ Let's try implementing such a function.
 The first point (1) of the monad definition tells us that `M` admits a functor instance, thus we can use the `map` function to transform the function `g: (b: B) => M<C>` into a function `map(g): (mb: M<B>) => M<M<C>>`
 
 <center>
-<img src="images/flatMap.png" alt="where chain comes from" width="450px" />
+<img src="/images/flatMap.png" alt="where chain comes from" width="450px" />
 
 (how to obtain the `h` function)
 
@@ -1402,7 +1402,7 @@ chain = flatten ∘ map(g)
 ```
 
 <center>
-<img src="images/chain.png" alt="come agisce `chain` sulla funzione `g`" width="400px" />
+<img src="/images/chain.png" alt="come agisce `chain` sulla funzione `g`" width="400px" />
 
 (how `chain` operates on the function `g`)
 
@@ -1420,7 +1420,7 @@ Now we can update our composition table
 What about `of`? Well, `of` comes from the identity morphisms in _K_: for every identity morphism 1<sub>A</sub> in _K_ there has to be a corresponding function from `A` to `M<A>` (that is, `of: <A>(a: A) => M<A>`).
 
 <center>
-<img src="images/of.png" alt="where of comes from" width="300px" />
+<img src="/images/of.png" alt="where of comes from" width="300px" />
 
 (come ottenere `of`)
 

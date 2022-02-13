@@ -111,7 +111,7 @@ export const f7 = (
 
 The fact that a function is pure does not imply automatically a ban on local mutability as long as it doesn't leaks out of its scope.
 
-![mutable / immutable](images/mutable-immutable.jpg)
+![mutable / immutable](/images/mutable-immutable.jpg)
 
 **Example** (Implementazion details of the `concatAll` function for monoids)
 
