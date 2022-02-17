@@ -41,5 +41,5 @@
     * [Semigroup, Monoid 인스턴스](functional-error-handling/semigroup-monoid.md)
     * [Either 타입](functional-error-handling/either.md)
  
-* [범주론](category-theory/README.md)
+* [Category theory](category-theory/README.md)
     * [정의](category-theory/definition.md)

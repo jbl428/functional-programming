@@ -1,4 +1,4 @@
-# 범주론
+# Category theory
 
 지금까지 함수형 프로그래밍의 기초인 **합성** 에 대해 살펴보았습니다.
 
@@ -55,15 +55,15 @@ double: (n: number) => number
 우리는 합성가능성에 대한 **공식적인 정의** 가 필요합니다.
 
 다행히도, 지난 70년 동안, 가장 오래되고 가장 큰 인류의 오픈 소스 프로젝트 (수학) 의 구성원과 많은 수의 연구원들이 합성가능성에 대한 다음 이론을 개발하는데 몰두했습니다.
-**범주론**, Saunders Mac Lane along Samuel Eilenberg (1945) 에 의해 시작된 수학의 한 분야.
+**category theory**, Saunders Mac Lane along Samuel Eilenberg (1945) 에 의해 시작된 수학의 한 분야.
 
-> 범주는 합성의 본질이라 할 수 있습니다.
+> category 는 합성의 본질이라 할 수 있습니다.
 
 ![Saunders Mac Lane](/images/maclane.jpg)
 
 ![Samuel Eilenberg](/images/eilenberg.jpg)
 
-다음 장에서 어떻게 범주가 다음 기반을 구성할 수 있는지 살펴볼 것입니다:
+다음 장에서 어떻게 category 가 다음 기반을 구성할 수 있는지 살펴볼 것입니다:
 
 - 일반적인 **프로그래밍 언어** 를 위한 모델
 - **합성** 의 개념을 위한 모델
