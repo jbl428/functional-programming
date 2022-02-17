@@ -43,4 +43,4 @@ category 는 `(Objects, Morphisms)` 쌍으로 되어있고 각각 다음을 의�
 
 <img src="/images/category.png" width="300" alt="a simple category" />
 
-category 는 매우 단순합니다, 3 개의 objects 와 6 개의 morphism 이 존재합니다 (1<sub>A</sub>, 1<sub>B</sub>, 1<sub>C</sub> 와  `A`, `B`, `C` 에 대한 identity morphism 들 입니다).
+category 는 매우 단순합니다, 3 개의 objects 와 6 개의 morphism 이 존재합니다 (1A, 1B, 1C 와  `A`, `B`, `C` 에 대한 identity morphism 들 입니다).
