@@ -46,3 +46,13 @@
     * [프로그래밍 언어 모델링](category-theory/modeling-programming-languages.md)
     * [TypeScript](category-theory/typescript.md)
     * [합성의 핵심 문제](category-theory/composition-core-problem.md)
+
+* [Functor](functor/README.md)
+    * [프로그램으로서의 함수](functor/functions-as-programs.md)
+    * [Functor 의 경계](functor/boundary-of-functor.md)
+    * [정의](functor/definition.md)
+    * [오류 처리](functor/error-handling.md)
+    * [합성](functor/compose.md)
+    * [contravariant functor](functor/contravariant-functor.md)
+    * [fp-ts 에서의 functor](functor/functor-in-fp-ts.md)
+    * [문제 해결](functor/solve-general-problem.md)
