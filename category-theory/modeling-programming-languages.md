@@ -21,7 +21,7 @@ Category 는 **타입이 있는 프로그래밍 언어** 의 단순화된 모델
 - `g = number => boolean`
 - `g ∘ f = string => boolean`
 
-그리고 다음과 같이 구현될 수 있습니다:
+그리고 다음과 같이 구현할 수 있습니다:
 
 ```typescript
 const idA = (s: string): string => s
