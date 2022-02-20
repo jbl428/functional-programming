@@ -55,7 +55,7 @@ const getSemigroup = <A>(): Semigroup<ReadonlyNonEmptyArray<A>> => ({
 })
 ```
 
-그러면 `A` 의 요소  `ReadonlyNonEmptyArray<A>` 의 "싱글톤" 으로 만들 수 있으며 이는 하나를 하나의 요소만 있는 배열을 의미합니다.
+그러면 `A` 의 요소 `ReadonlyNonEmptyArray<A>` 의 "싱글톤" 으로 만들 수 있으며 이는 하나를 하나의 요소만 있는 배열을 의미합니다.
 
 ```typescript
 // 비어있지 않은 배열에 값 하나를 넣습니다

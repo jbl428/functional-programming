@@ -34,7 +34,7 @@ console.log(SemigroupVector.concat(v1, v2)) // => { x: 2, y: 3 }
 
 boilerplate 코드가 너무 많나요? 좋은 소식은 semigroup 의 **수학적 법칙**에 따르면 각 필드에 대한 semigroup 인스턴스를 만들 수 있다면 `Vector` 같은 구조체의 semigroup 인스턴스를 만들 수 있습니다.
 
-편리하게도 `fp-ts/Semigroup` 모둘은 `struct` combinator 를 제공합니다:
+편리하게도 `fp-ts/Semigroup` 모듈은 `struct` combinator 를 제공합니다:
 
 ```typescript
 import { struct } from 'fp-ts/Semigroup'

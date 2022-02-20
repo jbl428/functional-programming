@@ -51,7 +51,7 @@ export const not = <A>(E: Eq<A>): Eq<A> => ({
 
 **예제**
 
-주어진 요소가 `ReadonlyArray` 가 포함하는지 확인하는 `elem` 함수를 좀전에 만든 `Eq` 인스턴스를 사용해 구현해봅시다.
+주어진 요소가 `ReadonlyArray` 에 포함하는지 확인하는 `elem` 함수를 좀전에 만든 `Eq` 인스턴스를 사용해 구현해봅시다.
 
 ```typescript
 import { Eq } from 'fp-ts/Eq'

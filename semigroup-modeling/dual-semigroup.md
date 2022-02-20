@@ -16,4 +16,4 @@ pipe(S.Semigroup.concat('a', 'b'), console.log) // => 'ab'
 pipe(reverse(S.Semigroup).concat('a', 'b'), console.log) // => 'ba'
 ```
 
-**문제**. 이 combinator 이치에 맞습니다만, 일반적으로 `concat` 연산은 [**교환법칙**](https://en.wikipedia.org/wiki/Commutative_property) 을 만족하지 않습니다, 교환법칙을 만족하는 `concat` 과 그렇지 않은것을 찾을 수 있습니까?
+**문제**. 위 `reverse` 는 유효한 combinator 이지만, 일반적으로 `concat` 연산은 [**교환법칙**](https://en.wikipedia.org/wiki/Commutative_property) 을 만족하지 않습니다, 교환법칙을 만족하는 `concat` 과 그렇지 않은것을 찾을 수 있습니까?

@@ -42,7 +42,7 @@ pipe(MagmaSub.concat(1, MagmaSub.concat(2, 3)), console.log) // => 2
 ```
 
 Semigroup 은 병렬 연산이 가능하다는 의미를 내포합니다
-Semigroups capture the essence of parallelizable operations
+> (원문) Semigroups capture the essence of parallelizable operations
 
 어떤 계산이 결합법칙을 만족한다는 것을 안다면, 계산을 두 개의 하위 계산으로 더 분할할 수 있고, 각각의 계산은 하위 계산으로 더 분할될 수 있습니다.
 
