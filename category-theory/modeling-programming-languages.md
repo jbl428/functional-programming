@@ -1,18 +1,18 @@
-## Modeling programming languages with categories
+## Category 로 프로그래밍 언어 모델링
 
-A category can be seen as a simplified model for a **typed programming language**, where:
+Category 는 **타입이 있는 프로그래밍 언어** 의 단순화된 모델로 볼 수 있습니다.
 
-- objects are **types**
-- morphisms are **functions**
-- `∘` is the usual **function composition**
+- object 는 **타입** 으로
+- morphism 은 **함수** 로
+- `∘` 을 일반적인 **함수의 합성** 으로
 
-The following diagram:
+다음 다이어그램에서:
 
 <img src="/images/category.png" width="300" alt="a simple programming language" />
 
-can be seen as an imaginary (and simple) programming language with just three types and six functions
+3가지 타입과 6가지 함수를 가진 가상의 (그리고 단순한) 프로그래밍 언어로 생각할 수 있습니다.
 
-Example given:
+예를 들면:
 
 - `A = string`
 - `B = number`
@@ -21,7 +21,7 @@ Example given:
 - `g = number => boolean`
 - `g ∘ f = string => boolean`
 
-The implementation could be something like:
+그리고 다음과 같이 구현될 수 있습니다:
 
 ```typescript
 const idA = (s: string): string => s
