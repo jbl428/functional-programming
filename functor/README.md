@@ -1,11 +1,11 @@
 # Functors
 
-In the last section we've spoken about the _TS_ category (the TypeScript category) and about function composition's core problem:
+이전 섹션에서 _TS_ category (TypeScript category) 와 함수 합성의 핵심 문제에 대해 살펴보았습니다:
 
-> How can we compose two generic functions `f: (a: A) => B` and `g: (c: C) => D`?
+> 어떻게 두 일반적인 함수 `f: (a: A) => B` 와 `g: (c: C) => D` 를 합성할 수 있을까요? 
 
-Why is finding solutions to this problem so important?
+왜 이 문제의 해결법을 찾는게 그렇게 중요할까요?
 
-Because, if it is true that categories can be used to model programming languages, morphisms (functions in the _TS_ category) can be used to model **programs**.
+왜냐하면, 만약 category 로 프로그래밍 언어를 모델링하는데 사용할 수 있다면, morphism (_TS_ category 에서 함수) 을 활용해 **프로그램** 을 모델링할 수 있기 때문입니다.
 
-Thus, solving this abstract problem means finding a concrete way of **composing programs in a generic way**. And _that_ is really interesting for us developers, isn't it?
+따라서, 이 추상적인 문제를 푸는 것은 **일반적인 방법으로 프로그램을 합성** 하는 구체적인 방법을 찾는 것을 의미합니다. 그리고 _이것은_ 우리 개발자들에게 정말 흥미로운 일입니다, 그렇지 않나요?
