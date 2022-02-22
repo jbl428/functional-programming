@@ -1,17 +1,17 @@
-## Functions as programs
+## 프로그램으로서의 함수
 
-If we want to model programs with functions we need to tackle an issue immediately:
+만약 함수로 프로그램을 모델링하고 싶다면 다음과 같은 문제를 해결해야합니다:
 
-> How is it possible to model a program that produces side effects with a pure function?
+> 어떻게 순수함수로 부작용을 발생시키는 프로그램을 모델링 할 수 있는가?
 
-The answer is to model side effects through **effects**, meaning types that **represent** side effects.
+정답은 **효과 (effects)** 를 통해 부작용을 모델링하는 것인데, 이는 부작용을 **표현** 하는 수단으로 생각할 수 있습니다.
 
-Let's see two possible techniques to do so in JavaScript:
+JavaScript 에서 가능한 두 가지 기술을 살펴보겠습니다:
 
-- define a DSL (domain specific language) for effects
-- use a _thunk_
+- 효과를 위한 DSL (domain specific language) 을 정의
+- _thunk_ 를 사용
 
-The first technique, using a DSL, means modifying a program like:
+DSL 을 사용하는 첫 번째 방법은 다음과 같은 프로그램을
 
 ```typescript
 function log(message: string): void {
@@ -19,10 +19,10 @@ function log(message: string): void {
 }
 ```
 
-changing its codomain to make the function return a **description** of the side effect:
+아래와 부작용에 대한 **설명** 을 반환하는 함수로 수정해 공역을 변경하는 것입니다:
 
 ```typescript
-type DSL = ... // sum type of every possible effect handled by the system
+type DSL = ... // 시스템이 처리할 수 있는 모든 effect 의 합타입
 
 function log(message: string): DSL {
   return {
@@ -32,7 +32,7 @@ function log(message: string): DSL {
 }
 ```
 
-**Quiz**. Is the freshly defined `log` function really pure? Actually `log('foo') !== log('foo')`!
+**문제**. 새롭게 정의한 `log` 함수는 정말로 순수한가요? `log('foo') !== log('foo')` 임을 유의해주세요!
 
 This technique requires a way to combine effects and the definition of an interpreter able to execute the side effects when launching the final program.
 
