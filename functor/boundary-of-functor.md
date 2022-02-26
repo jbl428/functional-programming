@@ -1,30 +1,30 @@
-## A boundary that leads to functors
+## Functor 로 이어지는 경계
 
-Let's consider the following boundary: `B = F<C>` for some type constructor `F`, we have the following situation:
+어떤 type constructor `F` 에 대해 `B = F<C>` 를 만족한다고 가정합시다. 그리고 다음과 같은 상황에서:
 
-- `f: (a: A) => F<B>` is an effectful program
-- `g: (b: B) => C` is a pure program
+- `f: (a: A) => F<B>` 는 effectful program 입니다
+- `g: (b: B) => C` 는 순수함수 입니다
 
-In order to compose `f` with `g` we need to find a procedure that allows us to derive a function `g` from a function `(b: B) => C` to a function `(fb: F<B>) => F<C>` in order to use the usual function composition (this way the codomain of `f` would be the same of the new function's domain).
+`f` 와 `g` 를 합성하기 위해서 `(b: B) => C` 인 `g` 함수를 일반적인 함수 합성을 사용할 수 있는 형태인 `(fb: F<B>) => F<C>` 로 만드는 과정이 필요합니다. (이러면 `f` 의 공역은 새로운 함수의 정의역과 일치하게 됩니다)
 
 <img src="/images/map.png" width="500" alt="map" />
 
-We have mutated the original problem in a new one: can we find a function, let's call it `map`, that operates this way?
+이제 기존 문제를 다음의 새로운 문제로 변경하였습니다: 위 방식을 위한, `map` 이라고 불리는 함수를 찾을 수 있을까요?
 
-Let's see some practical example:
+실용적인 예제를 살펴봅시다:
 
-**Example** (`F = ReadonlyArray`)
+**예제** (`F = ReadonlyArray`)
 
 ```typescript
 import { flow, pipe } from 'fp-ts/function'
 
-// transforms functions `B -> C` to functions `ReadonlyArray<B> -> ReadonlyArray<C>`
+// 함수 `B -> C` 를 `ReadonlyArray<B> -> ReadonlyArray<C>` 로 변형합니다
 const map = <B, C>(g: (b: B) => C) => (
   fb: ReadonlyArray<B>
 ): ReadonlyArray<C> => fb.map(g)
 
 // -------------------
-// usage example
+// 사용 예제
 // -------------------
 
 interface User {
@@ -39,7 +39,7 @@ const getName = (user: User): string => user.name
 // getFollowersNames: User -> ReadonlyArray<string>
 const getFollowersNames = flow(getFollowers, map(getName))
 
-// let's use `pipe` instead of `flow`...
+// `flow` 대신 `pipe` 를 사용해봅시다...
 export const getFollowersNames2 = (user: User) =>
   pipe(user, getFollowers, map(getName))
 
@@ -55,13 +55,13 @@ const user: User = {
 console.log(getFollowersNames(user)) // => [ 'Terry R. Emerson', 'Marsha J. Joslyn' ]
 ```
 
-**Example** (`F = Option`)
+**예제** (`F = Option`)
 
 ```typescript
 import { flow } from 'fp-ts/function'
 import { none, Option, match, some } from 'fp-ts/Option'
 
-// transforms functions `B -> C` to functions `Option<B> -> Option<C>`
+// 함수 `B -> C` 를 `Option<B> -> Option<C>` 로 변형합니다
 const map = <B, C>(g: (b: B) => C): ((fb: Option<B>) => Option<C>) =>
   match(
     () => none,
@@ -72,7 +72,7 @@ const map = <B, C>(g: (b: B) => C): ((fb: Option<B>) => Option<C>) =>
   )
 
 // -------------------
-// usage example
+// 사용 예제
 // -------------------
 
 import * as RA from 'fp-ts/ReadonlyArray'
@@ -87,20 +87,20 @@ console.log(getDoubleHead([1, 2, 3])) // => some(2)
 console.log(getDoubleHead([])) // => none
 ```
 
-**Example** (`F = IO`)
+**예제** (`F = IO`)
 
 ```typescript
 import { flow } from 'fp-ts/function'
 import { IO } from 'fp-ts/IO'
 
-// transforms functions `B -> C` to functions `IO<B> -> IO<C>`
+// 함수 `B -> C` 를 `IO<B> -> IO<C>` 로 변형합니다
 const map = <B, C>(g: (b: B) => C) => (fb: IO<B>): IO<C> => () => {
   const b = fb()
   return g(b)
 }
 
 // -------------------
-// usage example
+// 사용 예제
 // -------------------
 
 interface User {
@@ -108,7 +108,7 @@ interface User {
   readonly name: string
 }
 
-// a dummy in-memory database
+// 더미 인메모리 데이터베이스
 const database: Record<number, User> = {
   1: { id: 1, name: 'Ruth R. Gonzalez' },
   2: { id: 2, name: 'Terry R. Emerson' },
@@ -124,20 +124,20 @@ const getUserName = flow(getUser, map(getName))
 console.log(getUserName(1)()) // => Ruth R. Gonzalez
 ```
 
-**Example** (`F = Task`)
+**예제** (`F = Task`)
 
 ```typescript
 import { flow } from 'fp-ts/function'
 import { Task } from 'fp-ts/Task'
 
-// transforms functions `B -> C` into functions `Task<B> -> Task<C>`
+// 함수 `B -> C` 를 `Task<B> -> Task<C>` 로 변형합니다
 const map = <B, C>(g: (b: B) => C) => (fb: Task<B>): Task<C> => () => {
   const promise = fb()
   return promise.then(g)
 }
 
 // -------------------
-// usage example
+// 사용 예제
 // -------------------
 
 interface User {
@@ -145,7 +145,7 @@ interface User {
   readonly name: string
 }
 
-// a dummy remote database
+// 더미 원격 데이터베이스
 const database: Record<number, User> = {
   1: { id: 1, name: 'Ruth R. Gonzalez' },
   2: { id: 2, name: 'Terry R. Emerson' },
@@ -161,13 +161,13 @@ const getUserName = flow(getUser, map(getName))
 getUserName(1)().then(console.log) // => Ruth R. Gonzalez
 ```
 
-**Example** (`F = Reader`)
+**예제** (`F = Reader`)
 
 ```typescript
 import { flow } from 'fp-ts/function'
 import { Reader } from 'fp-ts/Reader'
 
-// transforms functions `B -> C` into functions `Reader<R, B> -> Reader<R, C>`
+// 함수 `B -> C` 를 `Reader<R, B> -> Reader<R, C>` 로 변형합니다
 const map = <B, C>(g: (b: B) => C) => <R>(fb: Reader<R, B>): Reader<R, C> => (
   r
 ) => {
@@ -176,7 +176,7 @@ const map = <B, C>(g: (b: B) => C) => <R>(fb: Reader<R, B>): Reader<R, C> => (
 }
 
 // -------------------
-// usage example
+// 사용 예제
 // -------------------
 
 interface User {
@@ -185,7 +185,7 @@ interface User {
 }
 
 interface Env {
-  // a dummy in-memory database
+  // 더미 인메모리 데이터베이스
   readonly database: Record<string, User>
 }
 
@@ -206,21 +206,22 @@ console.log(
 ) // => Ruth R. Gonzalez
 ```
 
-More generally, when a type constructor `F` admits a `map` function, we say it admits a **functor instance**.
+더 일반적으로, type constructor `F` 가 `map` 함수를 가질때, 이를 **functor 인스턴스** 라고 합니다.
+> (원문) More generally, when a type constructor `F` admits a `map` function, we say it admits a **functor instance**.
 
-From a mathematical point of view, functors are **maps between categories** that preserve the structure of the category, meaning they preserve the identity morphisms and the composition operation.
+수학적인 관점에서는, functor 는 category 의 구조를 유지하는 **category 간의 map** 이라 할 수 있으며, 이는 identity morphisms 과 합성 연산을 그대로 유지하게 만들어줍니다.
 
-Since categories are pairs of objects and morphisms, a functor too is a pair of two things:
+category 는 object 와 morphism 의 쌍이기에, functor 또한 두 개의 쌍입니다:
 
-- a **map between objects** that binds every object `X` in _C_ to an object in _D_.
-- a **map between morphisms** that binds every morphism `f` in _C_ to a morphism `map(f)` in _D_.
+- _C_ 의 모든 object `X` 를 object _D_ 로 묶는 object 간의 매핑.
+- _C_ 의 모든 morphism `f` 를 _D_ 의 morphism `map(f)` 로 묶는 morphism 간의 매핑.
 
-where _C_ e _D_ are two categories (aka two programming languages).
+여기서 _C_ 와 _D_ 는 (프로그래밍 언어라고 할 수 있는) category 입니다.
 
 <img src="/images/functor.png" width="500" alt="functor" />
 
-Even though a map between two different programming languages is a fascinating idea, we're more interested in a map where _C_ and _D_ are the same (the _TS_ category). In that case we're talking about **endofunctors** (from the greek "endo" meaning "inside", "internal").
+서로 다른 두 프로그래밍 언어의 매핑은 굉장한 아이디어지만, 우리는 _C_ 와 _D_ 가 동일한 상황(_TS_ category) 에서의 매핑에 더 관심이 있습니다. 이 경우에는 **endofunctors** 라고 부릅니다 (그리스어 "endo" 는 "내부" 를 뜻합니다)
 
-From now on, unless specified differently, when we write "functor" we mean an endofunctor in the _TS_ category.
+앞으로 따로 설명하지 않는한 "functor" 는 _TS_ category 에서의 endofunctor 를 의미합니다.
 
-Now we know the practical side of functors, let's see the formal definition.
+이제 functor 의 실용적인 면을 알게 되었으니, 공식 정의를 살펴봅시다.
