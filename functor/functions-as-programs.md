@@ -15,7 +15,7 @@ DSL 을 사용하는 첫 번째 방법은 다음과 같은 프로그램을
 
 ```typescript
 function log(message: string): void {
-  console.log(message) // side effect
+  console.log(message) // 부작용
 }
 ```
 

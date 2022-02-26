@@ -1,5 +1,5 @@
-// Adapted from https://adrian-salajan.github.io/blog/2021/01/25/images-functor
-// run `npm run functor` to execute
+// https://adrian-salajan.github.io/blog/2021/01/25/images-functor 를 참조
+// 실행하려면 `npm run functor` 을 수행하세요
 
 import { Endomorphism } from 'fp-ts/function'
 import * as R from 'fp-ts/Reader'
@@ -50,7 +50,7 @@ export const grayscale = (c: Color): Color => {
 export const invert = (c: Color): Color =>
   color(255 - c.red, 255 - c.green, 255 - c.red)
 
-// if brightness over some value V then put White else put Black
+// 만약 밝기가 특정 값 V 를 넘으면 하얀색으로, 그렇지 않으면 검정색으로 설정한다
 export const threshold = (c: Color): Color =>
   brightness(c) < 100 ? BLACK : WHITE
 
@@ -58,7 +58,7 @@ export const threshold = (c: Color): Color =>
 // main
 // -------------------------------------------------------------------------------------
 
-// `main` must be called by passing a transformation function, that is, an `Endomorphism<Image<RGB>>`
+// `main` 은 transformation function, 즉 `Endomorphism<Image<RGB>>` 를 파라미터로 호출해야 합니다.
 main(R.map((c: Color) => c))
 // main(R.map(grayscale))
 // main(R.map(invert))
