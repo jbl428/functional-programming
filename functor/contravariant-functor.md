@@ -1,14 +1,14 @@
 ## Contravariant Functors
 
-In the previous section we haven't been completely thorough with our definitions. What we have seen in the previous section and called "functors" should be more properly called **covariant functors**.
+사실 이전 장에서 우리는 정의를 완전히 철저히 따지지 않았습니다. 이전 장에서 "functor" 는 **covariant (공변) functor** 라고 부르는게 적절합니다.
 
-In this section we'll see another variant of the functor concept, **contravariant** functors.
+이번 장에서 우리는 또 다른 functor 인 **contravariant (반변)** functor 를 살펴보려 합니다.
 
-The definition of a contravariant functor is pretty much the same of the covariant one, except for the signature of its fundamental operation, which is called `contramap` rather than `map`.
+contravariant functor 의 정의는 기본 연산의 시그니쳐를 제외하면 covariant 와 거의 동일합니다. 해당 연산은 `map` 보다는 `contramap` 으로 불립니다.
 
 <img src="/images/contramap.png" width="300" alt="contramap" />
 
-**Example**
+**예제**
 
 ```typescript
 import { map } from 'fp-ts/Option'
@@ -21,11 +21,11 @@ type User = {
 
 const getId = (_: User): number => _.id
 
-// the way `map` operates...
+//`map` 이 동작하는 방식입니다
 // const getIdOption: (fa: Option<User>) => Option<number>
 const getIdOption = map(getId)
 
-// the way `contramap` operates...
+// `contramap` 이 동작하는 방식입니다
 // const getIdEq: (fa: Eq<number>) => Eq<User>
 const getIdEq = contramap(getId)
 
@@ -35,7 +35,7 @@ const EqID = getIdEq(N.Eq)
 
 /*
 
-In the `Eq` chapter we saw:
+이전 `Eq` 챕터에서 확인한 내용입니다:
 
 const EqID: Eq<User> = pipe(
   N.Eq,
