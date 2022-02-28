@@ -1,8 +1,8 @@
-## Functors compose
+## Functor 합성
 
-Functors compose, meaning that given two functors `F` and `G` then the composition `F<G<A>>` is still a functor and the `map` of this composition is the composition of the `map`s.
+Functor 합성이란, 주어진 두 개의 functor `F` 와 `G` 를 합성한 `F<G<A>>` 를 말하며 이 또한 functor 입니다. 여기서 합성한 functor 의 `map` 함수는 각 functor 의 `map` 함수의 합성입니다.
 
-**Example** (`F = Task`, `G = Option`)
+**예제** (`F = Task`, `G = Option`)
 
 ```typescript
 import { flow } from 'fp-ts/function'
@@ -16,7 +16,7 @@ export const map: <A, B>(
 ) => (fa: TaskOption<A>) => TaskOption<B> = flow(O.map, T.map)
 
 // -------------------
-// usage example
+// 사용 예제
 // -------------------
 
 interface User {
@@ -24,7 +24,7 @@ interface User {
   readonly name: string
 }
 
-// a dummy remote database
+// 더미 원격 데이터베이스
 const database: Record<number, User> = {
   1: { id: 1, name: 'Ruth R. Gonzalez' },
   2: { id: 2, name: 'Terry R. Emerson' },
