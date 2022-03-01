@@ -15,7 +15,7 @@ interface Response<A> {
 
 `boby` 는 타입 파라미터를 받기 때문에 이는 `Response` 가 functor 인스턴스의 후보가 된다는 것을 확인해주세요. 즉 `Response` 는 `n` 개의 파라미터를 받는 type constructor 조건을 만족합니다. (필요조건)
 
-`Response` 의 functor 인스턴스를 만들기 위해, `fp-ts` 가 요구하는 [기술적인 상세](https://gcanti.github.io/fp-ts/recipes/HKT.html) 와 함께 `map` 함수를 정의해야 합니다.
+`Response` 의 functor 인스턴스를 만들기 위해, `fp-ts` 가 요구하는 [기술적인 상세](https://gcanti.github.io/fp-ts/modules/HKT.ts.html) 와 함께 `map` 함수를 정의해야 합니다.
 
 ```typescript
 // `Response.ts` module
