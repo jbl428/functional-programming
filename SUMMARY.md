@@ -55,4 +55,4 @@
     * [합성](functor/compose.md)
     * [contravariant functor](functor/contravariant-functor.md)
     * [fp-ts 에서의 functor](functor/functor-in-fp-ts.md)
-    * [문제 해결](functor/solve-general-problem.md)
+    * [일반적인 문제 해결](functor/solve-general-problem.md)

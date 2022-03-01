@@ -1,11 +1,12 @@
-## Do functors solve the general problem?
+## 이제 functor 로 일반적인 문제를 해결할 수 있나요?
 
-Not yet. Functors allow us to compose an effectful program `f` with a pure program `g`, but `g` has to be a **unary** function, accepting one single argument. What happens if `g` takes two or more arguments?
+아직 아닙니다. Functor 는 effectful program 인 `f` 르르 순수 함수인 `g` 를 합성할 수 있게 해줍니다. 하지만 `g` 는 오직 하나의 argument 를 받은 **unary** 함수이어야 합니다. 만약 `g` 가 두 개 이상의 argument 를 받는다면 어떻게 될까요?
 
-| Program f | Program g               | Composition  |
-| --------- | ----------------------- | ------------ |
+| Program f | Program g               | 합성           |
+|-----------|-------------------------|--------------|
 | pure      | pure                    | `g ∘ f`      |
 | effectful | pure (unary)            | `map(g) ∘ f` |
 | effectful | pure (`n`-ary, `n > 1`) | ?            |
 
-To manage this circumstance we need something _more_, in the next chapter we'll see another important abstraction in functional programming: **applicative functors**.
+
+이 상황을 해결하려면 무언가 _더_ 필요합니다. 다음 장에서 함수형 프로그래밍에서 또 다른 중요한 추상화인 **applicative functor** 를 살펴볼 예정입니다.
