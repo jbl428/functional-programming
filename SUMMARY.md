@@ -2,7 +2,7 @@
 
 * [소개](README.md)
 
-## 문서
+# 문서
 
 * [함수형 프로그래밍이란](what-is-fp/README.md)
 
