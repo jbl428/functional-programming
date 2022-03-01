@@ -1,8 +1,8 @@
-## Functors in `fp-ts`
+## `fp-ts` 에서의 functor
 
-How do we define a functor instance in `fp-ts`? Let's see some example.
+`fp-ts` 에서는 어떻게 functor 를 정의할까요? 예제를 살펴봅시다.
 
-The following interface represents the model of some result we get by calling some HTTP API:
+다음 인터페이스는 어떤 HTTP API 의 결과를 표현한 것입니다:
 
 ```typescript
 interface Response<A> {
@@ -13,9 +13,9 @@ interface Response<A> {
 }
 ```
 
-Please note that since `body` is parametric, this makes `Response` a good candidate to find a functor instance given that `Response` is a an `n`-ary type constructor with `n >= 1` (a necessary condition).
+`boby` 는 타입 파라미터를 받기 때문에 이는 `Response` 가 functor 인스턴스의 후보가 된다는 것을 확인해주세요. 즉 `Response` 는 `n` 개의 파라미터를 받는 type constructor 조건을 만족합니다. (필요조건)
 
-To define a functor instance for `Response` we need to define a `map` function along some [technical details](https://gcanti.github.io/fp-ts/recipes/HKT.html) required by `fp-ts`.
+`Response` 의 functor 인스턴스를 만들기 위해, `fp-ts` 가 요구하는 [기술적인 상세](https://gcanti.github.io/fp-ts/recipes/HKT.html) 와 함께 `map` 함수를 정의해야 합니다.
 
 ```typescript
 // `Response.ts` module
@@ -43,7 +43,7 @@ export const map = <A, B>(f: (a: A) => B) => (
   body: f(fa.body)
 })
 
-// functor instance for `Response<A>`
+// `Response<A>` 의 functor 인스턴스
 export const Functor: Functor1<'Response'> = {
   URI: 'Response',
   map: (fa, f) => pipe(fa, map(f))
