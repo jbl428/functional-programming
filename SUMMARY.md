@@ -56,3 +56,10 @@
     * [contravariant functor](functor/contravariant-functor.md)
     * [fp-ts 에서의 functor](functor/functor-in-fp-ts.md)
     * [일반적인 문제 해결](functor/solve-general-problem.md)
+
+* [Applicative Functor](applicative-functor/README.md)
+    * [Currying](applicative-functor/Currying.md)
+    * [ap 연산](applicative-functor/ap.md)
+    * [of 연산](applicative-functor/of.md)
+    * [합성](applicative-functor/compose.md)
+    * [문제 해결](applicative-functor/solve-general-problem.md)
