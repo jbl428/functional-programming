@@ -1,8 +1,8 @@
 # Applicative functors
  
-Functor 섹션에서 effectful program 인 `f: (a: A) => F<B>` 와 순수함수 `g: (b: B) => C` 를 합성하기 위해 `g` 를 `map(g): (fb: F<B>) => F<C>` 처럼 변형시킨 과정을 살펴보았습니다. (`F` 는 functor 인스턴스)
+Functor 섹션에서 effectful 프로그램 인 `f: (a: A) => F<B>` 와 순수함수 `g: (b: B) => C` 를 합성하기 위해 `g` 를 `map(g): (fb: F<B>) => F<C>` 처럼 변형시킨 과정을 살펴보았습니다. (`F` 는 functor 인스턴스)
 
-| Program f | Program g    | 합성           |
+| 프로그램 f    | 프로그램 g       | 합성           |
 |-----------|--------------|--------------|
 | pure      | pure         | `g ∘ f`      |
 | effectful | pure (unary) | `map(g) ∘ f` |
