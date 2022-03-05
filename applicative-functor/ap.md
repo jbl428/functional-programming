@@ -1,10 +1,10 @@
-## The `ap` operation
+## `ap` 연산
 
-Suppose that:
+다음과 같은 상황을 가정합시다:
 
-- we do not have a `follower` but only his `id`
-- we do not have a `user` but only his `id`
-- that we have an API `fetchUser` which, given an `id`, queries an endpoint that returns the corresponding `User`
+- `follower` 는 없지만 그의 `id` 를 가지고 있습니다
+- `user` 는 없지만 그의 `id` 를 가지고 있습니다
+- 주어진 `id` 에 대한 `User` 를 가져오는 `fetchUser` API 가 있습니다
 
 ```typescript
 import * as T from 'fp-ts/Task'
@@ -25,12 +25,12 @@ declare const fetchUser: (id: number) => T.Task<User>
 const userId = 1
 const followerId = 3
 
-const result = addFollower(fetchUser(followerId))(fetchUser(userId)) // does not compile
+const result = addFollower(fetchUser(followerId))(fetchUser(userId)) // 컴파일 되지 않습니다
 ```
 
-I can't use `addFollower` anymore! How can we proceed?
+더이상 `addFollower` 를 사용할 수 없습니다! 어떻게 해야할까요?
 
-If only we had a function with the following signature:
+다음 시그니쳐를 가진 함수만 있으면 가능할거 같습니다:
 
 ```typescript
 declare const addFollowerAsync: (
@@ -38,7 +38,7 @@ declare const addFollowerAsync: (
 ) => (user: T.Task<User>) => T.Task<User>
 ```
 
-we could proceed with ease:
+그러면 다음과 같이 진행할 수 있습니다:
 
 ```typescript
 import * as T from 'fp-ts/Task'
@@ -59,12 +59,12 @@ const userId = 1
 const followerId = 3
 
 // const result: T.Task<User>
-const result = addFollowerAsync(fetchUser(followerId))(fetchUser(userId)) // now compiles
+const result = addFollowerAsync(fetchUser(followerId))(fetchUser(userId)) // 컴파일 됩니다
 ```
 
-We can obviously implement `addFollowerAsyn` manually, but is it possible instead to find a transformation which starting with a function like `addFollower: (follower: User) => (user: User): User` returns a function like `addFollowerAsync: (follower: Task<User>) => (user: Task<User>) => Task<User>`?
+물론 직접 `addFollowerAsyn` 를 구현할 수 있습니다만, 함수 `addFollower: (follower: User) => (user: User): User` 에서 시작해 함수 `addFollowerAsync: (follower: Task<User>) => (user: Task<User>) => Task<User>` 로 만드는 변환을 찾는게 가능할까요?
 
-More generally what we would like to have is a transformation, call it `liftA2`, which beginning with a function `g: (b: B) => (c: C) => D` returns a function with the following signature:
+더 일반적으로, 우리가 원하는 것은 `liftA2` 라고 불리는 변환이며, 함수 `g: (b: B) => (c: C) => D` 에서 다음과 같은 시그니쳐를 가진 함수를 반환합니다:
 
 ```typescript
 liftA2(g): (fb: F<B>) => (fc: F<C>) => F<D>
@@ -72,33 +72,34 @@ liftA2(g): (fb: F<B>) => (fc: F<C>) => F<D>
 
 <img src="/images/liftA2.png" width="500" alt="liftA2" />
 
-How can we obtain it? Given that `g` is now a unary function, we can leverage the functor instance and the good old `map`:
+어떻게 구할 수 있을까요? 주어진 `g` 는 unary 함수이므로, functor 인스턴스와 `map` 을 활용할 수 있습니다:
 
 ```typescript
 map(g): (fb: F<B>) => F<(c: C) => D>
 ```
 
-<img src="/images/liftA2-first-step.png" width="500" alt="liftA2 (first step)" />
+<img src="/images/liftA2-first-step.png" width="500" alt="liftA2 (첫 단계)" />
 
-Now we are blocked: there's no legal operation the functor instance provides us to "unpack" the type `F<(c: C) => D>` into `(fc: F<C>) => F<D>`.
+이제 문제가 발생합니다: functor 인스턴스는 타입 `F<(c: C) => D>` 에서 `(fc: F<C>) => F<D>` 로 만드는 연산을 지원하지 않습니다.
 
-We need to introduce a new operation `ap` which realizes this unpacking:
+이제 이 기능을 위한 새로운 연산인 `ap` 를 도입할 필요가 있습니다: 
 
 ```typescript
 declare const ap: <A>(fa: Task<A>) => <B>(fab: Task<(a: A) => B>) => Task<B>
 ```
 
-**참고**. Why is it names "ap"? Because it can be seen like some sort of function application.
+
+**참고**. 왜 이름이 "ap" 일까요? 왜냐하면 마치 함수 적용과 같은 형태를 보이기 때문입니다. 
 
 ```typescript
-// `apply` applies a function to a value
+// `apply` 는 값을 함수에 적용합니다
 declare const apply: <A>(a: A) => <B>(f: (a: A) => B) => B
 
 declare const ap: <A>(a: Task<A>) => <B>(f: Task<(a: A) => B>) => Task<B>
-// `ap` applies a function wrapped into an effect to a value wrapped into an effect
+// `ap` 는 effect 에 감싸진 값을 effect 에 감싸진 함수에 적용합니다
 ```
 
-Now that we have `ap` we can define `liftA2`:
+이제 `ap` 가 있으니 `liftA2` 를 정의할 수 있습니다:
 
 ```typescript
 import { pipe } from 'fp-ts/function'
@@ -123,7 +124,7 @@ const addFollower = (follower: User) => (user: User): User => ({
 const addFollowerAsync = liftA2(addFollower)
 ```
 
-and finally, we can compose `fetchUser` with the previous result:
+마침내, 우리는 이전 결과에서 `fetchUser` 를 합성할 수 있습니다:
 
 ```typescript
 import { flow, pipe } from 'fp-ts/function'
@@ -156,16 +157,17 @@ const followerId = 3
 const result = program(followerId)(fetchUser(userId))
 ```
 
+이제 두 함수 `f: (a: A) => F<B>` 와 `g: (b: B, c: C) => D` 를 합성하는 표준적 절차를 얻었습니다:
 We have found a standard procedure to compose two functions `f: (a: A) => F<B>`, `g: (b: B, c: C) => D`:
 
-1. we transform `g` through currying in a function `g: (b: B) => (c: C) => D`
-2. we define the `ap` function for the effect `F` (library function)
-3. we define the utility function `liftA2` for the effect `F` (library function)
-4. we obtain the composition `flow(f, liftA2(g))`
+1. `g` 를 currying 을 통해 함수 `g: (b: B) => (c: C) => D` 로 변환합니다
+2. Effect `F` 를 위한 `ap` 함수를 정의합니다 (라이브러리 함수)
+3. Effect `F` 를 위한 `liftA2` 함수를 정의합니다 (라이브러리 함수)
+4. 다음 합성을 수행합니다 `flow(f, liftA2(g))`
 
-Let's see how's the `ap` operation implemented for some of the type constructors we've already seen:
+이전에 본 type constructor 일부에 대한 `ap` 연산의 구현을 살펴봅시다:
 
-**Example** (`F = ReadonlyArray`)
+**예제** (`F = ReadonlyArray`)
 
 ```typescript
 import { increment, pipe } from 'fp-ts/function'
@@ -187,7 +189,7 @@ const double = (n: number): number => n * 2
 pipe([double, increment], ap([1, 2, 3]), console.log) // => [ 2, 4, 6, 2, 3, 4 ]
 ```
 
-**Example** (`F = Option`)
+**예제** (`F = Option`)
 
 ```typescript
 import { pipe } from 'fp-ts/function'
@@ -219,7 +221,7 @@ pipe(O.none, ap(O.some(1)), console.log) // => none
 pipe(O.none, ap(O.none), console.log) // => none
 ```
 
-**Example** (`F = IO`)
+**예제** (`F = IO`)
 
 ```typescript
 import { IO } from 'fp-ts/IO'
@@ -231,7 +233,7 @@ const ap = <A>(fa: IO<A>) => <B>(fab: IO<(a: A) => B>): IO<B> => () => {
 }
 ```
 
-**Example** (`F = Task`)
+**예제** (`F = Task`)
 
 ```typescript
 import { Task } from 'fp-ts/Task'
@@ -240,7 +242,7 @@ const ap = <A>(fa: Task<A>) => <B>(fab: Task<(a: A) => B>): Task<B> => () =>
   Promise.all([fab(), fa()]).then(([f, a]) => f(a))
 ```
 
-**Example** (`F = Reader`)
+**예제** (`F = Reader`)
 
 ```typescript
 import { Reader } from 'fp-ts/Reader'
@@ -254,9 +256,9 @@ const ap = <R, A>(fa: Reader<R, A>) => <B>(
 }
 ```
 
-We've seen how with `ap` we can manage functions with two parameters, but what happens with functions that take **three** parameters? Do we need _yet another abstraction_?
+지금까지 `ap` 가 두 개의 파라미터를 받는 함수를 다루는 것을 보았습니다. 하지만 함수가 **세 개의** 파라미터를 받는다면 어떡할까요? _또 다른 추상화_ 가 필요할까요?
 
-Good news is no, `map` and `ap` are sufficient:
+다행이도 필요하지 않습니다. `map` 과 `ap` 만으로 충분합니다:
 
 ```typescript
 import { pipe } from 'fp-ts/function'
@@ -276,10 +278,10 @@ const liftA4 = <B, C, D, E, F>(
 // etc...
 ```
 
-Now we cam update ore "composition table":
+이제 "합성 테이블" 을 수정할 수 있습니다:
 
-| Program f | Program g     | Composition     |
-| --------- | ------------- | --------------- |
+| 프로그램 f    | 프로그램 g        | 합성              |
+|-----------|---------------|-----------------|
 | pure      | pure          | `g ∘ f`         |
 | effectful | pure (unary)  | `map(g) ∘ f`    |
 | effectful | pure, `n`-ary | `liftAn(g) ∘ f` |
