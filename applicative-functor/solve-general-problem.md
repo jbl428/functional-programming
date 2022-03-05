@@ -1,5 +1,5 @@
-## Do applicative functors solve the general problem?
+## 이제 applicative functors 로 일반적인 문제를 해결할 수 있나요?
 
-Not yet. There's one last very important case to consider: when **both** programs are effectful.
+아직 아닙니다. 이제 마지막으로 가장 중요한 경우를 고려해야합니다. 두 프로그램 **모두** effectful 할 때 입니다.
 
-Yet again we need something more, in the following chapter we'll talk about one of the most important abstractions in functional programming: **monads**.
+아직 무언가 더 필요합니다. 다음 장에서 함수형 프로그래밍에서 가장 중요한 추상화 중 하나인 **monad** 를 살펴볼 예정입니다.
