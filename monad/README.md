@@ -1,29 +1,26 @@
 # Monads
 
-<center>
-<img src="/images/moggi.jpg" width="300" alt="Eugenio Moggi" />
+![Eugenio Moggi](/images/moggi.jpg)
 
-(Eugenio Moggi is a professor of computer science at the University of Genoa, Italy. He first described the general use of monads to structure programs)
+(Eugenio Moggi 이탈리아 Genoa 대학교의 컴퓨터 공학 교수입이다. 그는 먼저 프로그램을 만들기 위한 monad 의 일반적인 사용법을 발견했습니다)
 
-<img src="/images/wadler.jpg" width="300" alt="Philip Lee Wadler" />
+![Philip Lee Wadler](/images/wadler.jpg)
 
-(Philip Lee Wadler is an American computer scientist known for his contributions to programming language design and type theory)
+(Philip Lee Wadler 는 프로그래밍 언어 디자인과 타입 이론에 기여한 것으로 알려진 미국의 컴퓨터 과학자입니다)
 
-</center>
+이전 장에서 type constructor `F` 가 applicative functor 인스턴스를 가지는 경우에만 1 개 이상의 파라미터를 가지는 순수 프로그램 `g` 와 effectful 프로그램 `f: (a: A) => F<B>` 를 합성할 수 있음을 살펴보았습니다:
 
-In the last chapter we have seen how we can compose an effectful program `f: (a: A) => F<B>` with an `n`-ary pure program `g`, if and only if the type constructor `F` admits an applicative functor instance:
-
-| Program f | Program g     | Composition     |
-| --------- | ------------- | --------------- |
+| 프로그램 f    | 프로그램 g        | 합성              |
+|-----------|---------------|-----------------|
 | pure      | pure          | `g ∘ f`         |
 | effectful | pure (unary)  | `map(g) ∘ f`    |
 | effectful | pure, `n`-ary | `liftAn(g) ∘ f` |
 
-But we need to solve one last, quite common, case: when **both** programs are effectful:
+하지만 꽤 자주 발생하는 다음 상황에 대한 문제를 해결해야합니다. 두 프로그램 **모두** effectful 인 경우입니다:
 
 ```typescript
 f: (a: A) => F<B>
 g: (b: B) => F<C>
 ```
 
-What is the composition of `f` and `g`?
+`f` 와 `g` 의 합성이란 무엇일까요?
