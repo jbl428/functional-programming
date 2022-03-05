@@ -1,6 +1,6 @@
 /*
 
-  Models the dice roll of a role-playing game.
+  롤플레잉 게임의 주사위 게임의 모델링입니다.
 
 */
 import { pipe } from 'fp-ts/function'
@@ -45,16 +45,16 @@ export const multiply = (n: number) => (die: Die): Die =>
   )
 
 // ------------------------------------
-// instances
+// 인스턴스
 // ------------------------------------
 
 export const monoidDie: Monoid<Die> = {
   concat: (first, second) => pipe(first, add(second)),
-  empty: () => 0 // <= un dado con zero facce
+  empty: () => 0
 }
 
 // ------------------------------------
-// tests
+// 테스트
 // ------------------------------------
 
 const d6 = die(6)

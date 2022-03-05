@@ -1,34 +1,34 @@
-## The `of` operation
+## `of` 연산
 
-Now we know that given two function `f: (a: A) => F<B>`, `g: (b: B, c: C) => D` we can obtain the composition `h`:
+이제 다음 두 함수 `f: (a: A) => F<B>`, `g: (b: B, c: C) => D` 에서 다음 합성 `h` 을 얻을 수 있음을 보았습니다:
 
 ```typescript
 h: (a: A) => (fb: F<B>) => F<D>
 ```
 
-To execute `h` we need a new value of type `A` and a value of type `F<B>`.
+`h` 를 실행하기 위해 타입 `A` 의 값과 타입 `F<B>` 의 값이 필요합니다.
 
-But what happens if, instead of having a value of type `F<B>`, for the second parameter `fb` we only have a value of type `B`?
+하지만 만약, 두 번째 파라미터 `fb` 를 위한 타입 `F<B>` 의 값 대신 `B` 만 가지고 있다면 어떡할까요?
 
-It would be helpful to have an operation which can transform a value of type `B` in a value of type `F<B>` in order to use `h`.
+`B` 를 `F<B>` 로 바꿔주는 연산이 있다면 유용할 것입니다.
 
-Let's introduce such operation, called `of` (other synonyms: **pure**, **return**):
+이제 그러한 역할을 하는 `of` 로 불리는 연산을 소개합니다 (동의어: **pure**, **return**):
 
 ```typescript
 declare const of: <B>(b: B) => F<B>
 ```
 
-In literature the term **applicative functors** is used for the type constructors which admith _both_ the `ap` and `of` operations.
+보통 `ap` 와 `of` 연산을 가지는 type constructor 에 대해서만 **applicative functors** 라는 용어를 사용합니다.
 
-Let's see how `of` is defined for some type constructors we've already seen:
+지금까지 살펴본 type constructor 에 대한 `of` 의 정의를 살펴봅시다:
 
-**Example** (`F = ReadonlyArray`)
+**예제** (`F = ReadonlyArray`)
 
 ```typescript
 const of = <A>(a: A): ReadonlyArray<A> => [a]
 ```
 
-**Example** (`F = Option`)
+**예제** (`F = Option`)
 
 ```typescript
 import * as O from 'fp-ts/Option'
@@ -36,7 +36,7 @@ import * as O from 'fp-ts/Option'
 const of = <A>(a: A): O.Option<A> => O.some(a)
 ```
 
-**Example** (`F = IO`)
+**예제** (`F = IO`)
 
 ```typescript
 import { IO } from 'fp-ts/IO'
@@ -44,7 +44,7 @@ import { IO } from 'fp-ts/IO'
 const of = <A>(a: A): IO<A> => () => a
 ```
 
-**Example** (`F = Task`)
+**예제** (`F = Task`)
 
 ```typescript
 import { Task } from 'fp-ts/Task'
@@ -52,7 +52,7 @@ import { Task } from 'fp-ts/Task'
 const of = <A>(a: A): Task<A> => () => Promise.resolve(a)
 ```
 
-**Example** (`F = Reader`)
+**예제** (`F = Reader`)
 
 ```typescript
 import { Reader } from 'fp-ts/Reader'
@@ -60,6 +60,6 @@ import { Reader } from 'fp-ts/Reader'
 const of = <R, A>(a: A): Reader<R, A> => () => a
 ```
 
-**Demo**
+**데모**
 
 [`05_applicative.ts`](/src/05_applicative.ts)
