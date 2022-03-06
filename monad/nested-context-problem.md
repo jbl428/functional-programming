@@ -1,10 +1,11 @@
-## The problem with nested contexts
+## 중첩된 context 문제
 
-Let's see few examples on why we need something more.
+일반적인 문제를 풀기 위해 무언가 더 필요한 이유를 보여주는 몇가지 예제를 살펴봅시다.
 
-**Example** (`F = Array`)
+**예제** (`F = Array`)
 
-Suppose we want to get followers' followers.
+Follower 들의 follower 가 필요한 상황이라 가정합시다.
+
 
 ```typescript
 import { pipe } from 'fp-ts/function'
@@ -24,11 +25,11 @@ declare const user: User
 const followersOfFollowers = pipe(user, getFollowers, A.map(getFollowers))
 ```
 
-There's something wrong here, `followersOfFollowers` has a type `ReadonlyArray<ReadonlyArray<User>>` but we want `ReadonlyArray<User>`.
+여기서 문제가 발생합니다, `followersOfFollowers` 의 타입은 `ReadonlyArray<ReadonlyArray<User>>` 이지만 우리가 원하는 것은 `ReadonlyArray<User>` 입니다.
 
-We need to **flatten** nested arrays.
+중첩된 배열의 **평탄화(flatten)** 가 필요합니다.
 
-The function `flatten: <A>(mma: ReadonlyArray<ReadonlyArray<A>>) => ReadonlyArray<A>` exported by the `fp-ts/ReadonlyArray` is exactly what we need:
+`fp-ts/ReadonlyArray` 모듈에 있는 함수 `flatten: <A>(mma: ReadonlyArray<ReadonlyArray<A>>) => ReadonlyArray<A>` 가 바로 우리가 원하는 것입니다:
 
 ```typescript
 // followersOfFollowers: ReadonlyArray<User>
@@ -40,10 +41,11 @@ const followersOfFollowers = pipe(
 )
 ```
 
-Cool! Let's see some other data type.
+좋습니다! 다른 자료형도 살펴봅시다.
 
-**Example** (`F = Option`)
-Suppose you want to calculate the reciprocal of the first element of a numerical array:
+**예제** (`F = Option`)
+
+숫자 배열의 첫 번째 요소의 역수를 계산한다고 가정합시다:
 
 ```typescript
 import { pipe } from 'fp-ts/function'
@@ -57,24 +59,25 @@ const inverse = (n: number): O.Option<number> =>
 const inverseHead = pipe([1, 2, 3], A.head, O.map(inverse))
 ```
 
-Oops, it happened again, `inverseHead` has type `Option<Option<number>>` but we want `Option<number>`.
+이런, 같은 현상이 발생합니다, `inverseHead` 의 타입은 `Option<Option<number>>` 이지만 우리가 원하는 것은 `Option<number>` 입니다.
 
-We need to flatten again the nested `Option`s.
+이번에도 중첩된 `Option` 를 평평하게 만들어야 합니다.
 
-The `flatten: <A>(mma: Option<Option<A>>) => Option<A>` function exported by the `fp-ts/Option` module is what we need:
+`fp-ts/Option` 모듈에 있는 함수 `flatten: <A>(mma: Option<Option<A>>) => Option<A>` 가 우리가 원하는 것입니다:
 
 ```typescript
 // inverseHead: O.Option<number>
 const inverseHead = pipe([1, 2, 3], A.head, O.map(inverse), O.flatten)
 ```
 
-All of those `flatten` funcitons...They aren't a coincidence, there is a functional pattern behind the scenes: both the type constructors
-`ReadonlyArray` and `Option` (and many others) admit a **monad instance** and
+모든 곳에 `flatten` 함수가 있는데... 이것은 우연은 아닙니다. 다음과 같은 함수형 패턴이 존재합니다:
 
-> `flatten` is the most peculiar operation of monads
+두 type constructor `ReadonlyArray` 와 `Option` (그 외 여러) 은 **monad 인스턴스** 를 가지고 있습니다.
 
-**참고**. A common synonym of `flatten` is **join**.
+> `flatten` 은 monad 의 가장 특별한 연산입니다
 
-So, what is a monad?
+**참고**. `flatten` 의 자주 사용되는 동의어로 **join** 이 있습니다.
 
-Here is how they are often presented...
+그럼 monad 란 무엇일까요?
+
+보통 다음과 같이 표현합니다...
