@@ -21,7 +21,6 @@ category 는 `(Objects, Morphisms)` 쌍으로 되어있고 각각 다음을 의�
 <img src="/images/morphism.png" width="300" alt="A morphism" />
 
 **참고**. 앞으로는, 단순하게 원은 제외하고 object 에만 라벨을 붙이겠습니다>
-**참고**. For simplicity, from now on, I'll use labels only for objects, skipping the circles.
 
 ### 두 번째 (합성)
 

@@ -1,36 +1,20 @@
-## The Kleisli category
+## Kleisli category
 
-<center>
-<img src="/images/kleisli.jpg" width="300" alt="Heinrich Kleisli" />
+![Heinrich Kleisli](/images/kleisli.jpg)
 
-(Heinrich Kleisli, Swiss mathematician)
+Kleisli arrow 로만 이루어진 (**Kleisli category** 로 불리는) category _K_ 를 만들어봅시다:
 
-</center>
+- **object** 는 _TS_ category 에서의 object 와 동일합니다, 즉 모든 TypeScript 타입입니다.
+- **morphism** 은 다음 방식으로 만듭니다: _TS_ 에서의 모든 Kleisli arrow `f: A ⟼ M<B>` 는 _K_ 에서 `f': A ⟼ B` 로 매핑됩니다.
 
-Let's try building a category _K_ (called **Kleisli category**) which contains _only_ Kleisli arrows:
+![위는 TS category, 아래는 K construction](/images/kleisli_category.png)
 
-- **objects** will be the same objects of the _TS_ category, so all TypeScript types.
-- **morphisms** are built like this: every time there is a Kleisli arrow `f: A ⟼ M<B>` in _TS_ we draw an arrow `f': A ⟼ B` in _K_
+그렇다면 _K_ 에서 `f` 와 `g` 의 합성은 무엇일까요? 아래 아미지에서 `h'` 로 표시된 붉은 화살표입니다:
 
-<center>
-<img src="/images/kleisli_category.png" alt="above the TS category, below the K construction" width="400px" />
+![위는 TS category 에서의 합성, 아래는 K construction 에서의 합성](/images/kleisli_composition.png)
 
-(above the composition in the _TS_ category, below the composition in the _K_ construction)
+`K` 에 속하는 `A` 에서 `C` 로 향하는 화살표 `h'` 가 주어지면, 그에 해당하는 _TS_ 에 속하는 `A` 에서 `M<C>` 로 향하는 함수 `h` 를 찾을 수 있습니다. 
 
-</center>
+따라서 _TS_ 에서 `f` 와 `g` 의 합성을 위한 좋은 후보는 다음 시그니처를 가진 Kleisli arrow 입니다: `(a: A) => M<C>`
 
-So what would be the composition of `f` and `g` in _K_?
-It's th red arrow called `h'` in the image below:
-
-<center>
-<img src="/images/kleisli_composition.png" alt="above the composition in the TS category, below the composition in the K construction" width="400px" />
-
-(above the composition in the _TS_ category, below the composition in the _K_ construction)
-
-</center>
-
-Given that `h'` is an arrow from `A` to `C` in `K`, we can find a corresponding function `h` from `A` to `M<C>` in `TS`.
-
-Thus, a good candidate for the following composition of `f` and `g` in _TS_ is still a Kleisli arrow with the following signature: `(a: A) => M<C>`.
-
-Let's try implementing such a function.
+이제 이러한 함수를 구현해봅시다.
