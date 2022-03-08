@@ -1,41 +1,31 @@
-## Defining `chain` step by step
+## 단계별 `chain` 정의하기
 
-The first point (1) of the monad definition tells us that `M` admits a functor instance, thus we can use the `map` function to transform the function `g: (b: B) => M<C>` into a function `map(g): (mb: M<B>) => M<M<C>>`
+Monad 의 첫 번째 정의는 `M` 은 functor 인스턴스를 만족해야 함을 의미하며 `g: (b: B) => M<C>` 함수를 `map(g): (mb: M<B>) => M<M<C>>` 로 변경할 수 있다는 사실을 알 수 있습니다.
 
-<center>
-<img src="/images/flatMap.png" alt="where chain comes from" width="450px" />
+![h 함수를 얻는 방법](/images/flatMap.png)
 
-(how to obtain the `h` function)
+이제 문제가 발생합니다: functor 인스턴스를 위한 `M<M<C>>` 타입을 `M<C>` 로 만들어주는 연산이 필요한 상황이며 그러한 연산자를 `flatten` 이라 부르도록 합시다.
 
-</center>
-
-We're stuck now though: there is no legal operation for the functor instance that allows us to flatten a value of type `M<M<C>>` into a value of type `M<C>`, we need an additional operation, let's call it `flatten`.
-
-If we can define such operation then we can find the composition we were looking for:
+만약 이 연산자를 정의할 수 있다면 우리가 원하는 합성 방법을 찾을 수 있습니다:
 
 ```
 h = flatten ∘ map(g) ∘ f
 ```
 
-By joining the `flatten ∘ map(g)` names we get "flatMap", hence the name!
+`flatten ∘ map(g)` 이름을 합쳐서 "flatMap" 이라는 이름을 얻을 수 있습니다!
 
-Thus we can get `chain` in this way
+`chain` 도 이 방식으로 얻을 수 있습니다
 
 ```
 chain = flatten ∘ map(g)
 ```
 
-<center>
-<img src="/images/chain.png" alt="come agisce `chain` sulla funzione `g`" width="400px" />
+![chain 이 함수 g 에 동작하는 방식](/images/chain.png)
 
-(how `chain` operates on the function `g`)
+이제 합성 테이블을 갱신할 수 있습니다
 
-</center>
-
-Now we can update our composition table
-
-| Program f | Program g     | Composition     |
-| --------- | ------------- | --------------- |
+| 프로그램 f    | 프로그램 g        | 합성              |
+|-----------|---------------|-----------------|
 | pure      | pure          | `g ∘ f`         |
 | effectful | pure (unary)  | `map(g) ∘ f`    |
 | effectful | pure, `n`-ary | `liftAn(g) ∘ f` |
@@ -64,7 +54,7 @@ where `predicate: (b: B) => boolean`, `mb: M<B>` and `g: (b: B) => M<B>`.
 Last question: where do the laws come from? They are nothing else but the categorical laws in _K_ translated to _TS_:
 
 | Law            | _K_                               | _TS_                                                    |
-| -------------- | --------------------------------- | ------------------------------------------------------- |
+|----------------|-----------------------------------|---------------------------------------------------------|
 | Left identity  | 1<sub>B</sub> ∘ `f'` = `f'`       | `chain(of) ∘ f = f`                                     |
 | Right identity | `f'` ∘ 1<sub>A</sub> = `f'`       | `chain(f) ∘ of = f`                                     |
 | Associativity  | `h' ∘ (g' ∘ f') = (h' ∘ g') ∘ f'` | `chain(h) ∘ (chain(g) ∘ f) = chain((chain(h) ∘ g)) ∘ f` |
