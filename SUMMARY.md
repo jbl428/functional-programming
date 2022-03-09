@@ -69,4 +69,4 @@
     * [정의](monad/definition.md)
     * [Kleisli Category](monad/kleisli-category.md)
     * [단계별 chain 정의](monad/defining-chain.md)
-    * [Program 다루기](monad/manipulating-program.md)
+    * [프로그램 다루기](monad/manipulating-program.md)

@@ -1,8 +1,8 @@
-## Manipulating programs
+## 프로그램 다루기
 
-Let's see now, how thanks to referential transparency and the monad concept we can programmaticaly manipulate programs.
+이제 참조 투명성과 monad 개념을 통해 프로그램을 어떻게 다루는지 살펴봅시다.
 
-Here's a small program that reads / writes a file:
+여기 파일을 읽고 쓰는 작은 프로그램이 있습니다:
 
 ```typescript
 import { log } from 'fp-ts/Console'
@@ -11,7 +11,7 @@ import { pipe } from 'fp-ts/function'
 import * as fs from 'fs'
 
 // -----------------------------------------
-// library functions
+// 라이브러리 함수
 // -----------------------------------------
 
 const readFile = (filename: string): IO<string> => () =>
@@ -20,7 +20,7 @@ const readFile = (filename: string): IO<string> => () =>
 const writeFile = (filename: string, data: string): IO<void> => () =>
   fs.writeFileSync(filename, data, { encoding: 'utf-8' })
 
-// API derived from the previous functions
+// 지금까지 살펴본 함수들을 통해 만든 API
 const modifyFile = (filename: string, f: (s: string) => string): IO<void> =>
   pipe(
     readFile(filename),
@@ -28,7 +28,7 @@ const modifyFile = (filename: string, f: (s: string) => string): IO<void> =>
   )
 
 // -----------------------------------------
-// program
+// 프로그램
 // -----------------------------------------
 
 const program1 = pipe(
@@ -40,13 +40,11 @@ const program1 = pipe(
 )
 ```
 
-The actions:
-
 ```typescript
 pipe(readFile('file.txt'), chain(log))
 ```
 
-is repeated more than once in the program, but given that referential transparency holds we can factor it and assign it to a constant:
+위 로직은 프로그램에서 여러번 반복됩니다, 하지만 참조 투명성은 해당 식을 상수로 만들 수 있음을 보장해줍니다:
 
 ```typescript
 const read = pipe(readFile('file.txt'), chain(log))
@@ -59,7 +57,7 @@ const program2 = pipe(
 )
 ```
 
-We can even define a combinator and leverage it to make the code more compact:
+또한 combinator 를 정의해 활용하면 코드를 더 간결하게 만들 수 있습니다.
 
 ```typescript
 const interleave = <A, B>(action: IO<A>, middle: IO<B>): IO<A> =>
@@ -72,7 +70,7 @@ const interleave = <A, B>(action: IO<A>, middle: IO<B>): IO<A> =>
 const program3 = interleave(read, modify)
 ```
 
-Another example: implementing a function similar to Unix' `time` (the part related to the execution time) for `IO`.
+또 다른 예제: `IO` 를 위한 Unix 의 `time` 명령어와 유사한 함수를 구현하기.
 
 ```typescript
 import * as IO from 'fp-ts/IO'
@@ -80,7 +78,7 @@ import { now } from 'fp-ts/Date'
 import { log } from 'fp-ts/Console'
 import { pipe } from 'fp-ts/function'
 
-// logs the computation lenght in milliseconds
+// 계산 시간을 밀리세컨드 단위로 로그를 남깁니다
 export const time = <A>(ma: IO.IO<A>): IO.IO<A> =>
   pipe(
     now,
@@ -103,14 +101,14 @@ export const time = <A>(ma: IO.IO<A>): IO.IO<A> =>
   )
 ```
 
-**Digression**. As you can notice, using `chain` when it is required to maintain a scope leads to verbose code.
-In languages that support monadic style natively there is often syntax support that goes by the name of "do notation" which eases this kind of situations.
+**여담**. 보시다시피, `chain` 을 사용하면서 scope 를 유지하는 경우 장황한 코드가 만들어집니다.
+monadic 스타일을 기본적으로 지원하는 언어에서는 이러한 상황을 쉽게 해결해주는 "do notation" 이라는 이름으로 통하는 문법을 제공합니다.
 
-Let's see a Haskell example
+Haskell 을 예로들면
 
 ```haskell
 now :: IO Int
-now = undefined -- `undefined` in Haskell is equivalent to TypeScript's declare
+now = undefined -- Haskell 에서의 `undefined` 는 TypeScript 와 동일한 의미를 가집니다
 
 log :: String -> IO ()
 log = undefined
@@ -124,7 +122,7 @@ time ma = do
   return a
 ```
 
-TypeScript does not support such syntax, but it can be emulated with something similar:
+TypeScript 에서는 이러한 문법을 지원하지 않지만, 비슷한 역할을 하는 로직을 구현할 수 있습니다:
 
 ```typescript
 import { log } from 'fp-ts/Console'
@@ -132,7 +130,7 @@ import { now } from 'fp-ts/Date'
 import { pipe } from 'fp-ts/function'
 import * as IO from 'fp-ts/IO'
 
-// logs the computation lenght in milliseconds
+// 계산 시간을 밀리세컨드 단위로 로그를 남깁니다
 export const time = <A>(ma: IO.IO<A>): IO.IO<A> =>
   pipe(
     IO.Do,
@@ -146,7 +144,7 @@ export const time = <A>(ma: IO.IO<A>): IO.IO<A> =>
   )
 ```
 
-Let's see a usage example of the `time` combinator:
+`time` combinator 를 활용한 예제를 살펴봅시다:
 
 ```typescript
 import { randomInt } from 'fp-ts/Random'
@@ -155,14 +153,14 @@ import { replicate } from 'fp-ts/ReadonlyArray'
 
 const fib = (n: number): number => (n <= 1 ? 1 : fib(n - 1) + fib(n - 2))
 
-// launches `fib` with a random integer between 30 and 35
-// logging both the input and output
+// 30 과 35 사이의 임의의 숫자를 인자로 `fib` 함수를 호출합니다
+// 또한 입력과 출력을 로그에 남깁니다
 const randomFib: IO.IO<void> = pipe(
   randomInt(30, 35),
   IO.chain((n) => log([n, fib(n)]))
 )
 
-// a monoid instance for `IO<void>`
+// `IO<void>` 용 monoid 인스턴스
 const MonoidIO: Monoid<IO.IO<void>> = {
   concat: (first, second) => () => {
     first()
@@ -171,12 +169,12 @@ const MonoidIO: Monoid<IO.IO<void>> = {
   empty: IO.of(undefined)
 }
 
-// executes `n` times the `mv` computation
+// `mv` 연산을 `n` 번 수행합니다
 const replicateIO = (n: number, mv: IO.IO<void>): IO.IO<void> =>
   concatAll(MonoidIO)(replicate(n, mv))
 
 // -------------------
-// usage example
+// 사용 예제
 // -------------------
 
 time(replicateIO(3, randomFib))()
@@ -188,7 +186,7 @@ Elapsed: 89
 */
 ```
 
-Logs also the partial:
+중간 로그를 남길수도 있습니다:
 
 ```typescript
 time(replicateIO(3, time(randomFib)))()
