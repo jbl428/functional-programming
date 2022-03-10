@@ -201,16 +201,16 @@ Elapsed: 106
 */
 ```
 
-One of the most interesting aspects of working with the monadic interface (`map`, `of`, `chain`) is the possibility to inject dependencies which the program needs, including the **way of concatenating different computations**.
+Monadic 인터페이스 (`map`, `of`, `chain`) 의 활용에서 가장 흥미로운 측면은 프로그램이 필요한 의존성을 **여러 계산을 연결하는 방식** 과 함께 주입할 수 있다는 것입니다.
 
-To see that, let's refactor the small program that reads and writes a file:
+이를 확인하기 위해, 파일을 읽고 쓰는 프로그램을 개선해봅시다:
 
 ```typescript
 import { IO } from 'fp-ts/IO'
 import { pipe } from 'fp-ts/function'
 
 // -----------------------------------------
-// Deps interface, what we would call a "port" in the Hexagonal Architecture
+// 헥사고날 아키텍쳐에서 "port" 라고 부르는 Deps 인터페이스
 // -----------------------------------------
 
 interface Deps {
@@ -221,7 +221,7 @@ interface Deps {
 }
 
 // -----------------------------------------
-// program
+// 프로그램
 // -----------------------------------------
 
 const program4 = (D: Deps) => {
@@ -241,7 +241,7 @@ const program4 = (D: Deps) => {
 }
 
 // -----------------------------------------
-// a `Deps` instance, what we would call an "adapter" in the Hexagonal Architecture
+// 헥사고날 아키텍쳐에서 "adapter" 라 부르는 `Deps` 인스턴스
 // -----------------------------------------
 
 import * as fs from 'fs'
@@ -256,24 +256,24 @@ const DepsSync: Deps = {
   chain
 }
 
-// dependency injection
+// 의존성 주입
 program4(DepsSync)()
 ```
 
-There's more, we can even abstract the effect in which the program runs. We can define our own `FileSystem` effect (the effect representing read-write operations over the file system):
+더 나아가, 우리는 프로그램이 실행하는 효과를 추상화할 수 있습니다. 바로 `FileSystem` 효과를 직접 정의하는 것입니다. (파일 시스템에 동작하는 읽기-쓰기를 의미하는 효과):
 
 ```typescript
 import { IO } from 'fp-ts/IO'
 import { pipe } from 'fp-ts/function'
 
 // -----------------------------------------
-// our program's effect
+// 프로그램의 효과
 // -----------------------------------------
 
 interface FileSystem<A> extends IO<A> {}
 
 // -----------------------------------------
-// dependencies
+// 의존성
 // -----------------------------------------
 
 interface Deps {
@@ -286,7 +286,7 @@ interface Deps {
 }
 
 // -----------------------------------------
-// program
+// 프로그램
 // -----------------------------------------
 
 const program4 = (D: Deps) => {
@@ -306,31 +306,31 @@ const program4 = (D: Deps) => {
 }
 ```
 
-With a simple change in the definition of the `FileSystem` effect. we can modify the program to make it run asynchronously
+우리는 단순히 `FileSystem` 효과의 정의를 수정하기만 하면, 비동기적으로 실행하는 프로그램으로 변경할 수 있습니다.
 
 ```diff
 // -----------------------------------------
-// our program's effect
+// 프로그램의 효과
 // -----------------------------------------
 
 -interface FileSystem<A> extends IO<A> {}
 +interface FileSystem<A> extends Task<A> {}
 ```
 
-now all there's left is to modify the `Deps` instance to adapt to the new definition.
+이제 남은 작업은 새로운 정의에 맞게 `Deps` 인스턴스를 수정하는 것입니다.
 
 ```typescript
 import { Task } from 'fp-ts/Task'
 import { pipe } from 'fp-ts/function'
 
 // -----------------------------------------
-// our program's effect (modified)
+// 프로그램의 효과 (수정됨)
 // -----------------------------------------
 
 interface FileSystem<A> extends Task<A> {}
 
 // -----------------------------------------
-// dependencies (NOT modified)
+// 의존성 (수정 안됨)
 // -----------------------------------------
 
 interface Deps {
@@ -343,7 +343,7 @@ interface Deps {
 }
 
 // -----------------------------------------
-// program (NOT modified)
+// 프로그램 (수정 안됨)
 // -----------------------------------------
 
 const program5 = (D: Deps) => {
@@ -363,7 +363,7 @@ const program5 = (D: Deps) => {
 }
 
 // -----------------------------------------
-// a `Deps` instance (modified)
+// `Deps` 인스턴스 (수정됨)
 // -----------------------------------------
 
 import * as fs from 'fs'
@@ -381,11 +381,11 @@ const DepsAsync: Deps = {
   chain
 }
 
-// dependency injection
+// 의존성 주입
 program5(DepsAsync)()
 ```
 
-**Quiz**. The previous examples overlook, on purpose, possible errors. Example give: the file we're operating on may not exist at all. How could we modify the `FileSystem` effect to take this into account?
+**문제** 이전 예제에서는 일부러 발생 가능한 오류를 무시했습니다. 예를들면 작업 중인 파일이 존재하지 않을 수 있습니다. 이를 고려해 `FileSystem` 효과를 어떻게 수정할 수 있을까요?
 
 ```typescript
 import { Task } from 'fp-ts/Task'
@@ -393,13 +393,13 @@ import { pipe } from 'fp-ts/function'
 import * as E from 'fp-ts/Either'
 
 // -----------------------------------------
-// our program's effect (modified)
+// 프로그램의 효과 (수정됨)
 // -----------------------------------------
 
 interface FileSystem<A> extends Task<E.Either<Error, A>> {}
 
 // -----------------------------------------
-// dependencies (NOT modified)
+// 의존성 (수정 안됨)
 // -----------------------------------------
 
 interface Deps {
@@ -412,7 +412,7 @@ interface Deps {
 }
 
 // -----------------------------------------
-// program (NOT modified)
+// 프로그램 (수정 안됨)
 // -----------------------------------------
 
 const program5 = (D: Deps) => {
@@ -432,7 +432,7 @@ const program5 = (D: Deps) => {
 }
 
 // -----------------------------------------
-// `Deps` instance (modified)
+// `Deps` 인스턴스 (수정됨)
 // -----------------------------------------
 
 import * as fs from 'fs'
@@ -464,10 +464,10 @@ const DepsAsync: Deps = {
   chain
 }
 
-// dependency injection
+// 의존성 주입
 program5(DepsAsync)().then(console.log)
 ```
 
-**Demo**
+**데모**
 
 [`06_game.ts`](/src/06_game.ts)

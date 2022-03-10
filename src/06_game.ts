@@ -1,5 +1,5 @@
 // ====================
-// GUESS THE NUMBER
+// 숫자 맞추기
 // ====================
 
 import { pipe } from 'fp-ts/function'
@@ -10,24 +10,24 @@ import { randomInt } from 'fp-ts/Random'
 import * as T from 'fp-ts/Task'
 import { getLine, putStrLn } from './Console'
 
-// the number to guess
+// 맞추어야 할 숫자
 export const secret: T.Task<number> = T.fromIO(randomInt(1, 100))
 
-// combinator: print a message before an action
+// combinator: 행동 전에 메시지를 출력
 const withMessage = <A>(message: string, next: T.Task<A>): T.Task<A> =>
   pipe(
     putStrLn(message),
     T.chain(() => next)
   )
 
-// the input is a string so we have to validate it
+// 입력값은 문자열이므로 검증해야 한다
 const isValidGuess = between(N.Ord)(1, 100)
 const parseGuess = (s: string): O.Option<number> => {
   const n = parseInt(s, 10)
   return isNaN(n) || !isValidGuess(n) ? O.none : O.some(n)
 }
 
-const question: T.Task<string> = withMessage('Indovina il numero', getLine)
+const question: T.Task<string> = withMessage('숫자를 맞춰보세요', getLine)
 
 const answer: T.Task<number> = pipe(
   question,
@@ -36,7 +36,7 @@ const answer: T.Task<number> = pipe(
       s,
       parseGuess,
       O.match(
-        () => withMessage('Devi inserire un intero da 1 a 100', answer),
+        () => withMessage('1 부터 100 사이의 숫자를 넣어주세요', answer),
         (a) => T.of(a)
       )
     )
@@ -44,23 +44,23 @@ const answer: T.Task<number> = pipe(
 )
 
 const check = <A>(
-  secret: number, // the secret number to guess
-  guess: number, // user attempt
-  ok: T.Task<A>, // what to do if the user guessed
-  ko: T.Task<A> // what to do if the user did NOT guess
+  secret: number, // 맞추어야 할 숫자
+  guess: number, // 시도 횟수
+  ok: T.Task<A>, // 맞춘 경우 해야할 일
+  ko: T.Task<A> // 맞추지 못한 경우 해야할 일
 ): T.Task<A> => {
   if (guess > secret) {
-    return withMessage('Troppo alto', ko)
+    return withMessage('높아요', ko)
   } else if (guess < secret) {
-    return withMessage('Troppo basso', ko)
+    return withMessage('낮아요', ko)
   } else {
     return ok
   }
 }
 
-const end: T.Task<void> = putStrLn('Hai indovinato!')
+const end: T.Task<void> = putStrLn('맞추셨습니다!')
 
-// keep the state (secret) as the argument of the function (alla Erlang)
+// 함수의 인자로서 상태 (secret) 를 유지합니다
 const loop = (secret: number): T.Task<void> =>
   pipe(
     answer,
