@@ -38,6 +38,6 @@ export const program = (ns: ReadonlyArray<number>): Option<string> =>
 
 **데모** (optional)
 
-[`04_functor.ts`](/04_functor.ts)
+[`04_functor.ts`](../04_functor.ts)
 
 **문제**. `Task<A>` 는 항상 성공하는 비동기 호출을 의미합니다. 그렇다면 실패할 수 있는 계산작업은 어떻게 모델링할까요?
