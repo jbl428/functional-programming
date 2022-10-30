@@ -2,7 +2,7 @@
 
 Monad 의 첫 번째 정의는 `M` 은 functor 인스턴스를 만족해야 함을 의미하며 `g: (b: B) => M<C>` 함수를 `map(g): (mb: M<B>) => M<M<C>>` 로 변경할 수 있다는 사실을 알 수 있습니다.
 
-![h 함수를 얻는 방법](/images/flatMap.png)
+![h 함수를 얻는 방법](../images/flatMap.png)
 
 이제 문제가 발생합니다: functor 인스턴스를 위한 `M<M<C>>` 타입을 `M<C>` 로 만들어주는 연산이 필요한 상황이며 그러한 연산자를 `flatten` 이라 부르도록 합시다.
 
@@ -20,7 +20,7 @@ h = flatten ∘ map(g) ∘ f
 chain = flatten ∘ map(g)
 ```
 
-![chain 이 함수 g 에 동작하는 방식](/images/chain.png)
+![chain 이 함수 g 에 동작하는 방식](../images/chain.png)
 
 이제 합성 테이블을 갱신할 수 있습니다
 
@@ -34,7 +34,7 @@ chain = flatten ∘ map(g)
 `of` 는 경우는 어떤가요? 사실 `of` 는 _K_ 의 identity morphism 에서 왔습니다. _K_ 의 임의의 identity morphism 인 1A 에 대해 `A` 에서 `M<A>` 로 매칭되는 함수가 존재합니다 (즉 `of: <A>(a: A) => M<A>`).
 > (원문) What about `of`? Well, `of` comes from the identity morphisms in _K_: for every identity morphism 1<sub>A</sub> in _K_ there has to be a corresponding function from `A` to `M<A>` (that is, `of: <A>(a: A) => M<A>`).
 
-![of 는 어디서 왔는가](/images/of.png)
+![of 는 어디서 왔는가](../images/of.png)
 
 `of` 가 `chain` 에 대한 중립 원소라는 사실은 다음과 같은 종류의 흐름 제어를 가능하게 합니다:
 

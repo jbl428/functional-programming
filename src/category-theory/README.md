@@ -59,9 +59,9 @@ double: (n: number) => number
 
 > category 는 합성의 본질이라 할 수 있습니다.
 
-![Saunders Mac Lane](/images/maclane.jpg)
+![Saunders Mac Lane](../images/maclane.jpg)
 
-![Samuel Eilenberg](/images/eilenberg.jpg)
+![Samuel Eilenberg](../images/eilenberg.jpg)
 
 다음 장에서 어떻게 category 가 다음 기반을 구성할 수 있는지 살펴볼 것입니다:
 

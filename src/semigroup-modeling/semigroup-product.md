@@ -30,7 +30,7 @@ const v2: Vector = { x: 1, y: 2 }
 console.log(SemigroupVector.concat(v1, v2)) // => { x: 2, y: 3 }
 ```
 
-![SemigroupVector](/images/semigroupVector.png)
+![SemigroupVector](../images/semigroupVector.png)
 
 boilerplate 코드가 너무 많나요? 좋은 소식은 semigroup 의 **수학적 법칙**에 따르면 각 필드에 대한 semigroup 인스턴스를 만들 수 있다면 `Vector` 같은 구조체의 semigroup 인스턴스를 만들 수 있습니다.
 

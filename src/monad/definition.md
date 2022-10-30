@@ -35,7 +35,7 @@ chain: <A, B>(f: (a: A) => M<B>) => (ma: M<A>) => M<B>
 
 핵심 문제로 돌아가봅시다: 두 effectful 함수 `f` 와 `g` 의 합성이란 무엇일까요?
 
-![two Kleisli arrows, what's their composition?](/images/kleisli_arrows.png)
+![two Kleisli arrows, what's their composition?](../images/kleisli_arrows.png)
 
 **참고**. Effectful 함수는 **Kleisli arrow** 라고도 불립니다.
 

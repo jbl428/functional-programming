@@ -111,7 +111,7 @@ export const f7 = (
 
 함수가 순수하다는 것이 꼭 **지역변수의 변경** (local mutability)을 금지한다는 의미는 아닙니다. 변수가 함수 범위를 벗어나지 않는다면 변경할 수 있습니다.
 
-![mutable / immutable](/images/mutable-immutable.jpg)
+![mutable / immutable](../images/mutable-immutable.jpg)
 
 **예제** (monoid 용 `concatALl` 함수 구현)
 

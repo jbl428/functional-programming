@@ -7,6 +7,6 @@
 - **곱타입**
 - **합타입**
 
-![ADT](/images/adt.png)
+![ADT](../images/adt.png)
 
 좀 더 친숙한 곱타입부터 시작해봅시다.
