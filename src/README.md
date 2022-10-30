@@ -1,6 +1,6 @@
 # 소개
 
-이 저장소는 Typescript 와 fp-ts 라이브러리를 활용해 함수형 프로그래밍을 소개합니다.
+이 저장소는 Typescript 와 fp-ts 라이브러리를 활용한 함수형 프로그래밍을 소개합니다.
 
 모든 내용은 [enricopolanski](https://github.com/enricopolanski/functional-programming) 의 저장소에서 나온 것입니다.
 
