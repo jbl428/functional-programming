@@ -20,8 +20,8 @@ cd functional-programming
 npm i
 ```
 
-> 본 문서는 `Gitbook` 으로도 볼 수 있습니다.
-> [GitBook Link](https://jbl428.gitbook.io/typescript-fp-ts)
+> 본 문서는 웹사이트로 볼 수 있습니다.
+> [Github Page Link](https://jbl428.github.io/functional-programming)
 
 * [함수형 프로그래밍이란](src/what-is-fp/README.md)
 

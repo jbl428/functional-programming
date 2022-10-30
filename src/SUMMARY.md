@@ -2,8 +2,6 @@
 
 * [소개](README.md)
 
-# 문서
-
 * [함수형 프로그래밍이란](what-is-fp/README.md)
 
 * [함수형 프로그래밍의 두 가지 요소](two-pillar-of-fp/README.md)
