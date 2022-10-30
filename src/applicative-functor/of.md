@@ -62,4 +62,4 @@ const of = <R, A>(a: A): Reader<R, A> => () => a
 
 **데모**
 
-[`05_applicative.ts`](/src/05_applicative.ts)
+[`05_applicative.ts`](/05_applicative.ts)

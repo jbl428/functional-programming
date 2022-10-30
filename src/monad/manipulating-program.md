@@ -470,4 +470,4 @@ program5(DepsAsync)().then(console.log)
 
 **데모**
 
-[`06_game.ts`](/src/06_game.ts)
+[`06_game.ts`](/06_game.ts)

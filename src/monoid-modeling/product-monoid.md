@@ -34,4 +34,4 @@ const Monoid: Monoid<Point> = tuple(N.MonoidSum, N.MonoidSum)
 
 **데모** (캔버스에 기하학적 도형을 그리는 시스템 구현)
 
-[`03_shapes.ts`](/src/03_shapes.ts)
+[`03_shapes.ts`](/03_shapes.ts)

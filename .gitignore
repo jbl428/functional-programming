@@ -5,3 +5,5 @@ dev
 coverage
 .cache
 .idea
+/book
+/index.html
