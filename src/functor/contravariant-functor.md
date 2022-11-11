@@ -6,7 +6,7 @@
 
 contravariant functor 의 정의는 기본 연산의 시그니쳐를 제외하면 covariant 와 거의 동일합니다. 해당 연산은 `map` 보다는 `contramap` 으로 불립니다.
 
-<img src="/images/contramap.png" width="300" alt="contramap" />
+<img src="../images/contramap.png" width="300" alt="contramap" />
 
 **예제**
 

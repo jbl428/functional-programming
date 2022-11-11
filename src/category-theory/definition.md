@@ -18,7 +18,7 @@ category 는 `(Objects, Morphisms)` 쌍으로 되어있고 각각 다음을 의�
 
 모든 morphism 에서, `A` 와 `B` 는 모두 `Ojbects` 의 구성원입니다. 보통 `f: A ⟼ B` 라고 쓰며 "f 는 A 에서 B 로 가는 morphism" 이라 말합니다.
 
-<img src="/images/morphism.png" width="300" alt="A morphism" />
+<img src="../images/morphism.png" width="300" alt="A morphism" />
 
 **참고**. 앞으로는, 단순하게 원은 제외하고 object 에만 라벨을 붙이겠습니다>
 
@@ -28,18 +28,18 @@ category 는 `(Objects, Morphisms)` 쌍으로 되어있고 각각 다음을 의�
 
 - (**morphisms 의 합성**) 모든 임의의 두 morphisms `f: A ⟼ B` 와 `g: B ⟼ C` 에 대해 `f` 와 `g` 의 _합성_ 인 다음 `g ∘ f: A ⟼ C` morphism 이 존재해야 합니다.
  
-<img src="/images/composition.png" width="300" alt="composition" />
+<img src="../images/composition.png" width="300" alt="composition" />
 
 - (**결합 법칙**) 만약 `f: A ⟼ B`, `g: B ⟼ C` 이고 `h: C ⟼ D` 이면 `h ∘ (g ∘ f) = (h ∘ g) ∘ f`
 
-<img src="/images/associativity.png" width="500" alt="associativity" />
+<img src="../images/associativity.png" width="500" alt="associativity" />
 
 - (**항등성**) 모든 `X` 의 object 에 대해, 다음 법칙을 만족하는 _identity morphism_ 이라 불리는 morphism `identity: X ⟼ X` 가 존재합니다. 모든 임의의 morphism `f: A ⟼ X` 와 `g: X ⟼ B` 에 대해, `identity ∘ f = f` 와 `g ∘ identity = g` 식을 만족합니다.
  
-<img src="/images/identity.png" width="300" alt="identity" />
+<img src="../images/identity.png" width="300" alt="identity" />
 
 **예제**
 
-<img src="/images/category.png" width="300" alt="a simple category" />
+<img src="../images/category.png" width="300" alt="a simple category" />
 
 category 는 매우 단순합니다, 3 개의 objects 와 6 개의 morphism 이 존재합니다 (1A, 1B, 1C 와  `A`, `B`, `C` 에 대한 identity morphism 들 입니다).

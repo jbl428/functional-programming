@@ -70,7 +70,7 @@ const result = addFollowerAsync(fetchUser(followerId))(fetchUser(userId)) // 컴
 liftA2(g): (fb: F<B>) => (fc: F<C>) => F<D>
 ```
 
-<img src="/images/liftA2.png" width="500" alt="liftA2" />
+<img src="../images/liftA2.png" width="500" alt="liftA2" />
 
 어떻게 구할 수 있을까요? 주어진 `g` 는 unary 함수이므로, functor 인스턴스와 `map` 을 활용할 수 있습니다:
 
@@ -78,7 +78,7 @@ liftA2(g): (fb: F<B>) => (fc: F<C>) => F<D>
 map(g): (fb: F<B>) => F<(c: C) => D>
 ```
 
-<img src="/images/liftA2-first-step.png" width="500" alt="liftA2 (첫 단계)" />
+<img src="../images/liftA2-first-step.png" width="500" alt="liftA2 (첫 단계)" />
 
 이제 문제가 발생합니다: functor 인스턴스는 타입 `F<(c: C) => D>` 에서 `(fc: F<C>) => F<D>` 로 만드는 연산을 지원하지 않습니다.
 

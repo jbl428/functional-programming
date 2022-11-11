@@ -8,7 +8,7 @@ Category 는 **타입이 있는 프로그래밍 언어** 의 단순화된 모델
 
 다음 다이어그램에서:
 
-<img src="/images/category.png" width="300" alt="a simple programming language" />
+<img src="../images/category.png" width="300" alt="a simple programming language" />
 
 3가지 타입과 6가지 함수를 가진 가상의 (그리고 단순한) 프로그래밍 언어로 생각할 수 있습니다.
 

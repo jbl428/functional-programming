@@ -23,7 +23,7 @@ function pipe<A, B, C>(a: A, f: (a: A) => B, g: (b: B) => C): C {
 - `f: (a: A) => F<B>` 와 `g: (b: B, c: C) => D` 의 합성은 `F` 의 **applicative functor** 인스턴스가 필요합니다
 - `f: (a: A) => F<B>` 와 `g: (b: B) => F<C>` 의 합성은 `F` 의 **monad** 인스턴스가 필요합니다
 
-<img src="/images/spoiler.png" width="900" alt="The four composition recipes" />
+<img src="../images/spoiler.png" width="900" alt="The four composition recipes" />
 
 이번 장의 초반에 언급한 문제가 두 번째 상황에 해당하며 `F` 는 `Option` 타입을 의미합니다:
 

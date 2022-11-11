@@ -7,7 +7,7 @@
 
 `f` 와 `g` 를 합성하기 위해서 `(b: B) => C` 인 `g` 함수를 일반적인 함수 합성을 사용할 수 있는 형태인 `(fb: F<B>) => F<C>` 로 만드는 과정이 필요합니다. (이러면 `f` 의 공역은 새로운 함수의 정의역과 일치하게 됩니다)
 
-<img src="/images/map.png" width="500" alt="map" />
+<img src="../images/map.png" width="500" alt="map" />
 
 이제 기존 문제를 다음의 새로운 문제로 변경하였습니다: 위 방식을 위한, `map` 이라고 불리는 함수를 찾을 수 있을까요?
 
@@ -218,7 +218,7 @@ category 는 object 와 morphism 의 쌍이기에, functor 또한 두 개의 쌍
 
 여기서 _C_ 와 _D_ 는 (프로그래밍 언어라고 할 수 있는) category 입니다.
 
-<img src="/images/functor.png" width="500" alt="functor" />
+<img src="../images/functor.png" width="500" alt="functor" />
 
 서로 다른 두 프로그래밍 언어의 매핑은 굉장한 아이디어지만, 우리는 _C_ 와 _D_ 가 동일한 상황(_TS_ category) 에서의 매핑에 더 관심이 있습니다. 이 경우에는 **endofunctors** 라고 부릅니다 (그리스어 "endo" 는 "내부" 를 뜻합니다)
 
